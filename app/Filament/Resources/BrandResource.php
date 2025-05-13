@@ -50,9 +50,11 @@ class BrandResource extends Resource
                                 // Negeer het huidige record bij het controleren (belangrijk bij bewerken)
                                 ->unique(Brand::class, 'slug', ignoreRecord: true),
                         ]),
+
                     FileUpload::make('image')
                         ->image()
-                        ->directory('categories'),
+                        ->directory('brands'),
+
                     Toggle::make('is_active')
                         ->required()
                         ->default(true),

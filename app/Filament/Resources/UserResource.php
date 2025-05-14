@@ -89,6 +89,7 @@ class UserResource extends Resource
     {
         return [
             //
+            RelationManagers\OrdersRelationManager::class
         ];
     }
 

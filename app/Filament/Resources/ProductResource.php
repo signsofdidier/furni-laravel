@@ -33,6 +33,9 @@ class ProductResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
 
+    // Dit bepaald de volgorde in de sidebar
+    protected static ?int $navigationSort = 4;
+
     public static function form(Form $form): Form
     {
         return $form
@@ -182,6 +185,12 @@ class ProductResource extends Resource
         return [
             //
         ];
+    }
+
+    // GLOBAL SEARCH Multiple columns
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'description'];
     }
 
     public static function getPages(): array

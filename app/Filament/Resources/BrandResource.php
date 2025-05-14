@@ -27,6 +27,12 @@ class BrandResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-computer-desktop';
 
+    // GLOBAL SEARCH activation op naam
+    protected static ?string $recordTitleAttribute = 'name';
+
+    // Dit bepaald de volgorde in de sidebar
+    protected static ?int $navigationSort = 2;
+
     public static function form(Form $form): Form
     {
         return $form

@@ -27,6 +27,12 @@ class CategoryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-tag';
 
+    // GLOBAL SEARCH activation op naam
+    protected static ?string $recordTitleAttribute = 'name';
+
+    // Dit bepaald de volgorde in de sidebar
+    protected static ?int $navigationSort = 3;
+
     public static function form(Form $form): Form
     {
         return $form
@@ -108,6 +114,8 @@ class CategoryResource extends Resource
             //
         ];
     }
+
+
 
     public static function getPages(): array
     {

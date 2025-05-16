@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Brand;
 use App\Models\Category;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
 // Titel (tablat)

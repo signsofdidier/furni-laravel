@@ -30,7 +30,11 @@ class ProductsPage extends Component
     public $on_sale;
 
     #[Url]
-    public $price_range = null; // of 0 Zet dit op 0 zodat de filter niet actief blijft als je via bvb homepage categories filtert
+    public $price_range = 0; // Zet dit op 0 zodat de filter niet actief blijft als je via bvb homepage categories filtert
+
+    // sort by
+    #[Url]
+    public $sort = 'latest';
 
     public function render()
     {
@@ -61,6 +65,21 @@ class ProductsPage extends Component
         if($this->price_range) {
             // Filter op prijs tussen 0 en de geselecteerde prijs
             $productQuery->whereBetween('price', [0, $this->price_range]);
+        }
+
+        // Sorteer de laatste toegevoegde producten
+        if($this->sort == 'latest'){
+            $productQuery->latest();
+        }
+
+        // Sorteer de producten op prijs van laag naar hoog
+        if($this->sort == 'lowest_price'){
+            $productQuery->orderBy('price', 'asc');
+        }
+
+        // Sorteer de producten op prijs van hoog naar laag
+        if($this->sort == 'highest_price'){
+            $productQuery->orderBy('price', 'desc');
         }
 
         return view('livewire.products-page', [

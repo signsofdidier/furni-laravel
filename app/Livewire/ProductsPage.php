@@ -2,9 +2,13 @@
 
 namespace App\Livewire;
 
+use App\Helpers\CartManagement;
+use App\Livewire\Partials\Navbar;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
 use Livewire\Component;
@@ -35,6 +39,19 @@ class ProductsPage extends Component
     // sort by
     #[Url]
     public $sort = 'latest';
+
+    // add product to cart method
+    public function addToCart($product_id){
+        $total_count = CartManagement::addItemToCart($product_id);
+
+        //Hiermee kan je in de navbar class de 'update-cart-count' event triggeren met #[On('update-cart-count')]
+        $this->dispatch('update-cart-count', total_count: $total_count)->to(Navbar::class);
+
+        LivewireAlert::title('Item Saved')
+            ->text('The item has been successfully saved to the database.')
+            ->success()
+            ->show();
+    }
 
     public function render()
     {

@@ -85,9 +85,9 @@
                     </div>
 
                     @if($cart_items)
-                        <button class="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 w-full">Checkout</button>
+                        <a href="/checkout" class="bg-blue-500 block text-white text-center py-2 px-4 rounded-lg mt-4 w-full">Checkout</a>
                     @else
-                        <button class="bg-gray-300 text-white py-2 px-4 rounded-lg mt-4 w-full" disabled>Checkout</button>
+                        <a href="/checkout" class="bg-gray-300 block text-white text-center py-2 px-4 rounded-lg mt-4 w-full" disabled>Checkout</a>
                     @endif
                 </div>
             </div>

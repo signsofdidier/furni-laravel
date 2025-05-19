@@ -12,7 +12,9 @@ class Navbar extends Component
     public $total_count = 0;
 
     public function mount(){
-        $this->total_count = count(CartManagement::getCartItemsFromCookie());
+        // telt alle items in de cart op maar ook de quantity van een item
+        $this->total_count = array_sum(array_column(CartManagement::getCartItemsFromSession(), 'quantity'));
+
     }
 
     #[On('update-cart-count')]

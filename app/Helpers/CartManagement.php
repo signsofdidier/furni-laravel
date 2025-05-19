@@ -3,13 +3,11 @@
 namespace App\Helpers;
 
 use App\Models\Product;
-use Illuminate\Support\Facades\Cookie;
 
 class CartManagement {
     // add item to cart
     static public function addItemToCart($product_id){
-        // neem alle cart items van de cookie
-        $cart_items = self::getCartItemsFromCookie();
+        $cart_items = self::getCartItemsFromSession(); // ⬅️ aangepast
 
         $existing_item = null;
 
@@ -23,9 +21,9 @@ class CartManagement {
         if ($existing_item !== null) {
             $cart_items[$existing_item]['quantity']++;
             $cart_items[$existing_item]['total_amount'] = $cart_items[$existing_item]['quantity'] *
-            $cart_items[$existing_item]['unit_amount'];
+                $cart_items[$existing_item]['unit_amount'];
         } else {
-            $product = Product::where('id', $product_id)->first(['id', 'name', 'price', 'images']);
+            $product = Product::find($product_id, ['id', 'name', 'price', 'images']);
             if($product){
                 $cart_items[] = [
                     'product_id' => $product_id,
@@ -33,80 +31,102 @@ class CartManagement {
                     'quantity' => 1,
                     'unit_amount' => $product->price,
                     'total_amount' => $product->price,
-                    'image' => $product->images[0],
+                    'image' => $product->images[0] ?? null,
                 ];
             }
         }
 
-        self::addCartItemsToCookie($cart_items);
+        self::saveCartItemsToSession($cart_items); // ⬅️ aangepast
         return count($cart_items);
     }
 
-    // remove item from cart
-    static public function removeCartItem($product_id){
-        $cart_items = self::getCartItemsFromCookie();
+    // add item with quantity
+    static public function addItemToCartWithQuantity($product_id, $quantity){
+        $cart_items = self::getCartItemsFromSession(); // ⬅️ aangepast
+
+        $existing_item = null;
+
         foreach($cart_items as $key => $item){
             if($item['product_id'] == $product_id){
-                unset($cart_items[$key]);
+                $existing_item = $key;
                 break;
             }
         }
-        self::addCartItemsToCookie($cart_items);
+
+        if ($existing_item !== null) {
+            $cart_items[$existing_item]['quantity'] = $quantity;
+            $cart_items[$existing_item]['total_amount'] = $cart_items[$existing_item]['quantity'] *
+                $cart_items[$existing_item]['unit_amount'];
+        } else {
+            $product = Product::find($product_id, ['id', 'name', 'price', 'images']);
+            if($product){
+                $cart_items[] = [
+                    'product_id' => $product_id,
+                    'name' => $product->name,
+                    'quantity' => $quantity,
+                    'unit_amount' => $product->price,
+                    'total_amount' => $product->price * $quantity,
+                    'image' => $product->images[0] ?? null,
+                ];
+            }
+        }
+
+        self::saveCartItemsToSession($cart_items); // ⬅️ aangepast
         return count($cart_items);
     }
 
-    // sla de cart items op in een cookie voor 30 dagen
-    static public function addCartItemsToCookie($cart_items){
-        Cookie::queue('cart_items', json_encode($cart_items), 60 * 24 * 30);
-    }
-
-    // clear cart items from cookie
-    static public function ClearCartItems(){
-        Cookie::queue(Cookie::forget('cart_items'));
-    }
-
-    // get all cart items from cookie
-    static public function getCartItemsFromCookie(){
-        $cart_items = json_decode(Cookie::get('cart_items'), true);
-        if(!$cart_items){
-            $cart_items = [];
+    static public function removeCartItem($product_id){
+        $cart_items = self::getCartItemsFromSession(); // ⬅️ aangepast
+        foreach($cart_items as $key => $item){
+            if($item['product_id'] == $product_id){
+                unset($cart_items[$key]);
+            }
         }
+
+        $cart_items = array_values($cart_items); // indexen resetten
+        self::saveCartItemsToSession($cart_items); // ⬅️ aangepast
+
         return $cart_items;
     }
 
-    //increment item quantity
+    static public function saveCartItemsToSession($cart_items){
+        session()->put('cart_items', $cart_items); // ⬅️ aangepast
+    }
+
+    static public function clearCartItems(){
+        session()->forget('cart_items'); // ⬅️ aangepast
+    }
+
+    static public function getCartItemsFromSession(){
+        return session()->get('cart_items', []); // ⬅️ aangepast
+    }
+
     static public function incrementQuantityToCartItem($product_id){
-        $cart_items = self::getCartItemsFromCookie();
+        $cart_items = self::getCartItemsFromSession(); // ⬅️ aangepast
         foreach($cart_items as $key => $item){
             if($item['product_id'] == $product_id){
                 $cart_items[$key]['quantity']++;
                 $cart_items[$key]['total_amount'] = $cart_items[$key]['quantity'] *
-                $cart_items[$key]['unit_amount'];
-                break;
-            }
-        }
-        self::addCartItemsToCookie($cart_items);
-        return count($cart_items);
-    }
-
-    //decrement item quantity
-    static public function decrementQuantityToCartItem($product_id){
-        $cart_items = self::getCartItemsFromCookie();
-        foreach($cart_items as $key => $item){
-            if($item['product_id'] == $product_id){
-                if($cart_items[$key]['quantity'] > 1){
-                    $cart_items[$key]['quantity']--;
-                    $cart_items[$key]['total_amount'] = $cart_items[$key]['quantity'] *
                     $cart_items[$key]['unit_amount'];
-                }
                 break;
             }
         }
-        self::addCartItemsToCookie($cart_items);
-        return count($cart_items);
+        self::saveCartItemsToSession($cart_items); // ⬅️ aangepast
     }
 
-    // calculate grand total
+    static public function decrementQuantityToCartItem($product_id){
+        $cart_items = self::getCartItemsFromSession(); // ⬅️ aangepast
+        foreach($cart_items as $key => $item){
+            if($item['product_id'] == $product_id && $item['quantity'] > 1){
+                $cart_items[$key]['quantity']--;
+                $cart_items[$key]['total_amount'] = $cart_items[$key]['quantity'] *
+                    $cart_items[$key]['unit_amount'];
+                break;
+            }
+        }
+        self::saveCartItemsToSession($cart_items); // ⬅️ aangepast
+    }
+
     static public function calculateGrandTotal($items){
         return array_sum(array_column($items, 'total_amount'));
     }

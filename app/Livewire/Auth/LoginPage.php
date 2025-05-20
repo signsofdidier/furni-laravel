@@ -20,6 +20,7 @@ class LoginPage extends Component
         // zend flash message als de user login niet gelukt is.
         if(!auth()->attempt(['email' => $this->email, 'password' => $this->password])){
             session()->flash('error', 'Invalid credentials');
+            return;
         }
 
         return redirect()->intended();

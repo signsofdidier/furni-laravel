@@ -18,11 +18,56 @@
                         <tbody>
 
                         @foreach($orders as $order)
+
+                            @php
+                                // kleuren voor de status van de order
+                                switch ($order->status) {
+                                    case 'new':
+                                        $statusColor = 'bg-orange-500';
+                                        break;
+                                    case 'processing':
+                                        $statusColor = 'bg-blue-500';
+                                        break;
+                                    case 'shipped':
+                                        $statusColor = 'bg-green-500';
+                                        break;
+                                    case 'delivered':
+                                        $statusColor = 'bg-green-500';
+                                        break;
+                                    case 'cancelled':
+                                        $statusColor = 'bg-red-500';
+                                        break;
+                                }
+
+                                // kleuren voor de status van de payment
+                                switch ($order->payment_status){
+                                    case 'pending':
+                                        $paymentStatusColor = 'bg-yellow-500';
+                                        break;
+                                    case 'paid':
+                                        $paymentStatusColor = 'bg-green-500';
+                                        break;
+                                    case 'failed':
+                                        $paymentStatusColor = 'bg-red-500';
+                                        break;
+                                }
+
+
+                            @endphp
+
                             <tr class="odd:bg-white even:bg-gray-100 dark:odd:bg-slate-900 dark:even:bg-slate-800" wire:key="{{$order->id}}">
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">{{ $order->id }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">{{ $order->created_at->format('d-m-Y') }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><span class="bg-orange-500 py-1 px-3 rounded text-white shadow">{{ $order->status }}</span></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><span class="bg-green-500 py-1 px-3 rounded text-white shadow">{{ $order->payment_status }}</span></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                    <span class="{{ $statusColor }} py-1 px-3 rounded text-white shadow">
+                                        {{ $order->status }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                    <span class="{{ $paymentStatusColor }} py-1 px-3 rounded text-white shadow">
+                                        {{ $order->payment_status }}
+                                    </span>
+                                </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">{{ Number::currency($order->grand_total, 'EUR') }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
                                     <a href="/my-orders/{{ $order->id }}" class="bg-slate-600 text-white py-2 px-4 rounded-md hover:bg-slate-500">View Details</a>

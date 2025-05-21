@@ -15,7 +15,6 @@
     },
     "dependencies": {
         "@tailwindcss/postcss": "^4.1.7",
-        "preline": "^3.0.1",
-        "sweetalert2": "^11.21.2"
+        "preline": "^3.0.1"
     }
 }

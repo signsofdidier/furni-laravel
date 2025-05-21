@@ -7,7 +7,6 @@ use App\Livewire\Partials\Navbar;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
-use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
@@ -47,12 +46,14 @@ class ProductsPage extends Component
         //Hiermee kan je in de navbar class de 'update-cart-count' event triggeren met #[On('update-cart-count')]
         $this->dispatch('update-cart-count', total_count: $total_count)->to(Navbar::class);
 
-        LivewireAlert::title('Product added to cart')
-            ->success()
-            ->position('bottom-end')
-            ->timer(3000)
-            ->toast()
-            ->show();
+        // LIVEWIRE SWEETALERT
+        $this->dispatch('alert',
+            type: 'success',
+            title: 'Product added to cart',
+            position: 'bottom-end',
+            timer: 3000,
+            toast: true
+        );
 
     }
 

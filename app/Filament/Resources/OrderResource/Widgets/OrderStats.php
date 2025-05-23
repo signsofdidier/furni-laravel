@@ -18,7 +18,9 @@ class OrderStats extends BaseWidget
             Stat::make('Order Shipped', Order::query()->where('status', 'shipped')->count()),
 
             // dit toont de gemiddelde prijs van alle orders
-            Stat::make('Average Price', Number::currency(Order::query()->avg('grand_total'), 'EUR')),
+            Stat::make('Average Price',
+                Number::currency(
+                    Order::query()->avg('grand_total') ?? 0, 'EUR')),
         ];
     }
 }

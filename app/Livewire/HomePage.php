@@ -8,7 +8,7 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 
 // Titel (tablat)
-#[Title('Home Page - Ecommrce')]
+#[Title('Home Page - E-commerce')]
 
 class HomePage extends Component
 {

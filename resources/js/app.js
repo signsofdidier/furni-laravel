@@ -32,3 +32,5 @@ document.addEventListener('livewire:load', () => {
     });
 });
 
+
+

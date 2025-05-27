@@ -1037,9 +1037,6 @@
         <script src="{{ asset('assets/js/vendor.js') }}"></script>
         <script src="{{ asset('assets/js/main.js') }}"></script>
 
-         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-
          <!-- Voeg dit toe voor Livewire Alert JS -->
         <script src="https://cdn.jsdelivr.net/npm/livewire-alert@1.0.0/dist/livewire-alert.js"></script>
 

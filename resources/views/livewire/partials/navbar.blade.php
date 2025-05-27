@@ -66,27 +66,27 @@
                 <div class="col-lg-6 d-lg-block d-none">
                     <nav class="site-navigation">
                         <ul class="main-menu list-unstyled justify-content-center">
-                            <li class="menu-list-item nav-item active">
+                            <li class="menu-list-item nav-item {{ request()->is('/') ? 'active' : '' }}">
                                 <a wire:navigate class="nav-link" href="/">
                                     Home
                                 </a>
                             </li>
-                            <li class="menu-list-item nav-item">
+                            <li class="menu-list-item nav-item {{ request()->is('products') ? 'active' : '' }}">
                                 <a wire:navigate class="nav-link" href="/products">
                                     Products
                                 </a>
                             </li>
-                            <li class="menu-list-item nav-item">
+                            <li class="menu-list-item nav-item {{ request()->is('blog') ? 'active' : '' }}">
                                 <a wire:navigate class="nav-link" href="/blog">
                                     Blog
                                 </a>
                             </li>
-                            <li class="menu-list-item nav-item">
+                            <li class="menu-list-item nav-item {{ request()->is('about-us') ? 'active' : '' }}">
                                 <a wire:navigate class="nav-link" href="/about-us">
                                     About Us
                                 </a>
                             </li>
-                            <li wire:navigate class="menu-list-item nav-item">
+                            <li wire:navigate class="menu-list-item nav-item {{ request()->is('contact') ? 'active' : '' }}">
                                 <a class="nav-link" href=/contact">Contact</a>
                             </li>
                         </ul>

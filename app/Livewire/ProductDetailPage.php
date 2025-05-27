@@ -16,6 +16,7 @@ class ProductDetailPage extends Component
 
     public $quantity = 1;
 
+
     public function increaseQuantity(){
         $this->quantity++;
     }
@@ -50,8 +51,16 @@ class ProductDetailPage extends Component
 
     public function render()
     {
+        // haal alleen de actieve, featured producten op (max. 8)
+        $featuredProducts = Product::query()
+            ->where('is_active', 1)
+            ->where('is_featured', 1)
+            ->take(8)
+            ->get();
+
         return view('livewire.product-detail-page', [
-            'product' => Product::where('slug', $this->slug)->firstOrFail()
+            'product' => Product::where('slug', $this->slug)->firstOrFail(),
+            'featuredProducts' => $featuredProducts
         ]);
     }
 }

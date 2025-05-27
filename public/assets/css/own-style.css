@@ -1,0 +1,15 @@
+.product-hover-zoom {
+    display: inline-block;  /* of ‘block’, afhankelijk van je layout */
+    overflow: hidden;
+}
+
+.product-hover-zoom img {
+    display: block;         /* voorkom ongewenste witruimte rond de IMG */
+    width: 100%;            /* zorg dat hij de container vult */
+    height: auto;
+    transition: transform 1s ease-out;
+}
+
+.product-hover-zoom:hover img {
+    transform: scale(1.1);
+}

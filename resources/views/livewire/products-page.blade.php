@@ -43,9 +43,7 @@
                                 <div class="col-lg-4 col-md-6 col-6" wire:key="{{ $product->id }}">
                                     <div class="product-card">
                                         <div class="product-card-img">
-                                            <a class="hover-switch" href="#">
-                                                {{--<img class="secondary-img" src="assets/img/products/furniture/9.jpg"
-                                                     alt="product-img">--}}
+                                            <a class="product-hover-zoom" href="products/{{ $product->slug }}">
                                                 <img class="primary-img" src="{{ url('storage', $product->images[0]) }}"
                                                      alt="product-img">
                                             </a>
@@ -56,16 +54,8 @@
 
                                             <div
                                                 class="product-card-action product-card-action-2 justify-content-center">
-                                                <a href="#quickview-modal" class="action-card action-quickview"
-                                                   data-bs-toggle="modal">
-                                                    <svg width="26" height="26" viewBox="0 0 26 26" fill="none"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <path
-                                                            d="M10 0C15.5117 0 20 4.48828 20 10C20 12.3945 19.1602 14.5898 17.75 16.3125L25.7188 24.2812L24.2812 25.7188L16.3125 17.75C14.5898 19.1602 12.3945 20 10 20C4.48828 20 0 15.5117 0 10C0 4.48828 4.48828 0 10 0ZM10 2C5.57031 2 2 5.57031 2 10C2 14.4297 5.57031 18 10 18C14.4297 18 18 14.4297 18 10C18 5.57031 14.4297 2 10 2ZM11 6V9H14V11H11V14H9V11H6V9H9V6H11Z"
-                                                            fill="#00234D" />
-                                                    </svg>
-                                                </a>
 
+                                                {{-- WISHLIST BUTTON --}}
                                                 <a href="#" class="action-card action-wishlist">
                                                     <svg class="icon icon-wishlist" width="26" height="22"
                                                          viewBox="0 0 26 22" fill="none"
@@ -77,7 +67,7 @@
                                                 </a>
 
                                                 {{--Add to cart button--}}
-                                                <a a wire:click.prevent='addToCart({{ $product->id }})' href="#" class="action-card action-addtocart">
+                                                <a wire:click.prevent='addToCart({{ $product->id }})' href="#" class="action-card action-addtocart">
                                                     <svg class="icon icon-cart" width="24" height="26"
                                                          viewBox="0 0 24 26" fill="none"
                                                          xmlns="http://www.w3.org/2000/svg">
@@ -88,6 +78,8 @@
                                                 </a>
                                             </div>
                                         </div>
+
+                                        {{-- COLORS --}}
                                         <div class="product-card-details">
                                             <ul class="color-lists list-unstyled d-flex align-items-center">
                                                 <li><a href="javascript:void(0)"
@@ -98,9 +90,13 @@
                                                        class="color-swatch swatch-purple"></a>
                                                 </li>
                                             </ul>
+
+                                            {{-- PRODUCT TITLE --}}
                                             <h3 class="product-card-title">
-                                                <a href="#">best wood furniture</a>
+                                                <a href="/products/{{ $product->slug }}">{{ $product->name }}</a>
                                             </h3>
+
+                                            {{-- PRODUCT PRICE --}}
                                             <div class="product-card-price">
                                                 <span class="card-price-regular">{{ Number::currency($product->price ?? 0, 'EUR') }}</span>
                                                 {{--<span class="card-price-compare text-decoration-line-through">$1759</span>--}}
@@ -399,3 +395,6 @@
         </div>
     </div>
 </div>
+
+
+

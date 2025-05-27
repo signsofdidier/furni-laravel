@@ -35,6 +35,8 @@
                         </div>
                     </div>
 
+
+                    <!-- Products -->
                     <div class="collection-product-container">
                         <div class="row">
                             @foreach($products as $product)
@@ -184,15 +186,15 @@
                             <div class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
                                  data-bs-toggle="collapse" data-bs-target="#filter-collection">
                                 Categories
-                                {{--<span class="faq-heading-icon">
+                                <span class="faq-heading-icon">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                  viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"
                                                  stroke-linecap="round" stroke-linejoin="round" class="icon icon-down">
                                                 <polyline points="6 9 12 15 18 9"></polyline>
                                             </svg>
-                                        </span>--}}
+                                        </span>
                             </div>
-                            {{--<div id="filter-collection" class="accordion-collapse collapse show">
+                            <div id="filter-collection" class="accordion-collapse collapse show">
                                 <ul class="filter-lists list-unstyled mb-0">
                                     @foreach($categories as $category)
                                         <li class="filter-item" wire:key="{{ $category->id }}">
@@ -203,22 +205,9 @@
                                             </label>
                                         </li>
                                     @endforeach
-
-                                        --}}{{--@foreach($categories as $category)
-                                            <li class="mb-4" wire:key="{{ $category->id }}">
-                                                <label for="{{ $category->slug }}"
-                                                       class="flex items-center dark:text-gray-400 ">
-                                                    <input type="checkbox" wire:model.live="selected_categories"
-                                                           {{ $category->slug }} value="{{ $category->id }}"
-                                                           class="w-4 h-4 mr-2">
-                                                    <span class="text-lg">{{ $category->name }}</span>
-                                                </label>
-                                            </li>
-                                        @endforeach--}}{{--
-
                                 </ul>
-                            </div>--}}
-                            <ul class="filter-lists list-unstyled mb-0">
+                            </div>
+                            {{--<ul class="filter-lists list-unstyled mb-0">
                                 @foreach($categories as $category)
                                     <li class="filter-item" wire:key="{{ $category->id }}">
                                         <label class="filter-label">
@@ -228,20 +217,7 @@
                                         </label>
                                     </li>
                                 @endforeach
-
-                                {{--@foreach($categories as $category)
-                                    <li class="mb-4" wire:key="{{ $category->id }}">
-                                        <label for="{{ $category->slug }}"
-                                               class="flex items-center dark:text-gray-400 ">
-                                            <input type="checkbox" wire:model.live="selected_categories"
-                                                   {{ $category->slug }} value="{{ $category->id }}"
-                                                   class="w-4 h-4 mr-2">
-                                            <span class="text-lg">{{ $category->name }}</span>
-                                        </label>
-                                    </li>
-                                @endforeach--}}
-
-                            </ul>
+                            </ul>--}}
                         </div>
                         <div class="filter-widget">
                             <div class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom">

@@ -33,11 +33,15 @@ class ProductsPage extends Component
     public $on_sale;
 
     #[Url]
+    public $in_stock;
+
+    #[Url]
     public $price_range = 0; // Zet dit op 0 zodat de filter niet actief blijft als je via bvb homepage categories filtert
 
     // sort by
     #[Url]
     public $sort = 'latest';
+
 
     // add product to cart method
     public function addToCart($product_id){
@@ -80,6 +84,11 @@ class ProductsPage extends Component
         // On Sale filter
         if($this->on_sale){
             $productQuery->where('on_sale', 1);
+        }
+
+        // In Stock filter
+        if($this->in_stock) {
+            $productQuery->where('in_stock', 1);
         }
 
         // Price Range filter

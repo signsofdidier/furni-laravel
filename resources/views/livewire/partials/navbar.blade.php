@@ -54,9 +54,9 @@
             <div class="row align-items-center">
                 <div class="col-lg-3 col-md-4 col-4">
                     <div class="header-logo">
-                        <a href="index.html" class="logo-main">
-                            <!--<img src="assets/img/logo.png" loading="lazy" alt="bisum">-->
-                            <h2 class="text-bold">K(L)ASSE</h2>
+                        <a href="/" class="logo-main">
+                            <img src="assets/img/logo.png" loading="lazy" alt="bisum">
+                            {{--<h2 class="text-bold">K(L)ASSE</h2>--}}
                         </a>
                     </div>
                 </div>
@@ -64,182 +64,27 @@
                     <nav class="site-navigation">
                         <ul class="main-menu list-unstyled justify-content-center">
                             <li class="menu-list-item nav-item active">
-                                <a class="nav-link" href="index.html">
+                                <a wire:navigate class="nav-link" href="/">
                                     Home
                                 </a>
                             </li>
                             <li class="menu-list-item nav-item">
-                                <a class="nav-link" href="collection-left-sidebar.html">
-                                    Shop
+                                <a wire:navigate class="nav-link" href="/products">
+                                    Products
                                 </a>
                             </li>
-                            <!--<li class="menu-list-item nav-item has-megamenu">
-                                <div class="mega-menu-header">
-                                    <a class="nav-link" href="collection-left-sidebar.html">
-                                        Shop
-                                    </a>
-                                    <span class="open-submenu">
-                                        <svg class="icon icon-dropdown" xmlns="http://www.w3.org/2000/svg"
-                                            width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <polyline points="6 9 12 15 18 9"></polyline>
-                                        </svg>
-                                    </span>
-                                </div>
-                                <div class="submenu-transform submenu-transform-desktop">
-                                    <div class="container">
-                                        <ul class="submenu megamenu-container list-unstyled">
-                                            <li class="menu-list-item nav-item-sub">
-                                                <div class="mega-menu-header">
-                                                    <a class="nav-link-sub nav-text-sub megamenu-heading"
-                                                        href="collection-left-sidebar.html">
-                                                        CATEGORIES
-                                                    </a>
-                                                </div>
-                                                <div class="submenu-transform megamenu-transform">
-                                                    <ul class="megamenu list-unstyled">
-                                                        <li class="menu-list-item nav-item-sub">
-                                                            <a class="nav-link-sub nav-text-sub"
-                                                                href="collection-left-sidebar.html">Closets</a>
-                                                        </li>
-                                                        <li class="menu-list-item nav-item-sub">
-                                                            <a class="nav-link-sub nav-text-sub"
-                                                                href="collection-left-sidebar.html">Chairs</a>
-                                                        </li>
-                                                        <li class="menu-list-item nav-item-sub">
-                                                            <a class="nav-link-sub nav-text-sub"
-                                                                href="collection-left-sidebar.html">Tables</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </li>
-                                            <li class="menu-list-item nav-item-sub">
-                                                <div
-                                                    class="mega-menu-header d-flex align-items-center justify-content-between">
-                                                    <a class="nav-link-sub nav-text-sub megamenu-heading"
-                                                        href="collection-right-sidebar.html">
-                                                        BRANDS
-                                                    </a>
-                                                </div>
-                                                <div class="submenu-transform megamenu-transform">
-                                                    <ul class="megamenu list-unstyled">
-                                                        <li class="menu-list-item nav-item-sub">
-                                                            <a class="nav-link-sub nav-text-sub"
-                                                                href="product.html">Brand 1</a>
-                                                        </li>
-                                                        <li class="menu-list-item nav-item-sub">
-                                                            <a class="nav-link-sub nav-text-sub"
-                                                                href="product.html">Brand 2</a>
-                                                        </li>
-                                                        <li class="menu-list-item nav-item-sub">
-                                                            <a class="nav-link-sub nav-text-sub"
-                                                                href="product.html">Brand 3</a>
-                                                        </li>
-                                                        <li class="menu-list-item nav-item-sub">
-                                                            <a class="nav-link-sub nav-text-sub"
-                                                                href="product.html">Brand 4</a>
-                                                        </li>
-
-                                                    </ul>
-                                                </div>
-                                            </li>
-                                            <li class="menu-list-item nav-item-sub">
-                                                <div
-                                                    class="mega-menu-header d-flex align-items-center justify-content-between">
-                                                    <a class="nav-link-sub nav-text-sub megamenu-heading"
-                                                        href="index.html">
-                                                        PRODUCT LAYOUTS
-                                                    </a>
-                                                </div>
-                                                <div class="submenu-transform megamenu-transform">
-                                                    <ul class="megamenu list-unstyled">
-                                                        <li class="menu-list-item nav-item-sub">
-                                                            <a class="nav-link-sub nav-text-sub"
-                                                                href="product-2.html">Grid Images</a>
-                                                        </li>
-                                                        <li class="menu-list-item nav-item-sub">
-                                                            <a class="nav-link-sub nav-text-sub"
-                                                                href="product.html">Vertical Thumb</a>
-                                                        </li>
-                                                        <li class="menu-list-item nav-item-sub">
-                                                            <a class="nav-link-sub nav-text-sub"
-                                                                href="product.html">Gallery Type</a>
-                                                        </li>
-                                                        <li class="menu-list-item nav-item-sub">
-                                                            <a class="nav-link-sub nav-text-sub"
-                                                                href="product.html">Product Width Layout</a>
-                                                        </li>
-                                                        <li class="menu-list-item nav-item-sub">
-                                                            <a class="nav-link-sub nav-text-sub"
-                                                                href="product.html">Sticky Gallery</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </li>
-                                            <li class="menu-list-item nav-item-sub">
-                                                <div
-                                                    class="mega-menu-header d-flex align-items-center justify-content-between">
-                                                    <a class="mega-menu-img nav-link-sub nav-text-sub"
-                                                        href="collection-left-sidebar.html">
-                                                        <img class="menu-img" src="assets/img/menu/1.jpg" alt="img">
-                                                        <h2 class="img-menu-heading text_16 mt-2">Featured
-                                                            Collection</h2>
-                                                        <div
-                                                            class="img-menu-action text_12 bg-transparent p-0">
-                                                            <span>DISCOVER NOW</span>
-                                                            <span>
-                                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                                    width="30" height="18" fill="#000"
-                                                                    class="icon-right-long" viewBox="0 0 16 16">
-                                                                    <path fill-rule="evenodd"
-                                                                        d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z" />
-                                                                </svg>
-                                                            </span>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </li>-->
                             <li class="menu-list-item nav-item">
-                                <a class="nav-link" href="blog.html">
+                                <a wire:navigate class="nav-link" href="/blog">
                                     Blog
                                 </a>
                             </li>
-                            <!--<li class="menu-list-item nav-item has-dropdown">
-                                <div class="mega-menu-header">
-                                    <a class="nav-link" href="blog.html">Blog</a>
-                                    <span class="open-submenu">
-                                        <svg class="icon icon-dropdown" xmlns="http://www.w3.org/2000/svg"
-                                            width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <polyline points="6 9 12 15 18 9"></polyline>
-                                        </svg>
-                                    </span>
-                                </div>
-                                <div class="submenu-transform submenu-transform-desktop">
-                                    <ul class="submenu list-unstyled">
-                                        <li class="menu-list-item nav-item-sub">
-                                            <a class="nav-link-sub nav-text-sub" href="blog.html">Blog</a>
-                                        </li>
-                                        <li class="menu-list-item nav-item-sub">
-                                            <a class="nav-link-sub nav-text-sub" href="article.html">Blog
-                                                Details</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>-->
                             <li class="menu-list-item nav-item">
-                                <a class="nav-link" href="about-us.html">
+                                <a wire:navigate class="nav-link" href="/about-us">
                                     About Us
                                 </a>
                             </li>
-                            <li class="menu-list-item nav-item">
-                                <a class="nav-link" href="contact.html">Contact</a>
+                            <li wire:navigate class="menu-list-item nav-item">
+                                <a class="nav-link" href=/contact">Contact</a>
                             </li>
                         </ul>
                     </nav>
@@ -254,7 +99,7 @@
                                     fill="black" />
                             </svg>
                         </a>
-                        <a class="header-action-item header-wishlist ms-4 d-none d-lg-block"
+                        <a wire:navigate class="header-action-item header-wishlist ms-4 d-none d-lg-block"
                            href="wishlist.html">
                             <svg class="icon icon-wishlist" width="26" height="22" viewBox="0 0 26 22"
                                  fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -263,7 +108,7 @@
                                     fill="black" />
                             </svg>
                         </a>
-                        <a class="header-action-item header-cart ms-4" href="#drawer-cart"
+                        <a wire:navigate class="header-action-item header-cart ms-4" href="#drawer-cart"
                            data-bs-toggle="offcanvas">
                             <svg class="icon icon-cart" width="24" height="26" viewBox="0 0 24 26" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">

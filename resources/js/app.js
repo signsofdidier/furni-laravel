@@ -16,3 +16,19 @@ window.addEventListener('alert', event => {
     });
 });
 
+
+document.addEventListener('livewire:load', () => {
+    Livewire.hook('message.processed', (message, component) => {
+        // Forceer heractivatie van alle open collapses
+        const collapseEls = document.querySelectorAll('.accordion-collapse.collapse');
+        collapseEls.forEach(el => {
+            if (el.classList.contains('show')) {
+                // Bootstrap herinitialiseren
+                new bootstrap.Collapse(el, {
+                    toggle: false
+                });
+            }
+        });
+    });
+});
+

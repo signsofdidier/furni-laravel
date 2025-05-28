@@ -24,7 +24,7 @@
                                             </div>
                                         </td>
                                         <td class="cart-item-details">
-                                            <h2 class="product-title"><a href="/products/{{ $item['slug'] }}">{{ $item['name'] }}</a></h2>
+                                            <h2 class="product-title"><a href="{{ url('/products') }}/{{ $item['slug'] }}">{{ $item['name'] }}</a></h2>
 
                                             {{-- COLOR --}}
                                             <p class="product-vendor">Dove Gray</p>
@@ -83,7 +83,7 @@
                                     <p class="shipping_text">Shipping & taxes calculated at checkout</p>
                                     <div class="d-flex justify-content-center mt-4">
                                         @if($cart_items)
-                                            <a href="/checkout" class="position-relative btn-primary text-uppercase">
+                                            <a href="{{ url('/checkout') }}" class="position-relative btn-primary text-uppercase">
                                                 Proceed to checkout
                                             </a>
                                         @else

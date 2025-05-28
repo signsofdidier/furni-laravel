@@ -1,78 +1,3 @@
-{{--
-<div class="w-100 mt-4">
-    <div class="container px-0">
-        <div class="d-flex flex-column align-items-center justify-content-center py-5">
-            <i class="fas fa-check-circle fa-5x text-success mb-3"></i>
-            <h1 class="fw-bold mb-2" style="color: #2c5aa0;">Thank You!</h1>
-            <p class="mb-4 text-muted" style="max-width: 600px;">Your order has been successfully placed. Below are the details of your purchase.</p>
-
-            <div class="row w-100 justify-content-center mb-5">
-                <div class="col-12 col-md-6 mb-4">
-                    <div class="d-flex justify-content-between">
-                        <span class="fw-semibold">Order Number:</span>
-                        <span>{{ $order->id }}</span>
-                    </div>
-                </div>
-                <div class="col-12 col-md-6 mb-4">
-                    <div class="d-flex justify-content-between">
-                        <span class="fw-semibold">Date:</span>
-                        <span>{{ $order->created_at->format('d-m-Y') }}</span>
-                    </div>
-                </div>
-                <div class="col-12 col-md-6 mb-4">
-                    <div class="d-flex justify-content-between">
-                        <span class="fw-semibold">Total:</span>
-                        <span class="text-primary fw-semibold">{{ Number::currency($order->grand_total, 'EUR') }}</span>
-                    </div>
-                </div>
-                <div class="col-12 col-md-6 mb-4">
-                    <div class="d-flex justify-content-between">
-                        <span class="fw-semibold">Payment Method:</span>
-                        <span>{{ $order->payment_method == 'cod' ? 'Cash on Delivery' : 'Card' }}</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row w-100 mb-5">
-                <div class="col-12 col-md-6">
-                    <h4 class="fw-semibold mb-3">Shipping Address</h4>
-                    <p class="mb-1">{{ $order->address->full_name }}</p>
-                    <p class="mb-1">{{ $order->address->street_address }}</p>
-                    <p class="mb-1">{{ $order->address->city }}, {{ $order->address->state }} {{ $order->address->zip_code }}</p>
-                    <p class="mb-0">Phone: {{ $order->address->phone }}</p>
-                </div>
-                <div class="col-12 col-md-6">
-                    <h4 class="fw-semibold mb-3">Order Details</h4>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Subtotal</span><span>{{ Number::currency($order->grand_total, 'EUR') }}</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Discount</span><span>{{ Number::currency(0, 'EUR') }}</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Shipping</span><span>{{ Number::currency(0, 'EUR') }}</span>
-                    </div>
-                    <hr>
-                    <div class="d-flex justify-content-between fw-semibold">
-                        <span>Total</span><span>{{ Number::currency($order->grand_total, 'EUR') }}</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="d-flex flex-column flex-md-row gap-3">
-                <a href="/products" class="btn btn-outline-primary px-4 py-2">Continue Shopping</a>
-                <a href="/my-orders" class="btn btn-primary px-4 py-2">View My Orders</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<style>
-    p { color: #6c757d; }
-</style>
---}}
-
-
 <div class="w-100 d-flex align-items-center justify-content-center">
     <div class="container py-5">
         <div class="row justify-content-center">
@@ -137,8 +62,8 @@
                         </div>
 
                         <div class="d-flex justify-content-center gap-3">
-                            <a href="/products" class="btn btn-outline-secondary px-4">Continue Shopping</a>
-                            <a href="/my-orders" class="btn btn-primary px-4">View My Orders</a>
+                            <a href="{{ url('/products') }}" class="btn btn-outline-secondary px-4">Continue Shopping</a>
+                            <a href="{{ url('/my-orders') }}" class="btn btn-primary px-4">View My Orders</a>
                         </div>
 
                     </div>

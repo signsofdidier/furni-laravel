@@ -138,24 +138,24 @@
                     <ul class="main-menu list-unstyled">
                         <li class="menu-list-item nav-item active">
                             <div class="mega-menu-header">
-                                <a wire:navigate class="nav-link active" href="/">
+                                <a wire:navigate class="nav-link active" href="{{ url('/') }}">
                                     Home
                                 </a>
                             </div>
                         </li>
                         <li class="menu-list-item nav-item has-megamenu">
                             <div class="mega-menu-header">
-                                <a wire:navigate class="nav-link" href="/products">
+                                <a wire:navigate class="nav-link" href="{{ url('/products') }}">
                                     Products
                                 </a>
                             </div>
                         </li>
                         <li class="menu-list-item nav-item">
-                            <a wire:navigate class="nav-link" href="/blog">Blog</a>
+                            <a wire:navigate class="nav-link" href="{{ url('/blog') }}">Blog</a>
                         </li>
                         <li class="menu-list-item nav-item has-dropdown">
                             <div class="mega-menu-header">
-                                <a wire:navigate class="nav-link active" href="/about-us">
+                                <a wire:navigate class="nav-link active" href="{{ url('/about-us') }}">
                                     About Us
                                 </a>
                             </div>
@@ -181,7 +181,7 @@
                         </a>
                     </li>
                     <li class="utilty-menu-item">
-                        <a class="announcement-login announcement-text" href="login.html">
+                        <a class="announcement-login announcement-text" href="{{ url('/login') }}">
                                 <span class="utilty-icon-wrapper">
                                     <svg class="icon icon-user" width="24" height="24" viewBox="0 0 10 11" fill="none"
                                          xmlns="http://www.w3.org/2000/svg">

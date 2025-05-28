@@ -39,8 +39,8 @@
                                 </div>
                                 <!-- Actions -->
                                 <div class="col-md-4 text-md-end">
-                                    <a href="/my-orders/{{ $order->id }}" class="btn btn-sm btn-outline-secondary me-2">Details</a>
-                                    <a href="/my-orders/{{ $order->id }}/invoice" class="btn btn-sm btn-outline-secondary">Download PDF</a>
+                                    <a href="{{ url('/my-orders') }}/{{ $order->id }}" class="btn btn-sm btn-outline-secondary me-2">Details</a>
+                                    <a href="{{ url('/my-orders') }}/{{ $order->id }}/invoice" class="btn btn-sm btn-outline-secondary">Download PDF</a>
                                 </div>
                             </div>
                         </div>

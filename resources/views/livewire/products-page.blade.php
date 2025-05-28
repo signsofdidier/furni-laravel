@@ -43,7 +43,7 @@
                                 <div class="col-lg-4 col-md-6 col-6" wire:key="{{ $product->id }}">
                                     <div class="product-card">
                                         <div class="product-card-img">
-                                            <a class="product-hover-zoom" href="products/{{ $product->slug }}">
+                                            <a class="product-hover-zoom" href="{{ url('/products') }}/{{ $product->slug }}">
                                                 <img class="primary-img" src="{{ url('storage', $product->images[0]) }}"
                                                      alt="product-img">
                                             </a>
@@ -67,7 +67,7 @@
                                                 </a>
 
                                                 {{--Add to cart button--}}
-                                                <a wire:click.prevent='addToCart({{ $product->id }})' href="#" class="action-card action-addtocart">
+                                                <button wire:click.prevent='addToCart({{ $product->id }})' type="button" class="action-card action-addtocart">
                                                     <svg class="icon icon-cart" width="24" height="26"
                                                          viewBox="0 0 24 26" fill="none"
                                                          xmlns="http://www.w3.org/2000/svg">
@@ -75,7 +75,7 @@
                                                             d="M12 0.000183105C9.25391 0.000183105 7 2.25409 7 5.00018V6.00018H2.0625L2 6.93768L1 24.9377L0.9375 26.0002H23.0625L23 24.9377L22 6.93768L21.9375 6.00018H17V5.00018C17 2.25409 14.7461 0.000183105 12 0.000183105ZM12 2.00018C13.6562 2.00018 15 3.34393 15 5.00018V6.00018H9V5.00018C9 3.34393 10.3438 2.00018 12 2.00018ZM3.9375 8.00018H7V11.0002H9V8.00018H15V11.0002H17V8.00018H20.0625L20.9375 24.0002H3.0625L3.9375 8.00018Z"
                                                             fill="#00234D" />
                                                     </svg>
-                                                </a>
+                                                </button>
                                             </div>
                                         </div>
 
@@ -93,7 +93,7 @@
 
                                             {{-- PRODUCT TITLE --}}
                                             <h3 class="product-card-title">
-                                                <a href="/products/{{ $product->slug }}">{{ $product->name }}</a>
+                                                <a href="{{ url('/products') }}/{{ $product->slug }}">{{ $product->name }}</a>
                                             </h3>
 
                                             {{-- PRODUCT PRICE --}}

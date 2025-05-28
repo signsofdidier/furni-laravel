@@ -2,7 +2,7 @@
     <div class="breadcrumb">
         <div class="container">
             <ul class="list-unstyled d-flex align-items-center m-0">
-                <li><a href="/">Home</a></li>
+                <li><a href="{{ url('/') }}">Home</a></li>
                 @foreach($breadcrumbs as $index => $breadcrumb)
                     <li>
                         <svg class="icon icon-breadcrumb" width="64" height="64" viewBox="0 0 64 64" fill="none"

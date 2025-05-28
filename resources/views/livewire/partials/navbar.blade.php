@@ -22,7 +22,7 @@
                         {{-- Login knop voor gasten --}}
                         @guest
                             <a class="d-flex align-items-center text-white text-decoration-none"
-                               href="/login">
+                               href="{{ url('/login') }}">
                                 {{-- User-icon --}}
                                 <svg class="me-1" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
                                     <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
@@ -63,7 +63,7 @@
 
                                     <li>
                                         <a class="dropdown-item d-flex align-items-center py-2"
-                                           href="/my-orders">
+                                           href="{{ url('/my-orders') }}">
                                             {{-- Profile-icon --}}
                                             <svg class="me-2" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
                                                 <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3z"/>
@@ -74,7 +74,7 @@
                                     </li>
                                     <li>
                                         <a class="dropdown-item d-flex align-items-center py-2"
-                                           href="/my-orders">
+                                           href="{{ url('/my-orders') }}">
                                             {{-- Orders-icon --}}
                                             <svg class="me-2" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
                                                 <path d="M0 1.5A.5.5 0 0 1 .5 1h15a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-11zM1 2v10h14V2H1z"/>
@@ -87,7 +87,7 @@
 
                                     <li>
                                         <a class="dropdown-item d-flex align-items-center text-danger py-2"
-                                           href="/logout">
+                                           href="{{ url('/logout') }}">
                                             {{-- Logout-icon --}}
                                             <svg class="me-2 text-danger" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
                                                 <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h5.793l-1.147-1.146a.5.5 0 1 1 .708-.708l2 2a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708-.708L12.293 4H6.5a.5.5 0 0 1-.5-.5z"/>
@@ -144,27 +144,27 @@
                     <nav class="site-navigation">
                         <ul class="main-menu list-unstyled justify-content-center">
                             <li class="menu-list-item nav-item {{ request()->is('/') ? 'active' : '' }}">
-                                <a wire:navigate class="nav-link" href="/">
+                                <a wire:navigate class="nav-link" href="{{ url('/') }}">
                                     Home
                                 </a>
                             </li>
                             <li class="menu-list-item nav-item {{ request()->is('products') ? 'active' : '' }}">
-                                <a wire:navigate class="nav-link" href="/products">
+                                <a wire:navigate class="nav-link" href="{{ url('/products') }}">
                                     Products
                                 </a>
                             </li>
                             <li class="menu-list-item nav-item {{ request()->is('blog') ? 'active' : '' }}">
-                                <a wire:navigate class="nav-link" href="/blog">
+                                <a wire:navigate class="nav-link" href="{{ url('/blog') }}">
                                     Blog
                                 </a>
                             </li>
                             <li class="menu-list-item nav-item {{ request()->is('about-us') ? 'active' : '' }}">
-                                <a wire:navigate class="nav-link" href="/about-us">
+                                <a wire:navigate class="nav-link" href="{{ url('/about-us') }}">
                                     About Us
                                 </a>
                             </li>
                             <li wire:navigate class="menu-list-item nav-item {{ request()->is('contact') ? 'active' : '' }}">
-                                <a class="nav-link" href=/contact">Contact</a>
+                                <a class="nav-link" href={{ url('/contact') }}">Contact</a>
                             </li>
                         </ul>
                     </nav>

@@ -260,7 +260,7 @@
                     @endforeach
                 </div>
                 <div class="view-all text-center" data-aos="fade-up" data-aos-duration="700">
-                    <a class="btn-primary" href="/products/{{ '?featured=true' }}">VIEW ALL</a>
+                    <a class="btn-primary" href="{{ url('/products') }}/{{ '?featured=true' }}">VIEW ALL</a>
                 </div>
             </div>
         </div>
@@ -342,7 +342,7 @@
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus.
                         </p>
                         <a class="btn-primary single-banner-btn animate__animated animate__fadeInUp"
-                           href="/products"
+                           href="{{ url('/products') }}"
                            data-animation="animate__animated animate__fadeInUp" data-aos="fade-up"
                            data-aos-duration="700">
                             DISCOVER NOW

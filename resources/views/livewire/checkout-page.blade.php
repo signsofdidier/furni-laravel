@@ -146,7 +146,7 @@
 
                                     <div class=" shipping-address-area billing-area mt-4">
                                         <div class="minicart-btn-area d-flex align-items-center justify-content-between flex-wrap">
-                                            <a href="/cart" class="checkout-page-btn minicart-btn btn-secondary">BACK TO CART</a>
+                                            <a href="{{ url('/cart') }}" class="checkout-page-btn minicart-btn btn-secondary">BACK TO CART</a>
                                             <button type="submit" class="checkout-page-btn minicart-btn btn-primary">PLACE ORDER</button>
                                         </div>
                                     </div>
@@ -169,7 +169,7 @@
                                     <img class="mini-img" src="{{ url('storage', $item['image']) }}" alt="{{ $item['name'] }}">
                                 </div>
                                 <div class="product-info">
-                                    <h2 class="product-title"><a href="#">{{ $item['name'] }}</a></h2>
+                                    <h2 class="product-title"><a href="{{ url('/products') }}/{{ $item['slug'] }}">{{ $item['name'] }}</a></h2>
                                     <p class="product-vendor mb-1">{{ Number::currency($item['unit_amount'], 'EUR') }} x {{ $item['quantity'] }}</p>
                                 </div>
                             </div>

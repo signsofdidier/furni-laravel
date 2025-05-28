@@ -16,7 +16,7 @@
                                 <img class="mini-img" src="{{ url('storage', $item['image']) }}" alt="{{ $item['name'] }}">
                             </div>
                             <div class="product-info">
-                                <h2 class="product-title"><a href="#">{{ $item['name'] }}</a></h2>
+                                <h2 class="product-title"><a href="{{ url('/products') }}/{{ $item['slug'] }}">{{ $item['name'] }}</a></h2>
                                 {{--<p class="product-vendor">XS / Dove Gray</p>--}}
                                 <div class="misc d-flex align-items-end justify-content-between">
                                     <div class="quantity d-flex align-items-center justify-content-between">
@@ -69,8 +69,8 @@
                         </p>
                     </div>
                     <div class="minicart-btn-area d-flex align-items-center justify-content-between">
-                        <a href="/cart" class="minicart-btn btn-secondary">View Cart</a>
-                        <a href="/checkout" class="minicart-btn btn-primary">Checkout</a>
+                        <a href="{{ url('/cart') }}" class="minicart-btn btn-secondary">View Cart</a>
+                        <a href="{{ url('/checkout') }}" class="minicart-btn btn-primary">Checkout</a>
                     </div>
                 </div>
             </div>

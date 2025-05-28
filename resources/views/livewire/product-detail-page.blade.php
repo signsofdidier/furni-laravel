@@ -444,13 +444,13 @@
                         <div class="new-item" data-aos="fade-up" data-aos-duration="300">
                                 <div class="product-card">
                                     <div class="product-card-img">
-                                        <a class="product-hover-zoom" href="/products/{{ $featured->slug }}">
+                                        <a class="product-hover-zoom" href="{{ url('/products') }}/{{ $featured->slug }}">
                                             <img class="primary-img" src="{{ url('storage', $featured->images[0]) }}"
                                                  alt="product-img">
                                         </a>
 
                                         <div class="product-card-action product-card-action-2">
-                                            <a href="/products/{{ $featured->slug }}" class="quickview-btn btn-primary">VIEW</a>
+                                            <a href="{{ url('/products') }}/{{ $featured->slug }}" class="quickview-btn btn-primary">VIEW</a>
                                             <button wire:click.prevent="addToCart({{ $featured->id }})" type="button" class="addtocart-btn btn-primary">
                                                 ADD TO CART
                                             </button>
@@ -466,7 +466,7 @@
                                         </a>
                                     </div>
                                     <div class="product-card-details text-center">
-                                        <h3 class="product-card-title"><a href="/products/{{ $featured->slug }}">{{ $featured->name }}</a>
+                                        <h3 class="product-card-title"><a href="{{ url('/products') }}/{{ $featured->slug }}">{{ $featured->name }}</a>
                                         </h3>
                                         <div class="product-card-price">
                                             <span class="card-price-regular">{{ Number::currency($featured->price, 'EUR') }}</span>

@@ -14,13 +14,15 @@ class RegisterPage extends Component
     public $name;
     public $email;
     public $password;
+    public $password_confirmation;
 
     // register user
     public function save(){
         $this->validate([
             'name' => 'required|max:255',
             'email' => 'required|email|unique:users|max:255',
-            'password' => 'required|min:6|max:255'
+            'password' => 'required|min:6|max:255|confirmed',
+            'password_confirmation' => 'required|min:6|max:255'
         ]);
         //save to database
         $user = User::create([

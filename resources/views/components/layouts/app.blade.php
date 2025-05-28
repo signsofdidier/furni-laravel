@@ -93,27 +93,31 @@
 </head>
 
 <body>
+
+@livewire('partials.navbar')
+
 <div class="body-wrapper">
 
-    @livewire('partials.navbar')
+
 
     <main id="MainContent" class="content-for-layout">
 
         {{--BREADCRUMB--}}
-        @if (!request()->is('/'))
-            {{-- verberg op de homepagina --}}
+        {{-- verberg op de homepagina en reset wachtwoord pagina --}}
+        @if (!request()->is('/', 'login', 'register') && ! Route::is('password.reset') && ! Route::is('password.request') )
+
             <livewire:components.breadcrumb/>
         @endif
 
-
         {{ $slot }}
+
+
     </main>
-    @livewire('partials.footer')
 
     @livewireScripts
 
     <!-- scrollup start -->
-    <button id="scrollup">
+    <button class="d-flex justify-content-center align-items-center" id="scrollup">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff"
              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="18 15 12 9 6 15"></polyline>
@@ -254,5 +258,6 @@
     </script>
 
 </div>
+@livewire('partials.footer')
 </body>
 </html>

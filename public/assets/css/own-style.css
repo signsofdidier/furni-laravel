@@ -13,3 +13,10 @@
 .product-hover-zoom:hover img {
     transform: scale(1.1);
 }
+
+.body-wrapper {
+    position: relative;
+    max-width: 1920px;
+    margin-left: auto;
+    margin-right: auto;
+}

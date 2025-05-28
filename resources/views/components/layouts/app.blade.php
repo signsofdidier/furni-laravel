@@ -223,9 +223,10 @@
     <script src="{{ asset('assets/js/vendor.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
 
-    <!-- Voeg dit toe voor Livewire Alert JS -->
+    <!-- Livewire Alert JS -->
     <script src="https://cdn.jsdelivr.net/npm/livewire-alert@1.0.0/dist/livewire-alert.js"></script>
 
+    <!-- Livewire Alert JS -->
     <script>
         document.addEventListener('livewire:initialized', () => {
             Livewire.on('alert', (params) => {
@@ -240,6 +241,18 @@
             });
         });
     </script>
+
+    {{-- Zorgt dat de bootstrap dropdowns werken met Livewire --}}
+    <script>
+        document.addEventListener('livewire:load', () => {
+            Livewire.hook('message.processed', () => {
+                document
+                    .querySelectorAll('[data-bs-toggle="dropdown"]')
+                    .forEach(el => bootstrap.Dropdown.getOrCreateInstance(el));
+            });
+        });
+    </script>
+
 </div>
 </body>
 </html>

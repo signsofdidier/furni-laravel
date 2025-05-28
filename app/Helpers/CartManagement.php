@@ -7,7 +7,7 @@ use App\Models\Product;
 class CartManagement {
     // add item to cart
     static public function addItemToCart($product_id){
-        $cart_items = self::getCartItemsFromSession(); // ⬅️ aangepast
+        $cart_items = self::getCartItemsFromSession();
 
         $existing_item = null;
 
@@ -23,11 +23,12 @@ class CartManagement {
             $cart_items[$existing_item]['total_amount'] = $cart_items[$existing_item]['quantity'] *
                 $cart_items[$existing_item]['unit_amount'];
         } else {
-            $product = Product::find($product_id, ['id', 'name', 'price', 'images']);
+            $product = Product::find($product_id, ['id', 'name', 'price', 'images', 'slug']);
             if($product){
                 $cart_items[] = [
                     'product_id' => $product_id,
                     'name' => $product->name,
+                    'slug' => $product->slug,
                     'quantity' => 1,
                     'unit_amount' => $product->price,
                     'total_amount' => $product->price,
@@ -36,13 +37,13 @@ class CartManagement {
             }
         }
 
-        self::saveCartItemsToSession($cart_items); // ⬅️ aangepast
+        self::saveCartItemsToSession($cart_items);
         return count($cart_items);
     }
 
     // add item with quantity
     static public function addItemToCartWithQuantity($product_id, $quantity){
-        $cart_items = self::getCartItemsFromSession(); // ⬅️ aangepast
+        $cart_items = self::getCartItemsFromSession();
 
         $existing_item = null;
 
@@ -58,11 +59,12 @@ class CartManagement {
             $cart_items[$existing_item]['total_amount'] = $cart_items[$existing_item]['quantity'] *
                 $cart_items[$existing_item]['unit_amount'];
         } else {
-            $product = Product::find($product_id, ['id', 'name', 'price', 'images']);
+            $product = Product::find($product_id, ['id', 'name', 'price', 'images', 'slug']);
             if($product){
                 $cart_items[] = [
                     'product_id' => $product_id,
                     'name' => $product->name,
+                    'slug' => $product->slug,
                     'quantity' => $quantity,
                     'unit_amount' => $product->price,
                     'total_amount' => $product->price * $quantity,
@@ -71,12 +73,12 @@ class CartManagement {
             }
         }
 
-        self::saveCartItemsToSession($cart_items); // ⬅️ aangepast
+        self::saveCartItemsToSession($cart_items);
         return count($cart_items);
     }
 
     static public function removeCartItem($product_id){
-        $cart_items = self::getCartItemsFromSession(); // ⬅️ aangepast
+        $cart_items = self::getCartItemsFromSession();
         foreach($cart_items as $key => $item){
             if($item['product_id'] == $product_id){
                 unset($cart_items[$key]);
@@ -84,25 +86,25 @@ class CartManagement {
         }
 
         $cart_items = array_values($cart_items); // indexen resetten
-        self::saveCartItemsToSession($cart_items); // ⬅️ aangepast
+        self::saveCartItemsToSession($cart_items);
 
         return $cart_items;
     }
 
     static public function saveCartItemsToSession($cart_items){
-        session()->put('cart_items', $cart_items); // ⬅️ aangepast
+        session()->put('cart_items', $cart_items);
     }
 
     static public function clearCartItems(){
-        session()->forget('cart_items'); // ⬅️ aangepast
+        session()->forget('cart_items');
     }
 
     static public function getCartItemsFromSession(){
-        return session()->get('cart_items', []); // ⬅️ aangepast
+        return session()->get('cart_items', []);
     }
 
     static public function incrementQuantityToCartItem($product_id){
-        $cart_items = self::getCartItemsFromSession(); // ⬅️ aangepast
+        $cart_items = self::getCartItemsFromSession();
         foreach($cart_items as $key => $item){
             if($item['product_id'] == $product_id){
                 $cart_items[$key]['quantity']++;
@@ -111,11 +113,11 @@ class CartManagement {
                 break;
             }
         }
-        self::saveCartItemsToSession($cart_items); // ⬅️ aangepast
+        self::saveCartItemsToSession($cart_items);
     }
 
     static public function decrementQuantityToCartItem($product_id){
-        $cart_items = self::getCartItemsFromSession(); // ⬅️ aangepast
+        $cart_items = self::getCartItemsFromSession();
         foreach($cart_items as $key => $item){
             if($item['product_id'] == $product_id && $item['quantity'] > 1){
                 $cart_items[$key]['quantity']--;
@@ -124,7 +126,7 @@ class CartManagement {
                 break;
             }
         }
-        self::saveCartItemsToSession($cart_items); // ⬅️ aangepast
+        self::saveCartItemsToSession($cart_items);
     }
 
     static public function calculateGrandTotal($items){

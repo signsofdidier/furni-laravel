@@ -17,16 +17,92 @@
             <div class="col-lg-3 d-lg-block d-none">
                 <div class="announcement-meta-wrapper d-flex align-items-center justify-content-end">
                     <div class="announcement-meta">
-                        <a class="announcement-login announcement-text text-white d-flex align-items-center"
-                           href="login.html">
-                            <svg class="icon-user me-1" width="10" height="11" viewBox="0 0 10 11" fill="none"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M5 0C3.07227 0 1.5 1.57227 1.5 3.5C1.5 4.70508 2.11523 5.77539 3.04688 6.40625C1.26367 7.17188 0 8.94141 0 11H1C1 8.78516 2.78516 7 5 7C7.21484 7 9 8.78516 9 11H10C10 8.94141 8.73633 7.17188 6.95312 6.40625C7.88477 5.77539 8.5 4.70508 8.5 3.5C8.5 1.57227 6.92773 0 5 0ZM5 1C6.38672 1 7.5 2.11328 7.5 3.5C7.5 4.88672 6.38672 6 5 6C3.61328 6 2.5 4.88672 2.5 3.5C2.5 2.11328 3.61328 1 5 1Z"
-                                    fill="#fff"/>
-                            </svg>
-                            <span>Login</span>
-                        </a>
+
+                        {{-- Login knop voor gasten --}}
+                        @guest
+                            <a class="d-flex align-items-center text-white text-decoration-none"
+                               href="/login">
+                                {{-- User-icon --}}
+                                <svg class="me-1" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                                    <path fill-rule="evenodd" d="M8 9a5 5 0 0 0-5 5v1h10v-1a5 5 0 0 0-5-5z"/>
+                                </svg>
+                                <span class="fw-semibold">Login</span>
+                            </a>
+
+                            {{-- Dropdown voor ingelogde gebruikers --}}
+                        @else
+                            <div class="dropdown" wire:ignore>
+                                <a class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                                   href="#"
+                                   id="navbarUserDropdown"
+                                   data-bs-toggle="dropdown"
+                                   aria-expanded="false">
+                                    {{-- Optioneel een avatar, anders deze icon --}}
+                                    <img src="{{ Auth::user()->avatar_url ?? asset('assets/img/checkout/user.jpg') }}"
+                                         alt="Avatar"
+                                         class="rounded-circle me-2"
+                                         width="32" height="32">
+                                    <span class="fw-semibold">{{ Auth::user()->name }}</span>
+                                </a>
+
+                                <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg mt-2" aria-labelledby="navbarUserDropdown" style="min-width: 12rem;">
+                                    <li class="px-3 py-2">
+                                        <div class="d-flex align-items-center">
+                                            <img src="{{ Auth::user()->avatar_url ?? asset('assets/img/checkout/user.jpg') }}"
+                                                 alt="Avatar"
+                                                 class="rounded-circle me-2"
+                                                 width="40" height="40">
+                                            <div>
+                                                <div class="fw-bold">{{ Auth::user()->name }}</div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+
+                                    <li>
+                                        <a class="dropdown-item d-flex align-items-center py-2"
+                                           href="/my-orders">
+                                            {{-- Profile-icon --}}
+                                            <svg class="me-2" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                                                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3z"/>
+                                                <path fill-rule="evenodd" d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                                            </svg>
+                                            Profile Page
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item d-flex align-items-center py-2"
+                                           href="/my-orders">
+                                            {{-- Orders-icon --}}
+                                            <svg class="me-2" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                                                <path d="M0 1.5A.5.5 0 0 1 .5 1h15a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-11zM1 2v10h14V2H1z"/>
+                                                <path d="M3 4h10v2H3V4zm0 3h10v2H3V7z"/>
+                                            </svg>
+                                            My Orders
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+
+                                    <li>
+                                        <a class="dropdown-item d-flex align-items-center text-danger py-2"
+                                           href="/logout">
+                                            {{-- Logout-icon --}}
+                                            <svg class="me-2 text-danger" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h5.793l-1.147-1.146a.5.5 0 1 1 .708-.708l2 2a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708-.708L12.293 4H6.5a.5.5 0 0 1-.5-.5z"/>
+                                                <path fill-rule="evenodd" d="M13 8a.5.5 0 0 1-.5.5H2.707l1.147 1.146a.5.5 0 0 1-.708.708l-2-2a.5.5 0 0 1 0-.708l2-2a.5.5 0 1 1 .708.708L2.707 7.5H12.5A.5.5 0 0 1 13 8z"/>
+                                            </svg>
+                                            Logout
+                                        </a>
+                                        <form id="logout-form" action="/logout" method="POST" class="d-none">
+                                            @csrf
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        @endguest
+
+
                         {{-- <span class="separator-login d-flex px-3">
                                      <svg width="2" height="9" viewBox="0 0 2 9" fill="none"
                                           xmlns="http://www.w3.org/2000/svg">

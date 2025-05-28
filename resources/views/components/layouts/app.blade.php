@@ -104,7 +104,7 @@
 
         {{--BREADCRUMB--}}
         {{-- verberg op de homepagina en reset wachtwoord pagina --}}
-        @if (!request()->is('/', 'login', 'register') && ! Route::is('password.reset') && ! Route::is('password.request') )
+        @if (!request()->is('/', 'login', 'register', 'success') && ! Route::is('password.reset') && ! Route::is('password.request') )
 
             <livewire:components.breadcrumb/>
         @endif

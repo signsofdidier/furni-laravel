@@ -12,7 +12,7 @@
             </div>
             <div class="col-lg-6 col-12">
                 <div class="announcement-text-wrapper d-flex align-items-center justify-content-center">
-                    <p class="announcement-text text-white">Startup sale - 10% off</p>
+                    <p class="announcement-text text-white">Slogan</p>
                 </div>
             </div>
             <div class="col-lg-3 d-lg-block d-none">

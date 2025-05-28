@@ -1,206 +1,209 @@
-<div class="w-full max-w-[85rem] py-10 px-4 sm:px-6 lg:px-8 mx-auto">
-    <h1 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">
-        Checkout
-    </h1>
-    <form wire:submit.prevent="placeOrder">
-        <div class="grid grid-cols-12 gap-4">
-            <div class="md:col-span-12 lg:col-span-8 col-span-12">
-                <!-- Card -->
-                <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
-                    <!-- Shipping Address -->
-                    <div class="mb-6">
-                        <h2 class="text-xl font-bold underline text-gray-700 dark:text-white mb-2">
-                            Shipping Address
-                        </h2>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-gray-700 dark:text-white mb-1" for="first_name">
-                                    First Name
-                                </label>
-                                <input wire:model="first_name" class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none @error('first_name') border-red-500 @enderror" id="first_name" type="text">
-                                </input>
-                                @error('first_name')
-                                    <div class="text-red-500 text-sm">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-white mb-1" for="last_name">
-                                    Last Name
-                                </label>
-                                <input wire:model="last_name" class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none @error('last_name') border-red-500 @enderror" id="last_name" type="text">
-                                </input>
-                                @error('last_name')
-                                <div class="text-red-500 text-sm">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <label class="block text-gray-700 dark:text-white mb-1" for="phone">
-                                Phone
-                            </label>
-                            <input wire:model="phone" class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none @error('phone') border-red-500 @enderror" id="phone" type="text">
-                            </input>
-                            @error('phone')
-                            <div class="text-red-500 text-sm">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mt-4">
-                            <label class="block text-gray-700 dark:text-white mb-1" for="address">
-                                Address
-                            </label>
-                            <input wire:model="street_address" class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none @error('street_address') border-red-500 @enderror" id="address" type="text">
-                            </input>
-                            @error('street_address')
-                            <div class="text-red-500 text-sm">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mt-4">
-                            <label class="block text-gray-700 dark:text-white mb-1" for="city">
-                                City
-                            </label>
-                            <input wire:model="city" class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none @error('city') border-red-500 @enderror" id="city" type="text">
-                            </input>
-                            @error('city')
-                            <div class="text-red-500 text-sm">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="grid grid-cols-2 gap-4 mt-4">
-                            <div>
-                                <label class="block text-gray-700 dark:text-white mb-1" for="state">
-                                    State
-                                </label>
-                                <input wire:model="state" class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none @error('state') border-red-500 @enderror" id="state" type="text">
-                                </input>
-                                @error('state')
-                                <div class="text-red-500 text-sm">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-white mb-1" for="zip">
-                                    ZIP Code
-                                </label>
-                                <input wire:model="zip_code" class="w-full rounded-lg border py-2 px-3 dark:bg-gray-700 dark:text-white dark:border-none @error('zip_code') border-red-500 @enderror" id="zip" type="text">
-                                </input>
-                                @error('zip_code')
-                                <div class="text-red-500 text-sm">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
+<div class="checkout-page mt-100">
+    <div class="container">
+        <div class="checkout-page-wrapper">
+            <div class="row">
+                <div class="col-xl-9 col-lg-8 col-md-12 col-12">
+                    <div class="section-header mb-3">
+                        <h2 class="section-heading">Check out</h2>
                     </div>
-                    <div class="text-lg font-semibold mb-4">
-                        Select Payment Method
-                    </div>
-                    <ul class="grid w-full gap-6 md:grid-cols-2">
-                        <li>
-                            <input wire:model="payment_method" class="hidden peer" id="hosting-small" required="" type="radio" value="cod" />
-                            <label class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700" for="hosting-small">
-                                <div class="block">
-                                    <div class="w-full text-lg font-semibold">
-                                        Cash on Delivery
-                                    </div>
-                                </div>
-                                <svg aria-hidden="true" class="w-5 h-5 ms-3 rtl:rotate-180" fill="none" viewbox="0 0 14 10" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1 5h12m0 0L9 1m4 4L9 9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-                                    </path>
-                                </svg>
-                            </label>
-                        </li>
-                        <li>
-                            <input wire:model="payment_method" class="hidden peer" id="hosting-big" type="radio" value="stripe">
-                            <label class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700" for="hosting-big">
-                                <div class="block">
-                                    <div class="w-full text-lg font-semibold">
-                                        Stripe
-                                    </div>
-                                </div>
-                                <svg aria-hidden="true" class="w-5 h-5 ms-3 rtl:rotate-180" fill="none" viewbox="0 0 14 10" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1 5h12m0 0L9 1m4 4L9 9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-                                    </path>
-                                </svg>
-                            </label>
-                            </input>
-                        </li>
-                    </ul>
-                    @error('payment_method')
-                        <div class="text-red-500 text-sm">{{ $message }}</div>
-                    @enderror
-                </div>
-                <!-- End Card -->
-            </div>
-            <div class="md:col-span-12 lg:col-span-4 col-span-12">
-                <div class="bg-white rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
-                    <div class="text-xl font-bold underline text-gray-700 dark:text-white mb-2">
-                        ORDER SUMMARY
-                    </div>
-                    <div class="flex justify-between mb-2 font-bold">
-					<span>
-						Subtotal
-					</span>
-                        <span>
-						{{ Number::currency($grand_total, 'EUR') }}
-					</span>
-                    </div>
-                    <div class="flex justify-between mb-2 font-bold">
-					<span>
-						Taxes
-					</span>
-                        <span>
-						{{ Number::currency(0, 'EUR') }}{{-- VERANDEREN --}}
-					</span>
-                    </div>
-                    <div class="flex justify-between mb-2 font-bold">
-					<span>
-						Shipping Cost
-					</span>
-                        <span>
-						{{ Number::currency(0, 'EUR') }} {{-- VERANDEREN --}}
-					</span>
-                    </div>
-                    <hr class="bg-slate-400 my-4 h-1 rounded">
-                    <div class="flex justify-between mb-2 font-bold">
-					<span>
-						Grand Total
-					</span>
-                        <span>
-						{{ Number::currency($grand_total, 'EUR') }}
-					</span>
-                    </div>
-                    </hr>
-                </div>
-                <button type="submit" class="bg-green-500 mt-4 w-full p-3 rounded-lg text-lg text-white hover:bg-green-600">
-                    <span wire:loading.remove>Place Order</span>
-                    <span wire:loading>Processing...</span>
-                </button>
-                <div class="bg-white mt-4 rounded-xl shadow p-4 sm:p-7 dark:bg-slate-900">
-                    <div class="text-xl font-bold underline text-gray-700 dark:text-white mb-2">
-                        BASKET SUMMARY
-                    </div>
-                    <ul class="divide-y divide-gray-200 dark:divide-gray-700" role="list">
-                        @foreach($cart_items as $cart_item)
-                            <li class="py-3 sm:py-4" wire:key="{{ $cart_item['product_id'] }}">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0">
-                                        <img alt="{{ $cart_item['name'] }}" class="w-12 h-12 rounded-full" src="{{ url('storage', $cart_item['image']) }}">
-                                        </img>
-                                    </div>
-                                    <div class="flex-1 min-w-0 ms-4">
-                                        <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
-                                            {{ $cart_item['name'] }}
-                                        </p>
-                                        <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                                            Quantity: {{ $cart_item['quantity'] }}
-                                        </p>
-                                    </div>
-                                    <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                                        {{ Number::currency($cart_item['total_amount'], 'EUR') }}
-                                    </div>
-                                </div>
-                            </li>
-                        @endforeach
 
-                    </ul>
+                    <div class="checkout-user-area overflow-hidden d-flex align-items-center">
+                        <div class="checkout-user-img me-4">
+                            <img src="{{ Auth::user()->avatar_url ?? asset('assets/img/checkout/user.jpg') }}" alt="{{ Auth::user()->name }}">
+                        </div>
+                        <div class="checkout-user-details d-flex align-items-center justify-content-between w-100">
+                            <div class="checkout-user-info">
+                                <h2 class="checkout-user-name">{{ Auth::user()->name }}</h2>
+                                <p class="text-light mb-0">{{ Auth::user()->email }}</p>
+                            </div>
+                            <a href="#" class="edit-user btn">EDIT PROFILE</a>
+                        </div>
+                    </div>
+
+                    <div class="shipping-address-area">
+                        <h2 class="shipping-address-heading pb-1">Shipping address</h2>
+                        <div class="shipping-address-form-wrapper">
+                            <form wire:submit.prevent="placeOrder" class="shipping-address-form common-form">
+                                <div class="row">
+                                    {{-- First Name --}}
+                                    <div class="col-lg-6 col-md-12 col-12">
+                                        <fieldset>
+                                            <label for="first_name" class="label">First name</label>
+                                            <input wire:model="first_name" id="first_name" type="text" class="form-control" />
+                                        </fieldset>
+                                        @error('first_name')
+                                            <div class="text-danger small">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+
+                                    {{-- Last Name --}}
+                                    <div class="col-lg-6 col-md-12 col-12">
+                                        <fieldset>
+                                            <label for="last_name" class="label">Last name</label>
+                                            <input wire:model="last_name" id="last_name" type="text" class="form-control" />
+                                        </fieldset>
+                                        @error('last_name')
+                                            <div class="text-danger small">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+
+                                    {{-- Phone --}}
+                                    <div class="col-lg-6 col-md-12 col-12">
+                                        <fieldset>
+                                            <label for="phone" class="label">Phone</label>
+                                            <input wire:model="phone" id="phone" type="text" class="form-control" />
+                                        </fieldset>
+                                        @error('phone')
+                                            <div class="text-danger small">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+
+                                    {{-- Street Address --}}
+                                    <div class="col-lg-6 col-md-12 col-12">
+                                        <fieldset>
+                                            <label for="street_address" class="label">Address</label>
+                                            <input wire:model="street_address" id="street_address" type="text" class="form-control" />
+                                        </fieldset>
+                                        @error('street_address')
+                                        <div class="text-danger small">
+                                            {{ $message }}
+                                        </div>
+                                        @enderror
+                                    </div>
+
+                                    {{-- City --}}
+                                    <div class="col-lg-6 col-md-12 col-12">
+                                        <fieldset>
+                                            <label for="city" class="label">City</label>
+                                            <input wire:model="city" id="city" type="text" class="form-control" />
+                                        </fieldset>
+                                        @error('city')
+                                            <div class="text-danger small">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+
+                                    {{-- Zip Code --}}
+                                    <div class="col-lg-6 col-md-12 col-12">
+                                        <fieldset>
+                                            <label for="zip_code" class="label">Zip code</label>
+                                            <input wire:model="zip_code" id="zip_code" type="text" class="form-control" />
+                                        </fieldset>
+                                        @error('zip_code')
+                                            <div class="text-danger small">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+
+                                    {{-- State --}}
+                                    <div class="col-lg-6 col-md-12 col-12">
+                                        <fieldset>
+                                            <label for="state" class="label">Address</label>
+                                            <input wire:model="state" id="state" type="text" class="form-control" />
+                                        </fieldset>
+                                        @error('state')
+                                        <div class="text-danger small">
+                                            {{ $message }}
+                                        </div>
+                                        @enderror
+                                    </div>
+
+                                    {{-- Country --}}
+                                    <div class="col-lg-6 col-md-12 col-12">
+                                        <fieldset>
+                                            <label for="country" class="label">Country</label>
+                                            <select disabled class="form-select">
+                                                <option>Belgium</option>
+                                            </select>
+                                        </fieldset>
+                                    </div>
+
+                                    {{--  Payment Method --}}
+                                    <div class="col-lg-6 col-md-12 col-12">
+                                        <fieldset>
+                                            <label class="label">Payment method</label>
+                                            <div class="d-flex gap-2">
+                                                <input type="radio" id="payment-cod" wire:model="payment_method" value="cod" class="btn-check">
+                                                <label for="payment-cod" class="btn btn-outline-secondary flex-fill">CASH ON DELIVERY</label>
+                                                <input type="radio" id="payment-stripe" wire:model="payment_method" value="stripe" class="btn-check">
+                                                <label for="payment-stripe" class="btn btn-outline-secondary flex-fill">STRIPE</label>
+                                            </div>
+                                        </fieldset>
+                                        @error('payment_method')
+                                        <div class="text-danger small">
+                                            {{ $message }}
+                                        </div>
+                                        @enderror
+                                    </div>
+
+                                    <div class=" shipping-address-area billing-area mt-4">
+                                        <div class="minicart-btn-area d-flex align-items-center justify-content-between flex-wrap">
+                                            <a href="/cart" class="checkout-page-btn minicart-btn btn-secondary">BACK TO CART</a>
+                                            <button type="submit" class="checkout-page-btn minicart-btn btn-primary">PLACE ORDER</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- ORDER SUMMARY --}}
+                <div class="col-xl-3 col-lg-4 col-md-12 col-12">
+                    <div class="cart-total-area checkout-summary-area">
+                        <h3 class="d-none d-lg-block mb-0 text-center heading_24 mb-4">Order summary</h3>
+                        @forelse($cart_items as $item)
+                            <div class="minicart-item d-flex">
+                                <div class="mini-img-wrapper">
+                                    <img class="mini-img" src="{{ url('storage', $item['image']) }}" alt="{{ $item['name'] }}">
+                                </div>
+                                <div class="product-info">
+                                    <h2 class="product-title"><a href="#">{{ $item['name'] }}</a></h2>
+                                    <p class="product-vendor mb-1">{{ Number::currency($item['unit_amount'], 'EUR') }} x {{ $item['quantity'] }}</p>
+                                </div>
+                            </div>
+                        @empty
+                        @endforelse
+                        <div class="cart-total-box mt-4 bg-transparent p-0">
+                            <div class="subtotal-item subtotal-box d-flex justify-content-between">
+                                <h4 class="subtotal-title">Subtotals:</h4>
+                                <p class="subtotal-value">{{ Number::currency($grand_total, 'EUR') }}</p>
+                            </div>
+                            <div class="subtotal-item discount-box d-flex justify-content-between">
+                                <h4 class="subtotal-title">Taxes (21%):</h4>
+                                <p class="subtotal-value">0</p>
+                            </div>
+                            <div class="subtotal-item shipping-box d-flex justify-content-between">
+                                <h4 class="subtotal-title">Shipping:</h4>
+                                <p class="subtotal-value">0</p>
+                            </div>
+                            <hr />
+                            <div class="subtotal-item discount-box d-flex justify-content-between">
+                                <h4 class="subtotal-title">Total:</h4>
+                                <p class="subtotal-value">{{ Number::currency($grand_total, 'EUR') }}</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </form>
+    </div>
 </div>
+<style>
+    .btn-check:checked + .btn-outline-secondary {
+        background-color: #00234D;
+        color: #fff;
+        border-color: #00234D;
+    }
+</style>

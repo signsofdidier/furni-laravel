@@ -228,20 +228,21 @@
     <script src="{{ asset('assets/js/main.js') }}"></script>
 
     <!-- Livewire Alert JS -->
-    <script src="https://cdn.jsdelivr.net/npm/livewire-alert@1.0.0/dist/livewire-alert.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <!-- Livewire Alert JS -->
     <script>
-        document.addEventListener('livewire:initialized', () => {
-            Livewire.on('alert', (params) => {
-                Swal.fire({
-                    icon: params.type,
-                    title: params.title,
-                    position: params.position || 'center',
-                    timer: params.timer || null,
-                    toast: params.toast || false,
-                    showConfirmButton: !params.toast,
-                });
+        Livewire.on('alert', (params) => {
+            Swal.fire({
+                icon: params.icon || 'success',
+                title: params.title || 'Product Added!',
+                html: params.html || 'Product added to cart 🎉',
+                position: params.position || 'bottom-end',
+                toast: params.toast !== undefined ? params.toast : true,
+                timer: params.timer || 1800,
+                showConfirmButton: params.showConfirmButton !== undefined ? params.showConfirmButton : false,
+                timerProgressBar: params.timerProgressBar !== undefined ? params.timerProgressBar : true,
             });
         });
     </script>

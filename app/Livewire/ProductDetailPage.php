@@ -51,13 +51,15 @@ class ProductDetailPage extends Component
             ->to(Navbar::class);
 
         // LIVEWIRE SWEETALERT
-        $this->dispatch('alert',
+        $this->dispatch('alert');
+
+        /*$this->dispatch('alert',
             type: 'success',
             title: 'Product added to cart',
             position: 'bottom-end',
             timer: 3000,
             toast: true
-        );
+        );*/
     }
 
     public function render()

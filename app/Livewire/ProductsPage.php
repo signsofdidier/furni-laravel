@@ -50,13 +50,15 @@ class ProductsPage extends Component
         $this->dispatch('update-cart-count', total_count: $total_count)->to(Navbar::class);
 
         // LIVEWIRE SWEETALERT
-        $this->dispatch('alert',
+        $this->dispatch('alert');
+
+        /*$this->dispatch('alert',
             type: 'success',
             title: 'Product added to cart',
             position: 'bottom-end',
             timer: 3000,
             toast: true
-        );
+        );*/
 
     }
 

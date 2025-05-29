@@ -47,7 +47,8 @@ class ProductsPage extends Component
         $total_count = CartManagement::addItemToCart($product_id);
 
         //Hiermee kan je in de navbar class de 'update-cart-count' event triggeren met #[On('update-cart-count')]
-        $this->dispatch('update-cart-count', total_count: $total_count)->to(Navbar::class);
+        /*$this->dispatch('update-cart-count', total_count: $total_count)->to(Navbar::class);*/
+        $this->dispatch('update-cart-count', total_count: $total_count)->to('partials.navbar');
 
         // LIVEWIRE SWEETALERT
         $this->dispatch('alert');

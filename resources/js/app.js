@@ -1,7 +1,7 @@
 import './bootstrap';
 
 // index.js
-import 'preline'
+/*import 'preline'*/
 
 // Luister naar het Livewire browser event
 window.addEventListener('alert', event => {

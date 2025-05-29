@@ -39,4 +39,8 @@ class Product extends Model
     public function orderItems(){
         return $this->hasMany(OrderItem::class);
     }
+
+    public function colors(){
+        return $this->hasMany(Color::class);
+    }
 }

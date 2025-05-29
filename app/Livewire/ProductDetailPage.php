@@ -13,10 +13,20 @@ class ProductDetailPage extends Component
 {
 
     public $slug;
-
     public $quantity = 1;
+    public $selectedColorId;
 
+    public function mount($slug){
+        $this->slug = $slug;
 
+        // Haal product inclusief kleuren in 1 keer op
+        $product = Product::with('colors')
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        // Standard de eerste kleur nemen
+        /*$this->selectedColorId = optional($product->colors->first())->id;*/
+    }
     public function increaseQuantity(){
         $this->quantity++;
     }
@@ -29,10 +39,16 @@ class ProductDetailPage extends Component
 
     // add product to cart method
     public function addToCart($product_id){
-        $total_count = CartManagement::addItemToCartWithQuantity($product_id, $this->quantity);
+        // Voeg product met geselecteerde kleur toe aan cart
+        $total_count = CartManagement::addItemToCartWithQuantity(
+            $product_id,
+            $this->quantity,
+            $this->selectedColorId
+        );
 
-        //Hiermee kan je in de navbar class de 'update-cart-count' event triggeren met #[On('update-cart-count')]
-        $this->dispatch('update-cart-count', total_count: $total_count)->to(Navbar::class);
+        // Update cart count in Navbar via event
+        $this->dispatch('update-cart-count', $total_count)
+            ->to(Navbar::class);
 
         // LIVEWIRE SWEETALERT
         $this->dispatch('alert',
@@ -42,11 +58,6 @@ class ProductDetailPage extends Component
             timer: 3000,
             toast: true
         );
-
-    }
-
-    public function mount($slug){
-        $this->slug = $slug;
     }
 
     public function render()

@@ -106,7 +106,7 @@
                                     {{-- State --}}
                                     <div class="col-lg-6 col-md-12 col-12">
                                         <fieldset>
-                                            <label for="state" class="label">Address</label>
+                                            <label for="state" class="label">State</label>
                                             <input wire:model="state" id="state" type="text" class="form-control" />
                                         </fieldset>
                                         @error('state')

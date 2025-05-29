@@ -26,3 +26,81 @@
     outline: 0;
     box-shadow: none;
 }
+
+/* PAGINATE */
+.custom-pagination {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 28px;
+    margin-bottom: 0;
+}
+
+.pagination-list {
+    display: flex;
+    gap: 10px;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+}
+
+.page-item {
+    display: inline-block;
+}
+
+.page-link,
+.page-link:hover,
+.page-item.active .page-link,
+.page-link:focus {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 38px;
+    padding: 0 16px;
+    font-size: 1rem;
+    font-weight: 500 !important;   /* Dit is de fix */
+    background: #f9f9f9;
+    color: #00234D;
+    border-radius: 8px;
+    border: 1px solid #e6e6e6;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    cursor: pointer;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+.page-link:hover,
+.page-item.active .page-link {
+    background: #00234D;
+    color: #fff !important;
+    border-color: #00234D;
+}
+
+.page-item.disabled .page-link {
+    background: #f4f4f4;
+    color: #b0b0b0;
+    border-color: #e6e6e6;
+    cursor: default;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+    .custom-pagination {
+        justify-content: center;
+        margin-top: 22px;
+    }
+    .page-link,
+    .page-link:hover,
+    .page-item.active .page-link,
+    .page-link:focus {
+        min-width: 28px;
+        height: 28px;
+        font-size: 0.95rem;
+        padding: 0 7px;
+    }
+}
+
+
+

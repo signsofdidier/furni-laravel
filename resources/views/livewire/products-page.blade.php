@@ -82,13 +82,13 @@
                                         {{-- COLORS --}}
                                         <div class="product-card-details">
                                             <ul class="color-lists list-unstyled d-flex align-items-center">
-                                                <li><a href="javascript:void(0)"
-                                                       class="color-swatch swatch-black active"></a></li>
-                                                <li><a href="javascript:void(0)"
-                                                       class="color-swatch swatch-cyan"></a></li>
-                                                <li><a href="javascript:void(0)"
-                                                       class="color-swatch swatch-purple"></a>
-                                                </li>
+                                                {{--@foreach($colors as $color)
+                                                    <li>
+                                                        <a href="#"
+                                                           class="color-swatch swatch-black active"></a>
+                                                    </li>
+                                                @endforeach--}}
+
                                             </ul>
 
                                             {{-- PRODUCT TITLE --}}
@@ -392,9 +392,24 @@
                 </div>
                 <!-- sidebar end -->
             </div>
+
+            <div class="row">
+                <div class="col-lg-9 offset-lg-3">
+                    <nav class="custom-pagination">
+                        {{ $products->links('vendor.pagination.custom') }}
+                    </nav>
+                </div>
+            </div>
+
         </div>
     </div>
+
 </div>
+
+
+
+
+
 
 
 

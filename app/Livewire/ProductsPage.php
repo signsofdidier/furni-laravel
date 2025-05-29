@@ -6,6 +6,7 @@ use App\Helpers\CartManagement;
 use App\Livewire\Partials\Navbar;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Product;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
@@ -27,6 +28,9 @@ class ProductsPage extends Component
     public $selected_brands = [];
 
     #[Url]
+    public $selected_colors = [];
+
+    #[Url]
     public $featured;
 
     #[Url]
@@ -41,6 +45,7 @@ class ProductsPage extends Component
     // sort by
     #[Url]
     public $sort = 'latest';
+
 
     // add product to cart method
     public function addToCart($product_id){
@@ -72,6 +77,13 @@ class ProductsPage extends Component
         if(!empty($this->selected_categories)) {
             $productQuery->whereIn('category_id', $this->selected_categories);
         }
+
+        if (!empty($this->selected_colors)) {
+            $productQuery->whereHas('colors', function($query) {
+                $query->whereIn('colors.id', $this->selected_colors);
+            });
+        }
+
 
         // Brand filter
         if(!empty($this->selected_brands)) {
@@ -118,6 +130,7 @@ class ProductsPage extends Component
             'products' => $productQuery->paginate(6),
             'brands' => Brand::where('is_active', 1)->get(['id', 'name', 'slug']),
             'categories' => Category::where('is_active', 1)->get(['id', 'name', 'slug']),
+            'colors' => Color::all(),
         ]);
     }
 }

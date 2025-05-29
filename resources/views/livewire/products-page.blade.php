@@ -273,74 +273,34 @@
                                 Colors
                             </div>
                             <div x-show="open" x-collapse id="filter-color">
-                                <ul class="filter-lists list-unstyled mb-0">
-                                    <li class="filter-item">
-                                        <label class="filter-label blue">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label red">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label green">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label purple">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label gold">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label pink">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label orange">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label aqua">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label brown">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label bisque">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label grey">
-                                            <input type="checkbox" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                        </label>
-                                    </li>
+                                <ul class="color-lists list-unstyled d-flex align-items-center flex-wrap">
+                                    @foreach($colors as $color)
+                                        <li class="me-1 mb-2" wire:key="color-{{ $color->id }}">
+                                            <label style="cursor:pointer;">
+                                                <input
+                                                    type="checkbox"
+                                                    wire:model.live="selected_colors"
+                                                    value="{{ $color->id }}"
+                                                    class="d-none"
+                                                >
+                                                <span
+                                                    class="color-swatch"
+                                                    style="
+                                                        display: inline-block;
+                                                        width: 28px;
+                                                        height: 28px;
+                                                        border-radius: 50%;
+                                                        background: {{ $color->hex }};
+                                                        border: 2px solid #bbb;
+                                                        vertical-align: middle;
+                                                    "
+                                                    title="{{ $color->name }}"
+                                                ></span>
+                                            </label>
+                                        </li>
+                                    @endforeach
                                 </ul>
+
                             </div>
                         </div>
 
@@ -406,7 +366,17 @@
 
 </div>
 
-
+{{-- COLOR FILTER STYLING --}}
+<style>
+    /* Zorg dat bij selectie een duidelijke outline/ring verschijnt */
+    .color-lists input[type="checkbox"]:checked + .color-swatch {
+        border: 3px solid #F76B6A;
+        box-shadow: 0 0 0 2px #F76B6A;
+    }
+    .color-swatch {
+        transition: border 0.2s, box-shadow 0.2s;
+    }
+</style>
 
 
 

@@ -203,7 +203,7 @@
                                     fill="black"/>
                             </svg>
 
-                            <div style="color: green; font-weight: bold">DEBUG: {{ $total_count }}</div>
+                            {{--<div style="color: green; font-weight: bold">DEBUG: {{ $total_count }}</div>--}}
                             @if($total_count > 0)
                                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                     {{ $total_count }}
@@ -211,13 +211,6 @@
                                 </span>
                             @endif
 
-                            {{--@if($total_count > 0)
-                                <span
-                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    {{ $total_count }}
-                                    <span class="visually-hidden">items in cart</span>
-                                </span>
-                            @endif--}}
                         </a>
                         <a class="header-action-item header-hamburger ms-4 d-lg-none" href="#drawer-menu"
                            data-bs-toggle="offcanvas">

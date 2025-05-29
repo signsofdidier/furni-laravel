@@ -120,30 +120,34 @@
                                 <strong class="label mb-1 d-block">Color:</strong>
 
                                 <ul class="variant-list list-unstyled d-flex align-items-center flex-wrap">
-                                    <li class="variant-item">
-                                        <input type="radio" value="cyan" checked>
-                                        <label class="variant-label swatch-cyan"></label>
-                                    </li>
-                                    <li class="variant-item">
-                                        <input type="radio" value="black">
-                                        <label class="variant-label swatch-black"></label>
-                                    </li>
-                                    <li class="variant-item">
-                                        <input type="radio" value="purple">
-                                        <label class="variant-label swatch-purple"></label>
-                                    </li>
-                                    <li class="variant-item">
-                                        <input type="radio" value="blue">
-                                        <label class="variant-label swatch-blue"></label>
-                                    </li>
-                                    <li class="variant-item">
-                                        <input type="radio" value="orange">
-                                        <label class="variant-label swatch-orange"></label>
-                                    </li>
-                                    <li class="variant-item">
-                                        <input type="radio" value="teal">
-                                        <label class="variant-label swatch-teal"></label>
-                                    </li>
+                                    @foreach($product->colors as $color)
+                                        <li class="variant-item">
+                                            <input
+                                                type="radio"
+                                                id="color-{{ $color->id }}"
+                                                name="selectedColorId"
+                                                value="{{ $color->id }}"
+                                                wire:model="selectedColorId"
+                                                class="visually-hidden"
+                                                checked
+                                            >
+                                            <label
+                                                for="color-{{ $color->id }}"
+                                                class="variant-label rounded-circle d-inline-block"
+                                                style="
+                                                    width: 1.5rem;
+                                                    height: 1.5rem;
+                                                    background-color: {{ $color->hex }};
+                                                    border: 1px solid #ccc;
+                                                    box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+                                                    cursor: pointer;
+                                                "
+                                                title="{{ $color->name }}"
+                                            >
+                                            </label>
+                                        </li>
+                                    @endforeach
+
                                 </ul>
                             </div>
                         </div>

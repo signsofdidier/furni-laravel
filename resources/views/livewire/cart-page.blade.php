@@ -27,12 +27,26 @@
                                             <h2 class="product-title"><a href="{{ url('/products') }}/{{ $item['slug'] }}">{{ $item['name'] }}</a></h2>
 
                                             {{-- COLOR --}}
-                                            <p class="product-vendor">Dove Gray</p>
+                                            @if(! empty($item['color_name']))
+                                                <p class="product-vendor d-flex align-items-center">
+                                                    <span
+                                                        class="me-2 rounded-circle"
+                                                        style="
+                                                          display:inline-block;
+                                                          width:1rem;
+                                                          height:1rem;
+                                                          background-color: {{ $item['color_hex'] }};
+                                                          border: 1px solid #ccc;
+                                                        ">
+                                                    </span>
+                                                    {{ $item['color_name'] }}
+                                                </p>
+                                            @endif
                                         </td>
                                         <td class="cart-item-quantity d-md-flex flex-md-column">
                                             <div class="quantity d-flex align-items-center justify-content-between">
                                                 {{-- DECREMENT --}}
-                                                <button wire:click="decreaseQuantity({{ $item['product_id'] }})" class="qty-btn dec-qty">
+                                                <button wire:click="decreaseQuantity({{ $item['product_id'] }}, {{ $item['color_id'] }})" class="qty-btn dec-qty">
                                                     <img src="{{ asset('assets/img/icon/minus.svg') }}" alt="minus">
                                                 </button>
 
@@ -41,11 +55,11 @@
                                                 <span class="qty-input">{{ $item['quantity'] }}</span>
 
                                                 {{-- INCREMENT --}}
-                                                <button wire:click="increaseQuantity({{ $item['product_id'] }})" class="qty-btn inc-qty">
+                                                <button wire:click="increaseQuantity({{ $item['product_id'] }}, {{ $item['color_id'] }})" class="qty-btn inc-qty">
                                                     <img src="{{ asset('assets/img/icon/plus.svg') }}" alt="plus">
                                                 </button>
                                             </div>
-                                            <button wire:click="removeItem({{ $item['product_id'] }})" type="button" class="product-remove mt-2 text-danger">Remove
+                                            <button wire:click="removeItem({{ $item['product_id'] }}, {{ $item['color_id'] }})" type="button" class="product-remove mt-2 text-danger">Remove
                                             </button>
                                         </td>
                                         <td class="cart-item-price text-end">

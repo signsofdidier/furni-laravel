@@ -8,8 +8,8 @@ class Color extends Model
 {
     protected $fillable = ['product_id', 'name', 'hex'];
 
-    public function product(){
-        return $this->belongsTo(Product::class);
+    public function products(){
+        return $this->belongsToMany(Product::class);
     }
 
 }

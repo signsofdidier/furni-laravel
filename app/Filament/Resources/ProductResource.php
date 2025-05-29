@@ -9,6 +9,7 @@ use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\MultiSelect;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -63,6 +64,13 @@ class ProductResource extends Resource
                             ->dehydrated()
                             // Zorg dat de slug uniek is in de 'products' tabel, maar negeer het huidige record bij het bewerken
                             ->unique(Product::class, 'slug', ignoreRecord: true),
+
+                        Select::make('colors')
+                            ->multiple()
+                            ->relationship('colors', 'name')
+                            ->label('Available Colors')
+                            ->preload() // laadt alle kleuren in één keer
+                            ->searchable(), // doorzoekbaar indien veel kleuren
 
                         MarkdownEditor::make('description')
                             ->columnSpanFull()

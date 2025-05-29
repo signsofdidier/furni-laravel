@@ -34,6 +34,7 @@ class ColorResource extends Resource
                     ->required()
                     ->maxLength(50),
                 ColorPicker::make('hex')
+                    ->label('Color (hex: #)')
                     ->required(),
             ]);
     }
@@ -42,7 +43,6 @@ class ColorResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id')->sortable(),
                 TextColumn::make('name')->sortable(),
                 ColorColumn::make('hex')
                     ->label('Color'),
@@ -53,6 +53,7 @@ class ColorResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

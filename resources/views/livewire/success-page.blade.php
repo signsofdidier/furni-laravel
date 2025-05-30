@@ -32,6 +32,10 @@
                             </div>
                         </div>
 
+                        @if($order)
+                            <p>Transactie-ID (Stripe): <strong>{{ $order->transaction_id }}</strong></p>
+                        @endif
+
                         <div class="card border bg-light mb-4">
                             <div class="card-body">
                                 <h5 class="card-title fw-semibold mb-3">Shipping Address</h5>

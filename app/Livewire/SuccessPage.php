@@ -20,22 +20,26 @@ class SuccessPage extends Component
         // haal de laatste bestelling op van de ingelogde user
         $latest_order = Order::with('address')->where('user_id', auth()->user()->id)->latest()->first();
 
-        if($this->session_id){
+        if ($this->session_id) {
             Stripe::setApiKey(env('STRIPE_SECRET'));
 
-            //geeft ALLE informatie van de bestelling via stripe session
             $session_info = Session::retrieve($this->session_id);
 
-            // Als de session info failed betaling geeft ga je naar de cancel pagina, als de betaling succes is ga je naar de success pagina.
-            if($session_info->payment_status != 'paid'){
+            if ($session_info->payment_status != 'paid') {
                 $latest_order->payment_status = 'failed';
                 $latest_order->save();
                 return redirect('/cancel');
-            }else if($session_info->payment_status == 'paid'){
+            } elseif ($session_info->payment_status == 'paid') {
                 $latest_order->payment_status = 'paid';
+
+                // haal payment_intent op en bewaar het als transactie-ID
+                $payment_intent_id = $session_info->payment_intent;
+                $latest_order->transaction_id = $payment_intent_id;
+
                 $latest_order->save();
             }
         }
+
 
         return view('livewire.success-page', [
             'order' => $latest_order,

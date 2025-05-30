@@ -96,6 +96,9 @@ class CheckoutPage extends Component
                 'cancel_url' => route('cancel'),
             ]);
 
+            // Transaction id
+            $order->transaction_id = $sessionCheckout->id;
+
             $redirect_url = $sessionCheckout->url;
         }else {
             $redirect_url = route('success');

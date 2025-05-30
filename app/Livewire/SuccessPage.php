@@ -9,6 +9,10 @@ use Livewire\Component;
 use Stripe\Checkout\Session;
 use Stripe\Stripe;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\InvoiceMail;
+
 #[Title('Success - E-Commerce')]
 class SuccessPage extends Component
 {
@@ -39,6 +43,18 @@ class SuccessPage extends Component
                 $latest_order->save();
             }
         }
+
+        if (!$latest_order->transaction_id) {
+            $latest_order->transaction_id = $payment_intent_id;
+            $latest_order->save();
+
+            // Genereer factuur PDF
+            $pdf = Pdf::loadView('pdf.invoice', ['order' => $latest_order]);
+
+            // Mail factuur
+            Mail::to($latest_order->user->email)->send(new InvoiceMail($latest_order, $pdf->output()));
+        }
+
 
 
         return view('livewire.success-page', [

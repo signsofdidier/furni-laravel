@@ -43,4 +43,20 @@ Route::middleware('auth')->group(function() {
     Route::get('/my-orders/{order_id}', MyOrderDetailPage::class)->name('my-orders.show');
     Route::get('/success', SuccessPage::class)->name('success');
     Route::get('/cancel', CancelPage::class)->name('cancel');
+
+    Route::get('/my-orders/{order_id}/invoice', function ($order_id) {
+        $order = \App\Models\Order::with('items.product', 'user', 'address')->findOrFail($order_id);
+
+        if ($order->user_id !== auth()->id()) {
+            abort(403); // Je mag alleen je eigen orders zien
+        }
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.invoice', [
+            'order' => $order
+        ]);
+
+        return $pdf->download('factuur-order-' . $order->id . '.pdf');
+    })->name('my-orders.invoice')->middleware('auth');
+
+
 });

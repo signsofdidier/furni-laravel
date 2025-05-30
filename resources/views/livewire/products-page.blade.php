@@ -107,38 +107,21 @@
                             @endforeach
 
                         </div>
+
+
+                        {{--<div class="row">
+                            <div class="col-lg-9 offset-lg-3">
+                                <nav wire:navigate class="custom-pagination">
+                                    {{ $products->links('vendor.pagination.custom') }}
+                                </nav>
+                            </div>
+                        </div>--}}
                     </div>
-                    {{--PAGINATION WEG--}}
-                    {{--<div class="pagination justify-content-center mt-100">
-                        <nav>
-                            <ul class="pagination m-0 d-flex align-items-center">
-                                <li class="item disabled">
-                                    <a class="link">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"
-                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                             class="icon icon-left">
-                                            <polyline points="15 18 9 12 15 6"></polyline>
-                                        </svg>
-                                    </a>
-                                </li>
-                                <li class="item"><a class="link" href="#">1</a></li>
-                                <li class="item active"><a class="link" href="#">2</a></li>
-                                <li class="item"><a class="link" href="#">3</a></li>
-                                <li class="item"><a class="link" href="#">4</a></li>
-                                <li class="item">
-                                    <a class="link" href="#">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"
-                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                             class="icon icon-right">
-                                            <polyline points="9 18 15 12 9 6"></polyline>
-                                        </svg>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>--}}
+
+                    <div class="mt-5">
+                        {{ $products->links() }}
+                    </div>
+
                 </div>
                 <!-- product area end -->
 
@@ -351,14 +334,6 @@
                     </div>
                 </div>
                 <!-- sidebar end -->
-            </div>
-
-            <div class="row">
-                <div class="col-lg-9 offset-lg-3">
-                    <nav class="custom-pagination">
-                        {{ $products->links('vendor.pagination.custom') }}
-                    </nav>
-                </div>
             </div>
 
         </div>

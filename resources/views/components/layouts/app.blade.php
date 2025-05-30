@@ -258,6 +258,7 @@
         });
     </script>
 
+
 </div>
 @livewire('partials.footer')
 </body>

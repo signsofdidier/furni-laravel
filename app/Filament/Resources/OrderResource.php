@@ -111,7 +111,13 @@ class OrderResource extends Resource
                             ]),
 
                         TextArea::make('notes')
-                            ->columnSpanFull()
+                            ->columnSpanFull(),
+
+                        TextInput::make('transaction_id')
+                            ->label('Stripe Transaction-ID')
+                            ->readOnly()
+                            ->columnSpanFull(),
+
                     ])->columns(2),
 
                     Section::make('Order Items')->schema([
@@ -153,7 +159,9 @@ class OrderResource extends Resource
                                 ->numeric()
                                 ->required()
                                 ->dehydrated()
-                                ->columnSpan(3)
+                                ->columnSpan(3),
+
+
                         ])->columns(12),
 
                         Placeholder::make('grand_total_placeholder')
@@ -232,8 +240,13 @@ class OrderResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
-
+                TextColumn::make('transaction_id')
+                    ->label('Transaction-ID')
+                    ->copyable()
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])

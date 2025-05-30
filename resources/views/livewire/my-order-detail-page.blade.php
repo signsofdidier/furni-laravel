@@ -69,6 +69,7 @@
                             <span class="badge bg-{{ str_replace('bg-','',$paymentStatusColor) }} text-white">{{ ucfirst($order->payment_status) }}</span>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -145,6 +146,10 @@
                         <div class="d-flex justify-content-between fw-semibold">
                             <span>Total</span>
                             <span>{{ Number::currency($order->grand_total, 'EUR') }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between text-muted mt-3">
+                            <span>Transactie-ID:</span>
+                            <span class="text-break">{{ $order->transaction_id }}</span>
                         </div>
                     </div>
                 </div>

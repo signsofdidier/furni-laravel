@@ -114,9 +114,6 @@ class CheckoutPage extends Component
         // Na het plaatsen van de order wordt de cart geleegd
         CartManagement::clearCartItems();
 
-        // zend mail naar de user via de 'OrderPlaced' mail class
-        Mail::to(request()->user())->send(new OrderPlaced($order));
-
         return redirect($redirect_url);
     }
 

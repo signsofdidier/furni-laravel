@@ -1,45 +1,115 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>Factuur - Order #{{ $order->id }}</title>
     <style>
-        body { font-family: DejaVu Sans, sans-serif; font-size: 12px; }
-        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        th, td { padding: 8px; border: 1px solid #ddd; text-align: left; }
-        h1, h3 { margin-bottom: 0; }
+        body {
+            font-family: 'Arial', sans-serif;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .header {
+            background-color: #00234D;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header img {
+            max-height: 50px;
+            display: block;
+            margin: 0 auto 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 6px 8px;
+            vertical-align: middle;
+            text-align: left;
+        }
+
+        .table-header {
+            background-color: #00234D;
+            color: white;
+        }
+
+        td.image-cell {
+            width: 60px;
+            text-align: center;
+        }
+
+        img.product-image {
+            max-width: 50px;
+            max-height: 50px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .total {
+            font-weight: bold;
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+        }
     </style>
+
 </head>
 <body>
-<h1>Factuur</h1>
-<p><strong>Ordernummer:</strong> {{ $order->id }}</p>
-<p><strong>Datum:</strong> {{ $order->created_at->format('d-m-Y') }}</p>
-<p><strong>Klant:</strong> {{ $order->user->name }} ({{ $order->user->email }})</p>
+<div class="header">
+    <img src="{{ public_path('assets/img/logo-white.png') }}" alt="Shop Logo">
 
-<h3>Producten</h3>
+    <h1>Invoice #{{ $order->id }}</h1>
+</div>
+
+<p><strong>Customer:</strong> {{ $order->user->name }}</p>
+<p><strong>Email:</strong> {{ $order->user->email }}</p>
+<p><strong>Order Date:</strong> {{ $order->created_at->format('d/m/Y') }}</p>
+
 <table>
-    <thead>
+    <thead class="table-header">
     <tr>
+        <th>Image</th>
         <th>Product</th>
-        <th>Aantal</th>
-        <th>Prijs per stuk</th>
-        <th>Totaal</th>
+        <th>Quantity</th>
+        <th>Unit Price</th>
+        <th>Total</th>
     </tr>
     </thead>
     <tbody>
-    @foreach($order->items as $item)
+    @foreach ($order->items as $item)
         <tr>
-            <td>{{ $item->product->name }}</td>
+            <td class="image-cell">
+                <img class="product-image" src="{{ public_path('storage/' . $item->product->images[0]) }}" alt="{{ $item->product->name }}">
+            </td>
+            <td>
+                {{ $item->product->name }} <br>
+            </td>
             <td>{{ $item->quantity }}</td>
-            <td>€{{ number_format($item->unit_amount, 2, ',', '.') }}</td>
-            <td>€{{ number_format($item->total_amount, 2, ',', '.') }}</td>
+            <td>€{{ number_format($item->unit_amount, 2) }}</td>
+            <td>€{{ number_format($item->unit_amount * $item->quantity, 2) }}</td>
         </tr>
     @endforeach
     </tbody>
 </table>
 
-<p><strong>Grand Total:</strong> €{{ number_format($order->grand_total, 2, ',', '.') }}</p>
-<p><strong>Betaalstatus:</strong> {{ ucfirst($order->payment_status) }}</p>
-<p><strong>Status:</strong> {{ ucfirst($order->status) }}</p>
+<p class="total">Grand Total (incl. VAT): €{{ number_format($order->grand_total, 2) }}</p>
+
+<div class="footer">
+    This invoice was automatically generated<br>
+    BTW/VAT: BE0123.456.789 | Address: Example Street 1, 8870 Izegem, Belgium
+</div>
 </body>
 </html>

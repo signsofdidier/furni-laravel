@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\Color;
 use App\Models\Product;
+use App\Models\Setting;
 
 class CartManagement {
 
@@ -31,7 +32,7 @@ class CartManagement {
                 $cart_items[$existing_item]['quantity'] * $cart_items[$existing_item]['unit_amount'];
         } else {
             // Haal product en kleur op
-            $product = Product::find($product_id, ['id', 'name', 'price', 'images', 'slug']);
+            $product = Product::find($product_id, ['id', 'name', 'price', 'images', 'slug', 'shipping_cost']);
             $color = $color_id ? Color::find($color_id) : null; // haal kleur op als er ene is
 
             if($product){
@@ -45,6 +46,7 @@ class CartManagement {
                     'quantity' => 1,
                     'unit_amount' => $product->price,
                     'total_amount' => $product->price,
+                    'shipping_cost' => $product->shipping_cost,
                     'image' => $product->images[0] ?? null,
                 ];
             }
@@ -77,7 +79,7 @@ class CartManagement {
             $cart_items[$existing_item]['total_amount'] = $cart_items[$existing_item]['quantity'] *
                 $cart_items[$existing_item]['unit_amount'];
         } else {
-            $product = Product::find($product_id, ['id', 'name', 'price', 'images', 'slug']);
+            $product = Product::find($product_id, ['id', 'name', 'price', 'images', 'slug', 'shipping_cost']);
             $color = $color_id ? Color::find($color_id) : null;
 
             if($product){
@@ -91,6 +93,7 @@ class CartManagement {
                     'quantity' => $quantity,
                     'unit_amount' => $product->price,
                     'total_amount' => $product->price * $quantity,
+                    'shipping_cost' => $product->shipping_cost,
                     'image' => $product->images[0] ?? null,
                 ];
             }
@@ -167,4 +170,55 @@ class CartManagement {
     static public function calculateGrandTotal($items){
         return array_sum(array_column($items, 'total_amount'));
     }
+
+    /**
+     * Bereken het totaal inclusief shipping:
+     *   subtotal (sum total_amount) + shipping (of 0 bij gratis verzending).
+     */
+    public static function calculateTotalWithShipping(array $cart_items): float
+    {
+        // 1) Bereken de subtotal (exclusief shipping)
+        $subtotal = array_sum(array_column($cart_items, 'total_amount'));
+
+        // 2) Bepaal de threshold (gratis verzending) uit settings
+        $setting = Setting::first();
+        $threshold = $setting->free_shipping_threshold ?? 0;
+
+        // 3) Bereken de shipping
+        $shipping = 0;
+        foreach ($cart_items as $item) {
+            $shipping += ($item['shipping_cost'] * $item['quantity']);
+        }
+
+        // 4) Als we boven de threshold zitten, is shipping gratis
+        if ($subtotal >= $threshold) {
+            $shipping = 0;
+        }
+
+        // 5) Return subtotal + shipping
+        return $subtotal + $shipping;
+    }
+
+    public static function calculateShippingAmount(array $cart_items): float
+    {
+        $totalShipping = 0;
+        $grand_total   = self::calculateGrandTotal($cart_items);
+
+        // Haal threshold uit database
+        $setting   = Setting::first();
+        $threshold = $setting->free_shipping_threshold ?? 0;
+
+        // Bereken wat de “normale” shipping zou zijn
+        foreach ($cart_items as $item) {
+            $totalShipping += ($item['shipping_cost'] * $item['quantity']);
+        }
+
+        // Pas de logica aan: alleen gratis als threshold > 0 én grand_total >= threshold
+        if ($threshold > 0 && $grand_total >= $threshold) {
+            return 0;
+        }
+
+        return $totalShipping;
+    }
+
 }

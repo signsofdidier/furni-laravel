@@ -4,10 +4,10 @@ namespace App\Livewire;
 
 use App\Helpers\CartManagement;
 use App\Mail\InvoicePaidMail;
-use App\Mail\OrderPlaced;
 use App\Mail\OrderPlacedMail;
 use App\Models\Address;
 use App\Models\Order;
+use App\Models\Setting;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -25,6 +25,14 @@ class CheckoutPage extends Component
     public $state;
     public $zip_code;
     public $payment_method;
+    public $discount_code;
+
+    public float $sub_total = 0;
+
+    public float $shipping_amount = 0;
+
+    // Threshold voor gratis verzending uit de Settings
+    public float $free_shipping_threshold  = 0;
 
     // als de cart leeg is mag je niet je geen toegang hebben tot de checkout page en keer je terug naar products.
     public function mount(){
@@ -32,6 +40,14 @@ class CheckoutPage extends Component
         if(count($cart_items) == 0){
             return redirect('/products');
         }
+
+        // Haal de threshold op en bewaar in een property
+        $setting = Setting::first();
+        $this->free_shipping_threshold = $setting->free_shipping_threshold ?? 0;
+
+        // Bereken op mount meteen de sub_total en shipping_amount
+        $this->sub_total = CartManagement::calculateGrandTotal($cart_items);
+        $this->calculateShippingAmount($cart_items);
     }
 
     public function placeOrder(){
@@ -48,8 +64,13 @@ class CheckoutPage extends Component
         ]);
 
         $cart_items = CartManagement::getCartItemsFromSession();
-        $line_items = [];
 
+        // Herbereken sub_total en shipping_amount voor het geval de cart ondertussen is aangepast
+        $this->sub_total = CartManagement::calculateGrandTotal($cart_items);
+        $this->calculateShippingAmount($cart_items);
+
+        // Maak de line_items voor Stripe
+        $line_items = [];
         foreach($cart_items as $item){
             $line_items[] = [
                 'price_data' => [
@@ -63,17 +84,21 @@ class CheckoutPage extends Component
             ];
         }
 
+        // Maak het Order-object aan
         $order = new Order();
         $order->user_id = auth()->user()->id;
-        $order->grand_total = CartManagement::calculateGrandTotal($cart_items);
+        $order->grand_total = $this->sub_total;
         $order->payment_method = $this->payment_method;
         $order->payment_status = 'pending';
         $order->status = 'new';
         $order->currency = 'EUR';
-        $order->shipping_amount = 0;
-        $order->shipping_method = 'none';
+
+        // Sla verzendkosten op in het order (wordt later in database bewaard)
+        $order->shipping_amount = $this->shipping_amount;
+        $order->shipping_method = 'Flat Rate';
         $order->notes = 'Order placed by ' . auth()->user()->name;
 
+        // Maak het Address-object aan
         $address = new Address();
         $address->first_name = $this->first_name;
         $address->last_name = $this->last_name;
@@ -86,7 +111,7 @@ class CheckoutPage extends Component
         $redirect_url = '';
 
 
-        // If else voert uit als je kiest tussen cod of stripe
+        // Kies tussen Cash on Delivery of Stripe
         if($this->payment_method == 'stripe'){
             Stripe::setApiKey(env('STRIPE_SECRET'));
             $sessionCheckout = Session::create([
@@ -98,19 +123,21 @@ class CheckoutPage extends Component
                 'cancel_url' => route('cancel'),
             ]);
 
-            // Transaction id
+            // Sla de Stripe Transaction ID op in het order
             $order->transaction_id = $sessionCheckout->id;
-
             $redirect_url = $sessionCheckout->url;
+
         }else {
             $redirect_url = route('success');
         }
 
         $order->save();
 
+        // Koppel het adres aan het nieuw aangemaakte order
         $address->order_id = $order->id;
         $address->save();
 
+        // Sla alle item‐regels op in de “order_items”‐relatie (reflecteert wat in sessie zat)
         $order->items()->createMany($cart_items);
 
         // Na het plaatsen van de order wordt de cart geleegd
@@ -128,11 +155,41 @@ class CheckoutPage extends Component
     public function render()
     {
         $cart_items = CartManagement::getCartItemsFromSession();
-        $grand_total = CartManagement::calculateGrandTotal($cart_items);
+
+        // Herbereken sub_total en shipping_amount in render (voor de weergave)
+        $this->sub_total = CartManagement::calculateGrandTotal($cart_items);
+        $this->calculateShippingAmount($cart_items);
 
         return view('livewire.checkout-page', [
             'cart_items' => $cart_items,
-            'grand_total' => $grand_total,
+            'sub_total' => $this->sub_total,
+            'shipping_amount' => $this->shipping_amount,
+            'free_shipping_threshold' => $this->free_shipping_threshold,
+            // $grand_total is sub_total + shipping (maar ik kan da ook in de view zelf optellen)
+            'grand_total' => $this->sub_total + $this->shipping_amount,
         ]);
+    }
+
+    // Hulpmethode om verzendkosten te berekenen en in $shipping_amount te zetten
+    private function calculateShippingAmount(array $cart_items): void
+    {
+        $totalShipping = 0;
+        $grand_total = CartManagement::calculateGrandTotal($cart_items);
+
+        // Haal uit de database de threshold (gratis verzending)
+        $setting   = Setting::first();
+        $threshold = $setting->free_shipping_threshold ?? 0;
+
+        // Tel eerst de “normale” shipping voor alle items bij elkaar
+        foreach ($cart_items as $item) {
+            $totalShipping += ($item['shipping_cost'] * $item['quantity']);
+        }
+
+        // Alleen gratis verzending als threshold > 0 én grand_total ≥ threshold
+        if ($threshold > 0 && $grand_total >= $threshold) {
+            $totalShipping = 0;
+        }
+
+        $this->shipping_amount = $totalShipping;
     }
 }

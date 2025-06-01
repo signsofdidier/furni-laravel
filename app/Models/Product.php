@@ -21,6 +21,7 @@ class Product extends Model
         'on_sale',
         'category_id',
         'brand_id',
+        'shipping_cost',
     ];
 
     // hierdoor worden de images omgezet naar een array uit de JSON van images

@@ -81,9 +81,15 @@
                                         <h4 class="subtotal-title">Subtotals:</h4>
                                         <p class="subtotal-value">{{ Number::currency($grand_total, 'EUR') }}</p>
                                     </div>
-                                    <div class="subtotal-item shipping-box">
-                                        <h4 class="subtotal-title">Shipping:</h4>
-                                        <p class="subtotal-value">{{ Number::currency(0, 'EUR') }}</p>
+                                    <div class="subtotal-item shipping-box d-flex justify-content-between">
+                                        <h4 class="subtotal-title">Shipping Cost:</h4>
+                                        <p class="subtotal-value">
+                                            @if($grand_total >= $free_shipping_threshold)
+                                                Free Shipping
+                                            @else
+                                                {{ Number::currency($shipping_amount, 'EUR') }}
+                                            @endif
+                                        </p>
                                     </div>
                                     <div class="subtotal-item discount-box">
                                         <h4 class="subtotal-title">Discount:</h4>

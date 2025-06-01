@@ -94,7 +94,14 @@ class ProductResource extends Resource
                         TextInput::make('price')
                         ->numeric()
                         ->required()
-                        ->prefix('EUR')
+                        ->prefix('EUR'),
+
+                        TextInput::make('shipping_cost')
+                            ->label('Shipping cost / unit')
+                            ->numeric()
+                            ->required()
+                            ->prefix('EUR'),
+
                     ]),
 
                     Section::make('Associations')->schema([
@@ -150,6 +157,10 @@ class ProductResource extends Resource
                 TextColumn::make('price')
                     ->money('EUR')
                     ->sortable(),
+                TextColumn::make('shipping_cost')
+                    ->money('EUR')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 IconColumn::make('is_featured')
                 ->boolean(),
                 IconColumn::make('on_sale')

@@ -164,47 +164,75 @@
                 <div class="col-xl-3 col-lg-4 col-md-12 col-12">
                     <div class="cart-total-area checkout-summary-area">
                         <h3 class="d-none d-lg-block mb-0 text-center heading_24 mb-4">Order summary</h3>
+
                         @forelse($cart_items as $item)
                             <div class="minicart-item d-flex">
                                 <div class="mini-img-wrapper">
                                     <img class="mini-img" src="{{ url('storage', $item['image']) }}" alt="{{ $item['name'] }}">
                                 </div>
                                 <div class="product-info">
-                                    <h2 class="product-title"><a href="{{ url('/products') }}/{{ $item['slug'] }}">{{ $item['name'] }}</a></h2>
-                                    <p class="product-vendor mb-1">{{ Number::currency($item['unit_amount'], 'EUR') }} x {{ $item['quantity'] }}</p>
+                                    <h2 class="product-title">
+                                        <a href="{{ url('/products') }}/{{ $item['slug'] }}">
+                                            {{ $item['name'] }}
+                                        </a>
+                                    </h2>
+                                    <p class="product-vendor mb-1">
+                                        {{ Number::currency($item['unit_amount'], 'EUR') }} × {{ $item['quantity'] }}
+                                    </p>
                                 </div>
                             </div>
                         @empty
+                            {{-- Als je om de een of andere reden geen items hebt… (maar dat zou niet mogen) --}}
                         @endforelse
-                        {{-- → NIEUW: Kortingscode invullen (optioneel) --}}
+
+                        {{-- Veld voor kortingscode (optioneel) --}}
                         <div class="mb-4">
                             <label for="discount_code" class="form-label">Discount code:</label>
-                            <input type="text"
-                                   wire:model.defer="discount_code"
-                                   id="discount_code"
-                                   class="form-control @error('discount_code') is-invalid @enderror"
+                            <input
+                                type="text"
+                                wire:model.defer="discount_code"
+                                id="discount_code"
+                                class="form-control @error('discount_code') is-invalid @enderror"
                             >
                             @error('discount_code')
                             <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
+
                         <div class="cart-total-box mt-4 bg-transparent p-0">
+
+                            {{-- 1) Subtotals: som van alle items --}}
                             <div class="subtotal-item subtotal-box d-flex justify-content-between">
                                 <h4 class="subtotal-title">Subtotals:</h4>
-                                <p class="subtotal-value">{{ Number::currency($grand_total, 'EUR') }}</p>
+                                <p class="subtotal-value">{{ Number::currency($sub_total, 'EUR') }}</p>
                             </div>
+
+                            {{-- 2) Taxes (21%) nog altijd 0 in dit voorbeeld --}}
                             <div class="subtotal-item discount-box d-flex justify-content-between">
-                                <h4 class="subtotal-title">Taxes (21%):</h4>
-                                <p class="subtotal-value">0</p>
+                                <h4 class="subtotal-title small">Taxes (21%):</h4>
+                                <p class="subtotal-value small">0</p>
                             </div>
+
+                            {{-- 3) Shipping Cost --}}
                             <div class="subtotal-item shipping-box d-flex justify-content-between">
-                                <h4 class="subtotal-title">Shipping:</h4>
-                                <p class="subtotal-value">0</p>
+                                <h4 class="subtotal-title small">Shipping Cost:</h4>
+                                <p class="subtotal-value small">
+                                    @if($free_shipping_threshold > 0 && $sub_total >= $free_shipping_threshold)
+                                        Free Shipping
+                                    @else
+                                        {{ Number::currency($shipping_amount, 'EUR') }}
+                                    @endif
+                                </p>
                             </div>
+
                             <hr />
+
+                            {{-- 4) Total: sub_total + shipping_amount --}}
                             <div class="subtotal-item discount-box d-flex justify-content-between">
                                 <h4 class="subtotal-title">Total:</h4>
-                                <p class="subtotal-value">{{ Number::currency($grand_total, 'EUR') }}</p>
+                                <p class="subtotal-value">
+                                    {{ Number::currency($grand_total, 'EUR') }}
+                                </p>
                             </div>
                         </div>
                     </div>

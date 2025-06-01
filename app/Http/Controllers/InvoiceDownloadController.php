@@ -12,14 +12,18 @@ class InvoiceDownloadController extends Controller
     // Download de juiste invoice pdf bij orders, cash on delivery of stripe
     public function __invoke(Order $order)
     {
+        // Enkel je eigen orders downloaden
         if ($order->user_id !== Auth::id()) {
             abort(403);
         }
 
-        // Laad alle nodige relaties
-        $order->load(['user', 'address', 'items.product', 'items.color']);
+        // Check betaalmethode
+        $view = $order->payment_method === 'cod'
+            ? 'pdf.order-placed'
+            : 'pdf.invoice';
 
-        $pdf = Pdf::loadView('pdf.order-placed', ['order' => $order]);
+        $pdf = Pdf::loadView($view, ['order' => $order]);
+
         return $pdf->download('invoice-order-' . $order->id . '.pdf');
     }
 

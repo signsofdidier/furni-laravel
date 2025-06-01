@@ -69,9 +69,11 @@
 </head>
 <body>
 <div class="header">
-    <img src="{{ public_path('assets/img/logo-white.png') }}" alt="Shop Logo">
-
-    <h1>Invoice #{{ $order->id }}</h1>
+    <div class="header">
+        <img src="{{ public_path('assets/img/logo-white.png') }}" alt="Shop Logo">
+        <h1>Order Confirmation #{{ $order->id }}</h1>
+        <p>Payment Method: <strong>Stripe</strong></p>
+    </div>
 </div>
 
 <p><strong>Customer:</strong> {{ $order->user->name }}</p>
@@ -108,8 +110,8 @@
 <p class="total">Grand Total (incl. VAT): €{{ number_format($order->grand_total, 2) }}</p>
 
 <div class="footer">
-    This invoice was automatically generated<br>
-    BTW/VAT: BE0123.456.789 | Address: Example Street 1, 8870 Izegem, Belgium
+    This invoice was automatically generated.<br>
+    BTW/VAT: BE0000.000.000 | Address: Syntrastreet, 8800 Roeselare, Belgium
 </div>
 </body>
 </html>

@@ -3,7 +3,9 @@
 namespace App\Livewire;
 
 use App\Helpers\CartManagement;
+use App\Mail\InvoicePaidMail;
 use App\Mail\OrderPlaced;
+use App\Mail\OrderPlacedMail;
 use App\Models\Address;
 use App\Models\Order;
 use Illuminate\Support\Facades\Mail;
@@ -113,6 +115,11 @@ class CheckoutPage extends Component
 
         // Na het plaatsen van de order wordt de cart geleegd
         CartManagement::clearCartItems();
+
+        // Bij COD handmatig mail verzenden
+        if ($this->payment_method === 'cod') {
+            Mail::to($order->user->email)->send(new OrderPlacedMail($order));
+        }
 
         return redirect($redirect_url);
     }

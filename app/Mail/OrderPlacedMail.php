@@ -3,12 +3,12 @@
 namespace App\Mail;
 
 use App\Models\Order;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Barryvdh\DomPDF\Facade\Pdf;
 
-class InvoicePaidMail extends Mailable
+class OrderPlacedMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -22,14 +22,13 @@ class InvoicePaidMail extends Mailable
     // PDF IN MAIL
     public function build()
     {
-        $pdf = Pdf::loadView('pdf.invoice', ['order' => $this->order]);
+        $pdf = Pdf::loadView('pdf.order-placed', ['order' => $this->order]);
 
         // Stuurt een e-mail met een pdf attachement
-        return $this->subject('Your Order #' . $this->order->id . ' is confirmed')
-            ->view('emails.invoice-paid')
-            ->attachData($pdf->output(), 'invoice-order-' . $this->order->id . '.pdf', [
+        return $this->subject('Your Order #' . $this->order->id . ' was placed successfully')
+            ->view('emails.order-placed')
+            ->attachData($pdf->output(), 'order-confirmation-' . $this->order->id . '.pdf', [
                 'mime' => 'application/pdf',
             ]);
     }
 }
-

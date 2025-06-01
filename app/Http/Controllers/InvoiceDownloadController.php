@@ -8,15 +8,19 @@ use Illuminate\Support\Facades\Auth;
 
 class InvoiceDownloadController extends Controller
 {
+
+    // Download de juiste invoice pdf bij orders, cash on delivery of stripe
     public function __invoke(Order $order)
     {
-        // Zorg dat gebruikers alleen hun eigen orders kunnen downloaden
         if ($order->user_id !== Auth::id()) {
             abort(403);
         }
 
-        $pdf = Pdf::loadView('pdf.invoice', ['order' => $order]);
+        // Laad alle nodige relaties
+        $order->load(['user', 'address', 'items.product', 'items.color']);
 
-        return $pdf->download('factuur-order-' . $order->id . '.pdf');
+        $pdf = Pdf::loadView('pdf.order-placed', ['order' => $order]);
+        return $pdf->download('invoice-order-' . $order->id . '.pdf');
     }
+
 }

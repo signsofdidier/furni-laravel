@@ -59,8 +59,8 @@ class SuccessPage extends Component
             ]);
 
             // Verstuur de factuur als bijlage via mail naar de gebruiker
-            /*Mail::to($latest_order->user->email)
-                ->send(new InvoicePaidMail($latest_order));*/
+            Mail::to($latest_order->user->email)
+                ->send(new InvoicePaidMail($latest_order));
         }
 
         // Toon de success pagina met ordergegevens

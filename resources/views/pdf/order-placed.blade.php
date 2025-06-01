@@ -53,11 +53,30 @@
             display: block;
         }
 
-        .total {
-            font-weight: bold;
-            text-align: right;
+        /* ------ Styling voor de totals-sectie ------ */
+        .totals-container {
             margin-top: 20px;
+            text-align: right;
         }
+
+        .totals-subtotal {
+            font-size: 16px;
+            margin: 4px 0;
+        }
+
+        .totals-small {
+            font-size: 14px;
+            margin: 2px 0;
+            color: #555;
+        }
+
+        .totals-grand {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 8px 0;
+            color: #00234D;
+        }
+
 
         .footer {
             margin-top: 40px;
@@ -68,6 +87,12 @@
     </style>
 </head>
 <body>
+
+@php
+    // Haal de gratis-verzenddrempel op uit de settings
+    $threshold = \App\Models\Setting::first()->free_shipping_threshold ?? 0;
+@endphp
+
 <div class="header">
     <img src="{{ public_path('assets/img/logo-white.png') }}" alt="Shop Logo">
     <h1>Order Confirmation #{{ $order->id }}</h1>
@@ -109,7 +134,28 @@
     </tbody>
 </table>
 
-<p class="total">Grand Total (incl. VAT): €{{ number_format($order->grand_total, 2) }}</p>
+{{-- ------ Aangepaste totals-sectie met Taxes erbij ------ --}}
+<div class="totals-container">
+    <p class="totals-subtotal">
+        Subtotal: €{{ number_format($order->sub_total, 2) }}
+    </p>
+    <p class="totals-small">
+        Discount: €{{ number_format(0, 2) }}
+    </p>
+    <p class="totals-small">
+        Taxes (21%) incl.: €{{ number_format($order->sub_total * 0.21, 2) }}
+    </p>
+    <p class="totals-small">
+        @if($threshold > 0 && $order->sub_total >= $threshold)
+            <strong>Free Shipping</strong>
+        @else
+            Shipping Cost: €{{ number_format($order->shipping_amount, 2) }}
+        @endif
+    </p>
+    <p class="totals-grand">
+        Grand Total: €{{ number_format($order->grand_total, 2) }}
+    </p>
+</div>
 
 <p><strong>Note:</strong> Please have the exact amount ready. Payment is due upon delivery.</p>
 

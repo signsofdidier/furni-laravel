@@ -73,34 +73,17 @@
                             <h4>There are no items in your cart</h4>
                         @endif
                     </div>
+
                     <div class="col-lg-5 col-md-12 col-12">
                         <div class="cart-total-area">
                             <h3 class="cart-total-title d-none d-lg-block mb-0">Cart Totals</h3>
                                 <div class="cart-total-box mt-4">
                                     <div class="subtotal-item subtotal-box">
                                         <h4 class="subtotal-title">Subtotals:</h4>
-                                        <p class="subtotal-value">{{ Number::currency($grand_total, 'EUR') }}</p>
-                                    </div>
-                                    <div class="subtotal-item shipping-box d-flex justify-content-between">
-                                        <h4 class="subtotal-title">Shipping Cost:</h4>
-                                        <p class="subtotal-value">
-                                            @if($grand_total >= $free_shipping_threshold)
-                                                Free Shipping
-                                            @else
-                                                {{ Number::currency($shipping_amount, 'EUR') }}
-                                            @endif
-                                        </p>
-                                    </div>
-                                    <div class="subtotal-item discount-box">
-                                        <h4 class="subtotal-title">Discount:</h4>
-                                        <p class="subtotal-value">{{ Number::currency(0, 'EUR') }}</p>
+                                        <p class="subtotal-value">{{ Number::currency($sub_total, 'EUR') }}</p>
                                     </div>
                                     <hr />
-                                    <div class="subtotal-item discount-box">
-                                        <h4 class="subtotal-title">Total:</h4>
-                                        <p class="subtotal-value">{{ Number::currency($grand_total, 'EUR') }}</p>
-                                    </div>
-                                    <p class="shipping_text">Shipping & taxes calculated at checkout</p>
+                                    <p class="shipping_text">Shipping, taxes & discount calculated at checkout</p>
                                     <div class="d-flex justify-content-center mt-4">
                                         @if($cart_items)
                                             <a href="{{ url('/checkout') }}" class="position-relative btn-primary text-uppercase">

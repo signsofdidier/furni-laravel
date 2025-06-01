@@ -201,24 +201,30 @@ class CartManagement {
 
     public static function calculateShippingAmount(array $cart_items): float
     {
-        $totalShipping = 0;
-        $grand_total   = self::calculateGrandTotal($cart_items);
+        // 1) Bereken sub_total zodat we kunnen checken op gratis verzending
+        $grand_total = self::calculateGrandTotal($cart_items);
 
-        // Haal threshold uit database
+        // 2) Haal threshold op uit de instellingen
         $setting   = Setting::first();
         $threshold = $setting->free_shipping_threshold ?? 0;
 
-        // Bereken wat de “normale” shipping zou zijn
+        // 3) Zoek de hoogste verzendkost in de hele cart
+        $maxShipping = 0;
         foreach ($cart_items as $item) {
-            $totalShipping += ($item['shipping_cost'] * $item['quantity']);
+            if (isset($item['shipping_cost']) && $item['shipping_cost'] > $maxShipping) {
+                $maxShipping = $item['shipping_cost'];
+            }
         }
 
-        // Pas de logica aan: alleen gratis als threshold > 0 én grand_total >= threshold
+        // 4) Als er een positieve threshold is én sub_total ≥ threshold, is het gratis
         if ($threshold > 0 && $grand_total >= $threshold) {
             return 0;
         }
 
-        return $totalShipping;
+        // 5) Anders is de verzendkost precies die maxShipping
+        return $maxShipping;
     }
+
+
 
 }

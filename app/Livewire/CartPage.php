@@ -14,14 +14,6 @@ class CartPage extends Component
     public array $cart_items = [];
     public float $sub_total = 0.0;
 
-    // property om verzendkosten op te slaan
-    public float $shipping_amount       = 0.0;
-    // property om threshold (gratis verzending) op te slaan
-    public float $free_shipping_threshold = 0.0;
-
-    // property voor het eindbedrag (items + shipping – discount)
-    public float $grand_total = 0.0;
-
     public function mount(): void
     {
         // deze helper-methode haalt de sessie opnieuw op en berekent de totalen, zodat je dat niet in elke functie hoeft te herhalen.
@@ -36,16 +28,6 @@ class CartPage extends Component
 
         // 2) Bereken “sub_total” = sum(total_amount) van alle items
         $this->sub_total = CartManagement::calculateGrandTotal($this->cart_items);
-
-        // 3) Haal de free_shipping_threshold uit de settings (één record)
-        $setting = Setting::first();
-        $this->free_shipping_threshold = $setting->free_shipping_threshold ?? 0.0;
-
-        // 4) Bereken de verzendkosten via de helper
-        $this->shipping_amount = CartManagement::calculateShippingAmount($this->cart_items);
-
-        // 5) Bereken het grand totaal (“grand_total”) = sub_total + shipping_amount
-        $this->grand_total = $this->sub_total + $this->shipping_amount;
     }
 
     /**
@@ -103,9 +85,6 @@ class CartPage extends Component
         return view('livewire.cart-page', [
             'cart_items' => $this->cart_items,
             'sub_total' => $this->sub_total,
-            'shipping_amount'=> $this->shipping_amount,
-            'free_shipping_threshold' => $this->free_shipping_threshold,
-            'grand_total' => $this->grand_total,
         ]);
     }
 }

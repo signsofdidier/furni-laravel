@@ -7,6 +7,8 @@
             font-family: 'Arial', sans-serif;
             font-size: 14px;
             color: #333;
+            margin: 0;
+            padding: 0;
         }
 
         .header {
@@ -20,6 +22,14 @@
             max-height: 50px;
             display: block;
             margin: 0 auto 10px;
+        }
+
+        .customer-info {
+            margin: 20px 0;
+        }
+
+        .customer-info p {
+            margin: 4px 0;
         }
 
         table {
@@ -52,10 +62,28 @@
             display: block;
         }
 
-        .total {
-            font-weight: bold;
-            text-align: right;
+        /* ------ Styling voor de totals-sectie ------ */
+        .totals-container {
             margin-top: 20px;
+            text-align: right;
+        }
+
+        .totals-subtotal {
+            font-size: 16px;
+            margin: 4px 0;
+        }
+
+        .totals-small {
+            font-size: 14px;
+            margin: 2px 0;
+            color: #555;
+        }
+
+        .totals-grand {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 8px 0;
+            color: #00234D;
         }
 
         .footer {
@@ -65,53 +93,81 @@
             text-align: center;
         }
     </style>
-
 </head>
 <body>
+
+@php
+    // Haal de gratis-verzenddrempel op uit de settings
+    $threshold = \App\Models\Setting::first()->free_shipping_threshold ?? 0;
+@endphp
+
 <div class="header">
-    <div class="header">
-        <img src="{{ public_path('assets/img/logo-white.png') }}" alt="Shop Logo">
-        <h1>Order Confirmation #{{ $order->id }}</h1>
-        <p>Payment Method: <strong>Stripe</strong></p>
-    </div>
+    <img src="{{ public_path('assets/img/logo-white.png') }}" alt="Shop Logo">
+    <h1>Order Confirmation #{{ $order->id }}</h1>
+    <p>Payment Method: <strong>{{ ucfirst($order->payment_method) }}</strong></p>
 </div>
 
-<p><strong>Customer:</strong> {{ $order->user->name }}</p>
-<p><strong>Email:</strong> {{ $order->user->email }}</p>
-<p><strong>Order Date:</strong> {{ $order->created_at->format('d/m/Y') }}</p>
+<div class="container">
+    <div class="customer-info">
+        <p><strong>Customer:</strong> {{ $order->user->name }}</p>
+        <p><strong>Email:</strong> {{ $order->user->email }}</p>
+        <p><strong>Order Date:</strong> {{ $order->created_at->format('d/m/Y') }}</p>
+    </div>
 
-<table>
-    <thead class="table-header">
-    <tr>
-        <th>Image</th>
-        <th>Product</th>
-        <th>Quantity</th>
-        <th>Unit Price</th>
-        <th>Total</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach ($order->items as $item)
+    <table>
+        <thead class="table-header">
         <tr>
-            <td class="image-cell">
-                <img class="product-image" src="{{ public_path('storage/' . $item->product->images[0]) }}" alt="{{ $item->product->name }}">
-            </td>
-            <td>
-                {{ $item->product->name }} <br>
-            </td>
-            <td>{{ $item->quantity }}</td>
-            <td>€{{ number_format($item->unit_amount, 2) }}</td>
-            <td>€{{ number_format($item->unit_amount * $item->quantity, 2) }}</td>
+            <th>Image</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Total</th>
         </tr>
-    @endforeach
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        @foreach ($order->items as $item)
+            <tr>
+                <td class="image-cell">
+                    <img class="product-image"
+                         src="{{ public_path('storage/' . $item->product->images[0]) }}"
+                         alt="{{ $item->product->name }}">
+                </td>
+                <td>{{ $item->product->name }}</td>
+                <td>{{ $item->quantity }}</td>
+                <td>€{{ number_format($item->unit_amount, 2) }}</td>
+                <td>€{{ number_format($item->unit_amount * $item->quantity, 2) }}</td>
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
 
-<p class="total">Grand Total (incl. VAT): €{{ number_format($order->grand_total, 2) }}</p>
+    {{-- ------ Aangepaste totals-sectie met Taxes erbij ------ --}}
+    <div class="totals-container">
+        <p class="totals-subtotal">
+            Subtotal: €{{ number_format($order->sub_total, 2) }}
+        </p>
+        <p class="totals-small">
+            Discount: €{{ number_format(0, 2) }}
+        </p>
+        <p class="totals-small">
+            Taxes (21%) incl.: €{{ number_format($order->sub_total * 0.21, 2) }}
+        </p>
+        <p class="totals-small">
+            @if($threshold > 0 && $order->sub_total >= $threshold)
+                <strong>Free Shipping</strong>
+            @else
+                Shipping Cost: €{{ number_format($order->shipping_amount, 2) }}
+            @endif
+        </p>
+        <p class="totals-grand">
+            Grand Total: €{{ number_format($order->grand_total, 2) }}
+        </p>
+    </div>
 
-<div class="footer">
-    This invoice was automatically generated.<br>
-    BTW/VAT: BE0000.000.000 | Address: Syntrastreet, 8800 Roeselare, Belgium
+    <div class="footer">
+        This invoice was automatically generated.<br>
+        BTW/VAT: BE0000.000.000 | Address: Syntrastreet, 8800 Roeselare, Belgium
+    </div>
 </div>
 </body>
 </html>

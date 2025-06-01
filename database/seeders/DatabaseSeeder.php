@@ -22,8 +22,8 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
         User::create([
-            'name' => 'John Smith',
-            'email' => 'john@gmail.com',
+            'name' => 'Didier Vanassche',
+            'email' => 'didier.v@hotmail.com',
             'password' => Hash::make('password'),
         ]);
         User::create([
@@ -95,6 +95,7 @@ class DatabaseSeeder extends Seeder
                 'in_stock' => true,
                 'on_sale' => false,
                 'colors' => [1, 2, 5],
+                'shipping_cost' => 65.00,
             ],
             [
                 'name' => 'UrbanCraft Coffee Table',
@@ -107,6 +108,7 @@ class DatabaseSeeder extends Seeder
                 'in_stock' => true,
                 'on_sale' => true,
                 'colors' => [5, 6],
+                'shipping_cost' => 65.00,
             ],
             [
                 'name' => 'Designo 3-Seat Sofa',
@@ -119,6 +121,7 @@ class DatabaseSeeder extends Seeder
                 'in_stock' => true,
                 'on_sale' => true,
                 'colors' => [2, 3, 4],
+                'shipping_cost' => 65.00,
             ],
             [
                 'name' => 'SitWell Dining Table',
@@ -131,6 +134,7 @@ class DatabaseSeeder extends Seeder
                 'in_stock' => false,
                 'on_sale' => false,
                 'colors' => [1, 2, 5, 6],
+                'shipping_cost' => 65.00,
             ],
             [
                 'name' => 'VintageVibe Cabinet',
@@ -143,6 +147,7 @@ class DatabaseSeeder extends Seeder
                 'in_stock' => true,
                 'on_sale' => false,
                 'colors' => [5, 6, 4],
+                'shipping_cost' => 65.00,
             ],
             [
                 'name' => 'Taupe Serenity Armchair',
@@ -155,6 +160,7 @@ class DatabaseSeeder extends Seeder
                 'in_stock' => true,
                 'on_sale' => true,
                 'colors' => [5, 6],
+                'shipping_cost' => 65.00,
             ],
             [
                 'name' => 'Lime Green Modern Sofa',
@@ -167,6 +173,7 @@ class DatabaseSeeder extends Seeder
                 'in_stock' => true,
                 'on_sale' => false,
                 'colors' => [4, 2],
+                'shipping_cost' => 65.00,
             ],
             [
                 'name' => 'Turquoise Dining Table',
@@ -179,6 +186,7 @@ class DatabaseSeeder extends Seeder
                 'in_stock' => false,
                 'on_sale' => false,
                 'colors' => [3, 2],
+                'shipping_cost' => 65.00,
             ],
             [
                 'name' => 'Minimalist Walnut Coffee Table',
@@ -191,6 +199,7 @@ class DatabaseSeeder extends Seeder
                 'in_stock' => true,
                 'on_sale' => true,
                 'colors' => [6, 1],
+                'shipping_cost' => 65.00,
             ],
             [
                 'name' => 'Oak & Taupe Storage Cabinet',
@@ -203,6 +212,7 @@ class DatabaseSeeder extends Seeder
                 'in_stock' => true,
                 'on_sale' => false,
                 'colors' => [5, 2],
+                'shipping_cost' => 65.00,
             ],
         ];
 
@@ -249,6 +259,7 @@ class DatabaseSeeder extends Seeder
                 'is_featured' => $productData['is_featured'],
                 'in_stock'    => $productData['in_stock'],
                 'on_sale'     => $productData['on_sale'],
+                'shipping_cost' => $productData['shipping_cost'],
             ]);
             $product->colors()->attach($productData['colors']);
         }

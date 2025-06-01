@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->decimal('subtotal', 10, 2)
+            $table->decimal('sub_total', 10, 2)
                 ->before('grand_total')
                 ->default(0);
             $table->decimal('tax_amount', 10, 2)
@@ -30,7 +30,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn(['subtotal', 'tax_amount', 'discount_amount']);
+            $table->dropColumn(['sub_total', 'tax_amount', 'discount_amount']);
         });
     }
 };

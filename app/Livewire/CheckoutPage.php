@@ -28,9 +28,7 @@ class CheckoutPage extends Component
     public $discount_code;
 
     public float $sub_total = 0;
-
     public float $shipping_amount = 0;
-
     // Threshold voor gratis verzending uit de Settings
     public float $free_shipping_threshold  = 0;
 
@@ -87,7 +85,8 @@ class CheckoutPage extends Component
         // Maak het Order-object aan
         $order = new Order();
         $order->user_id = auth()->user()->id;
-        $order->grand_total = $this->sub_total;
+        $order->sub_total = $this->sub_total;
+        $order->grand_total = $this->sub_total + $this->shipping_amount;
         $order->payment_method = $this->payment_method;
         $order->payment_status = 'pending';
         $order->status = 'new';
@@ -173,23 +172,7 @@ class CheckoutPage extends Component
     // Hulpmethode om verzendkosten te berekenen en in $shipping_amount te zetten
     private function calculateShippingAmount(array $cart_items): void
     {
-        $totalShipping = 0;
-        $grand_total = CartManagement::calculateGrandTotal($cart_items);
-
-        // Haal uit de database de threshold (gratis verzending)
-        $setting   = Setting::first();
-        $threshold = $setting->free_shipping_threshold ?? 0;
-
-        // Tel eerst de “normale” shipping voor alle items bij elkaar
-        foreach ($cart_items as $item) {
-            $totalShipping += ($item['shipping_cost'] * $item['quantity']);
-        }
-
-        // Alleen gratis verzending als threshold > 0 én grand_total ≥ threshold
-        if ($threshold > 0 && $grand_total >= $threshold) {
-            $totalShipping = 0;
-        }
-
-        $this->shipping_amount = $totalShipping;
+        // Gebruik de helper waarin we al de “max‐verzendkost” logica hebben geïmplementeerd
+        $this->shipping_amount = CartManagement::calculateShippingAmount($cart_items);
     }
 }

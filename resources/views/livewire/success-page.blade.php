@@ -1,3 +1,8 @@
+@php
+    // gratis-verzenddrempel correct ophalen
+    $threshold = \App\Models\Setting::first()->free_shipping_threshold ?? 0;
+@endphp
+
 <div class="w-100 d-flex align-items-center justify-content-center">
     <div class="container py-5">
         <div class="row justify-content-center">
@@ -50,16 +55,25 @@
                             <div class="card-body">
                                 <h5 class="card-title fw-semibold mb-3">Order Details</h5>
                                 <div class="d-flex justify-content-between mb-2">
-                                    <span>Subtotal</span><span>{{ Number::currency($order->grand_total, 'EUR') }}</span>
+                                    <span>Subtotal</span><span>{{ Number::currency($order->sub_total, 'EUR') }}</span>
                                 </div>
                                 <div class="d-flex justify-content-between mb-2">
                                     <span>Discount</span><span>{{ Number::currency(0, 'EUR') }}</span>
                                 </div>
                                 <div class="d-flex justify-content-between mb-2">
-                                    <span>Shipping</span><span>{{ Number::currency(0, 'EUR') }}</span>
+                                    <span class="text-muted">Taxes (21%) incl.</span><span class="text-muted">{{ Number::currency($order->sub_total * 0.21 , 'EUR') }}</span>
                                 </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    @if($threshold > 0 && $order->sub_total >= $threshold)
+                                        <span>Free Shipping</span>
+                                    @else
+                                        <span>Shipping</span>
+                                        <span>{{ Number::currency($order->shipping_amount, 'EUR') }}</span>
+                                    @endif
+                                </div>
+
                                 <hr>
-                                <div class="d-flex justify-content-between fw-semibold">
+                                <div class="d-flex justify-content-between fw-bold">
                                     <span>Total</span><span>{{ Number::currency($order->grand_total, 'EUR') }}</span>
                                 </div>
                             </div>

@@ -209,20 +209,24 @@
 
                             {{-- 2) Taxes (21%) nog altijd 0 in dit voorbeeld --}}
                             <div class="subtotal-item discount-box d-flex justify-content-between">
-                                <h4 class="subtotal-title small">Taxes (21%):</h4>
-                                <p class="subtotal-value small">0</p>
+                                <h4 class="subtotal-title small text-muted">Taxes (21%):</h4>
+                                <p class="subtotal-value small text-muted">{{ Number::currency($sub_total * 0.21, 'EUR') }}</p>
                             </div>
 
                             {{-- 3) Shipping Cost --}}
                             <div class="subtotal-item shipping-box d-flex justify-content-between">
-                                <h4 class="subtotal-title small">Shipping Cost:</h4>
-                                <p class="subtotal-value small">
+
                                     @if($free_shipping_threshold > 0 && $sub_total >= $free_shipping_threshold)
-                                        Free Shipping
+                                        <p class="subtotal-value small">
+                                            Free Shipping
+                                        </p>
                                     @else
-                                        {{ Number::currency($shipping_amount, 'EUR') }}
+                                        <h4 class="subtotal-title small">Shipping Cost:</h4>
+                                        <p class="subtotal-value small">
+                                            {{ Number::currency($shipping_amount, 'EUR') }}
+                                        </p>
                                     @endif
-                                </p>
+
                             </div>
 
                             <hr />

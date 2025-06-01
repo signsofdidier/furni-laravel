@@ -15,6 +15,9 @@
         'failed'  => 'danger',
         default   => 'secondary',
     };
+
+    // Haal de gratis-verzenddrempel op via Settings (ervan uitgaande dat je dit even meepakt in de view)
+    $threshold = \App\Models\Setting::first()->free_shipping_threshold ?? 0;
 @endphp
 
 <div class="w-100 mt-4">
@@ -132,15 +135,22 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-2">
                             <span>Subtotal</span>
-                            <span>{{ Number::currency($order->grand_total, 'EUR') }}</span>
+                            <span>{{ Number::currency($order->sub_total, 'EUR') }}</span>
                         </div>
                         <div class="d-flex justify-content-between mb-2">
-                            <span>Taxes</span>
+                            <span>discount</span>
                             <span>{{ Number::currency(0, 'EUR') }}</span>
                         </div>
                         <div class="d-flex justify-content-between mb-2">
-                            <span>Shipping</span>
-                            <span>{{ Number::currency(0, 'EUR') }}</span>
+                            <span class="text-muted">Taxes (21%) incl.</span><span class="text-muted">{{ Number::currency($order->sub_total * 0.21 , 'EUR') }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            @if($threshold > 0 && $order->sub_total >= $threshold)
+                                <span>Free Shipping</span>
+                            @else
+                                <span>Shipping</span>
+                                <span>{{ Number::currency($order->shipping_amount, 'EUR') }}</span>
+                            @endif
                         </div>
                         <hr>
                         <div class="d-flex justify-content-between fw-semibold">

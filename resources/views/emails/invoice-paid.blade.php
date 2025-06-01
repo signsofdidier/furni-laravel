@@ -88,6 +88,49 @@
         </tbody>
     </table>
 
+    @php
+        // Haal de gratis-verzenddrempel op uit Settings
+        $threshold = \App\Models\Setting::first()->free_shipping_threshold ?? 0;
+    @endphp
+
+    {{-- Subtotal / Discount / Shipping / Total --}}
+    <table style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+        <tr>
+            <td style="text-align: left; padding: 8px;"><strong>Subtotal:</strong></td>
+            <td style="text-align: right; padding: 8px;">
+                {{ Number::currency($order->sub_total, 'EUR') }}
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left; padding: 8px;"><strong>Discount:</strong></td>
+            <td style="text-align: right; padding: 8px;">
+                {{ Number::currency(0, 'EUR') }}
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left; padding: 8px;"><strong>Taxes (21%) incl.:</strong></td>
+            <td style="text-align: right; padding: 8px;">
+                {{ Number::currency($order->sub_total * 0.21, 'EUR') }}
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left; padding: 8px;"><strong>Shipping:</strong></td>
+            <td style="text-align: right; padding: 8px;">
+                @if($threshold > 0 && $order->sub_total >= $threshold)
+                    Free Shipping
+                @else
+                    {{ Number::currency($order->shipping_amount, 'EUR') }}
+                @endif
+            </td>
+        </tr>
+        <tr style="border-top: 1px solid #dee2e6;">
+            <td style="text-align: left; padding: 8px; font-weight: bold;"><strong>Total:</strong></td>
+            <td style="text-align: right; padding: 8px; font-weight: bold;">
+                {{ Number::currency($order->grand_total, 'EUR') }}
+            </td>
+        </tr>
+    </table>
+
 
     <p>
         You can view your full order anytime using the button below:

@@ -3,6 +3,7 @@
 namespace App\Livewire\Partials;
 
 use App\Helpers\CartManagement;
+use App\Models\Setting;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -11,10 +12,16 @@ class Navbar extends Component
 
     public $total_count = 0;
 
+    // Threshold voor gratis verzending uit de Settings
+    public float $free_shipping_threshold  = 0;
+
     public function mount(){
         // telt alle items in de cart op maar ook de quantity van een item
         $this->total_count = array_sum(array_column(CartManagement::getCartItemsFromSession(), 'quantity'));
 
+        // Haal de free_shipping_threshold uit de database (één record in settings)
+        $setting = Setting::first();
+        $this->free_shipping_threshold = $setting->free_shipping_threshold ?? 0.0;
     }
 
     #[On('update-cart-count')]

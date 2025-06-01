@@ -92,7 +92,8 @@
     @foreach ($order->items as $item)
         <tr>
             <td class="image-cell">
-                <img class="product-image" src="{{ public_path('storage/' . $item->product->images[0]) }}" alt="{{ $item->product->name }}">
+                <img class="product-image" src="{{ public_path('storage/' . $item->product->images[0]) }}"
+                     alt="{{ $item->product->name }}">
             </td>
             <td>
                 {{ $item->product->name }}<br>

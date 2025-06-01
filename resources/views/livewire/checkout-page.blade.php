@@ -159,6 +159,7 @@
                     </div>
                 </div>
 
+
                 {{-- ORDER SUMMARY --}}
                 <div class="col-xl-3 col-lg-4 col-md-12 col-12">
                     <div class="cart-total-area checkout-summary-area">
@@ -175,6 +176,18 @@
                             </div>
                         @empty
                         @endforelse
+                        {{-- → NIEUW: Kortingscode invullen (optioneel) --}}
+                        <div class="mb-4">
+                            <label for="discount_code" class="form-label">Discount code:</label>
+                            <input type="text"
+                                   wire:model.defer="discount_code"
+                                   id="discount_code"
+                                   class="form-control @error('discount_code') is-invalid @enderror"
+                            >
+                            @error('discount_code')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
                         <div class="cart-total-box mt-4 bg-transparent p-0">
                             <div class="subtotal-item subtotal-box d-flex justify-content-between">
                                 <h4 class="subtotal-title">Subtotals:</h4>

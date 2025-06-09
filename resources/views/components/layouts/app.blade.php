@@ -27,12 +27,16 @@
     <link href="{{ asset('assets/css/promotional-product.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/wishlist.css') }}" rel="stylesheet">
 
+    {{-- FLUX FONTS --}}
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=inter:400,500,600&display=swap" rel="stylesheet" />
+
 
     <!-- Livewire Alert CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css">
 
     @livewireStyles
-
+    @fluxAppearance
 
     <!-- fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -258,8 +262,20 @@
         });
     </script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const cartButton = document.getElementById('open-cart-button');
+            if (cartButton) {
+                cartButton.addEventListener('click', function () {
+                    window.dispatchEvent(new CustomEvent('open-cart'));
+                });
+            }
+        });
+    </script>
+
 
 </div>
 @livewire('partials.footer')
+@fluxScripts
 </body>
 </html>

@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Helpers\CartManagement;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
@@ -23,6 +24,22 @@ class HomePage extends Component
         // Haal de free_shipping_threshold uit de database (één record in settings)
         $setting = Setting::first();
         $this->free_shipping_threshold = $setting->free_shipping_threshold ?? 0.0;
+
+    }
+
+    // add product to cart method
+    public function addToCart($product_id){
+        $total_count = CartManagement::addItemToCart($product_id);
+
+        //Hiermee kan je in de navbar class de 'update-cart-count' event triggeren met #[On('update-cart-count')]
+        /*$this->dispatch('update-cart-count', total_count: $total_count)->to(Navbar::class);*/
+        $this->dispatch('update-cart-count', total_count: $total_count)->to('partials.navbar');
+
+        // Update cart in de drawer modal
+        $this->dispatch('cart-updated');
+
+        // LIVEWIRE SWEETALERT
+        $this->dispatch('alert');
 
     }
 

@@ -55,6 +55,9 @@ class ProductsPage extends Component
         /*$this->dispatch('update-cart-count', total_count: $total_count)->to(Navbar::class);*/
         $this->dispatch('update-cart-count', total_count: $total_count)->to('partials.navbar');
 
+        // Update cart in de drawer modal
+        $this->dispatch('cart-updated');
+
         // LIVEWIRE SWEETALERT
         $this->dispatch('alert');
 
@@ -73,6 +76,7 @@ class ProductsPage extends Component
         // Start een query om alleen actieve producten op te halen
         $productQuery = Product::query()->where('is_active', 1);
 
+
         // Filter de producten op basis van de geselecteerde categorieën, als er categorieën zijn geselecteerd
         if(!empty($this->selected_categories)) {
             $productQuery->whereIn('category_id', $this->selected_categories);
@@ -83,7 +87,6 @@ class ProductsPage extends Component
                 $query->whereIn('colors.id', $this->selected_colors);
             });
         }
-
 
         // Brand filter
         if(!empty($this->selected_brands)) {
@@ -126,11 +129,15 @@ class ProductsPage extends Component
             $productQuery->orderBy('price', 'desc');
         }
 
+        // Filter de producten op basis van de geselecteerde categorieën, als er categorieën zijn geselecteerd
+        $totalFilteredCount = (clone $productQuery)->count();
+
         return view('livewire.products-page', [
             'products' => $productQuery->paginate(6),
             'brands' => Brand::where('is_active', 1)->get(['id', 'name', 'slug']),
             'categories' => Category::where('is_active', 1)->get(['id', 'name', 'slug']),
             'colors' => Color::all(),
+            'filtered_count' => $totalFilteredCount,
         ]);
     }
 }

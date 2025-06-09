@@ -7,7 +7,7 @@
                     <div class="filter-sort-wrapper d-flex justify-content-between flex-wrap">
                         <div class="collection-title-wrap d-flex align-items-end">
                             <h2 class="collection-title heading_24 mb-0">All products</h2>
-                            <p class="collection-counter text_16 mb-0 ms-2">(237 items)</p>
+                            <p class="collection-counter text_16 mb-0 ms-2">({{ $filtered_count }} items)</p>
                         </div>
                         <div class="filter-sorting">
                             <div class="collection-sorting position-relative d-none d-lg-block">
@@ -297,7 +297,7 @@
                                 @foreach($brands as $brand)
                                     <li class="filter-item" wire:key="{{ $brand->id }}">
                                         <label class="filter-label">
-                                            <input type="checkbox" wire:model="selectedBrands" value="{{ $brand->id }}" />
+                                            <input type="checkbox" wire:model.live="selected_brands" value="{{ $brand->id }}" />
                                             <span class="filter-checkbox rounded me-2"></span>
                                             <span class="filter-text">{{ $brand->name }}</span>
                                         </label>

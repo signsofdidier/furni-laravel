@@ -70,11 +70,10 @@
                         <div class="col-xl-4 col-lg-5 col-md-6 col-12 footer-widget">
                             <div class="footer-widget-inner">
                                 <h4 class="footer-logo">
-                                    <!--<a href="/"><img src="assets/img/logo-accent.png" alt="bisum"></a>-->
-                                    <h2>K(L)ASSE</h2>
+                                    <a href="/"><img src="assets/img/logo-accent.png" alt="bisum"></a>
                                 </h4>
                                 <div class="footer-newsletter">
-                                    <p class="footer-text mb-3">Stay up to date with all the news.</p>
+                                   {{-- <p class="footer-text mb-3">Stay up to date with all the news.</p>
                                     <div class="newsletter-wrapper">
                                         <form action="#" class="footer-newsletter-form d-flex align-items-center">
                                             <input class="footer-newsletter-input bg-transparent" type="email"
@@ -82,7 +81,7 @@
                                             <button class="footer-newsletter-btn" type="submit">SIGN
                                                 UP</button>
                                         </form>
-                                    </div>
+                                    </div>--}}
                                     <div class="footer-social-wrapper">
                                         <ul
                                             class="footer-social list-unstyled d-flex align-items-center flex-wrap mb-0">
@@ -103,6 +102,7 @@
                                                          viewBox="0 0 20 20" fill="none"
                                                          xmlns="http://www.w3.org/2000/svg">
                                                         <path
+                                                            d="M16.3021 4.58314H14.0258C13.1546 4.58314 12.4098 4.89227 11.7916 5.51054C11.2014 6.12881 10.9063 6.87354 10.9063 7.74473V9.97892H9.09368V12.6768H10.9063V18.9578H13.6042V12.6768H16.3021V9.97892H13.6042V8.16628C13.6042 7.94145 13.6885 7.74473 13.8571 7.57611C14.0258 7.37939 14.2365 7.28103 14.4895 7.28103H16.3021V4.58314ZM1 2C1 1.44772 1.44772 1 2 1H18C18.5523 1 19 1.44772 19 2V17.9578C19 18.5101 18.5523 18.9578 18 18.9578H2C1.44772 18.9578 1 18.5101 1 17.9578V2Z"
                                                             d="M16.3021 4.58314H14.0258C13.1546 4.58314 12.4098 4.89227 11.7916 5.51054C11.2014 6.12881 10.9063 6.87354 10.9063 7.74473V9.97892H9.09368V12.6768H10.9063V18.9578H13.6042V12.6768H16.3021V9.97892H13.6042V8.16628C13.6042 7.94145 13.6885 7.74473 13.8571 7.57611C14.0258 7.37939 14.2365 7.28103 14.4895 7.28103H16.3021V4.58314ZM1 2C1 1.44772 1.44772 1 2 1H18C18.5523 1 19 1.44772 19 2V17.9578C19 18.5101 18.5523 18.9578 18 18.9578H2C1.44772 18.9578 1 18.5101 1 17.9578V2Z"
                                                             fill="#00234D" />
                                                     </svg>
@@ -158,7 +158,7 @@
                         <li class="footer-menu-item"><a href="about-us.html">Privacy policy</a></li>
                         <li class="footer-menu-item"><a href="about-us.html">Terms & Conditions</a></li>
                     </ul>
-                    <p class="copyright footer-text">©<span class="current-year"></span> Spree Themes.</p>
+                    <p class="copyright footer-text">©<span class="current-year"></span> Didier Vanassche.</p>
                 </div>
             </div>
         </div>

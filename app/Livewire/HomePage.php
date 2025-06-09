@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Setting;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
@@ -13,6 +14,17 @@ use Livewire\Component;
 
 class HomePage extends Component
 {
+
+    // Threshold voor gratis verzending uit de Settings
+    public float $free_shipping_threshold  = 0;
+
+
+    public function mount(){
+        // Haal de free_shipping_threshold uit de database (één record in settings)
+        $setting = Setting::first();
+        $this->free_shipping_threshold = $setting->free_shipping_threshold ?? 0.0;
+
+    }
 
     public function render()
     {
@@ -32,5 +44,7 @@ class HomePage extends Component
             'categories' => $categories,
             'featuredProducts' => $featuredProducts
         ]);
+
+
     }
 }

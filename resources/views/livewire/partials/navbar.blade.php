@@ -154,7 +154,7 @@
                                         Products
                                     </a>
                                 </li>
-                                <li class="menu-list-item nav-item {{ request()->is('blog') ? 'active' : '' }}">
+                                {{--<li class="menu-list-item nav-item {{ request()->is('blog') ? 'active' : '' }}">
                                     <a wire:navigate class="nav-link" href="{{ url('/blog') }}">
                                         Blog
                                     </a>
@@ -165,8 +165,8 @@
                                     </a>
                                 </li>
                                 <li wire:navigate class="menu-list-item nav-item {{ request()->is('contact') ? 'active' : '' }}">
-                                    <a class="nav-link" href={{ url('/contact') }}">Contact</a>
-                            </li>
+                                    <a class="nav-link" href="{{ url('/contact') }}">Contact</a>
+                                </li>--}}
                         </ul>
                     </nav>
                 </div>

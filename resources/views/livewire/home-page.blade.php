@@ -267,61 +267,6 @@
     </div>
     <!-- collection end -->
 
-    <!-- shop by category start -->
-    {{--<div class="shop-category mt-100 overflow-hidden">
-        <div class="collection-tab-inner mt-0">
-            <div class="container">
-                <div class="section-header text-center">
-                    <h2 class="section-heading primary-color">Shop By Category</h2>
-                </div>
-                <div class="shop-category-2 shop-category-inner">
-                    <div class="scattered-item" data-aos="fade-left" data-aos-duration="700">
-                        <div class="scattered-wrapper">
-                            <div class="scattered-content">
-                                <img class="scattered-img" src="assets/img/banner/f4.jpg" alt="img">
-                            </div>
-                            <div class="scattered-details">
-                                <h2 class="scattered-heading primary-color">Home Decor</h2>
-                                <a href="collection-left-sidebar.html"
-                                   class="text_12 link-underline d-block primary-color mt-2">
-                                    SHOP COLLECTION
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="scattered-item" data-aos="fade-right" data-aos-duration="700">
-                        <div class="scattered-wrapper">
-                            <div class="scattered-content">
-                                <img class="scattered-img" src="assets/img/banner/f5.jpg" alt="img">
-                            </div>
-                            <div class="scattered-details">
-                                <h2 class="scattered-heading primary-color">Storage Furniture</h2>
-                                <a href="#2" class="text_12 link-underline d-block primary-color mt-2">
-                                    SHOP COLLECTION
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="scattered-item" data-aos="fade-left" data-aos-duration="700">
-                        <div class="scattered-wrapper">
-                            <div class="scattered-content">
-                                <img class="scattered-img" src="assets/img/banner/f6.jpg" alt="img">
-                            </div>
-                            <div class="scattered-details">
-                                <h2 class="scattered-heading primary-color">Black Cusion Chair</h2>
-                                <a href="#3" class="text_12 link-underline d-block primary-color mt-2">
-                                    SHOP COLLECTION
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>--}}
-    <!-- shop by category end -->
-
-
     <!-- single banner start -->
     <div class="single-banner-section mt-100 overflow-hidden">
         <div class="position-relative overlay">
@@ -543,54 +488,5 @@
         </div>
     </div>
     <!-- latest blog end -->
-
-    {{--<!-- brand logo start -->
-    <div class="brand-logo-section mt-100">
-        <div class="brand-logo-inner">
-            <div class="container">
-                <div class="brand-logo-container overflow-hidden">
-                    <div class="scroll-horizontal row align-items-center flex-nowrap">
-                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6" data-aos="fade-up"
-                             data-aos-duration="700">
-                            <a href="index.html" class="brand-logo d-flex align-items-center justify-content-center">
-                                <img src="assets/img/brand/1.png" alt="img">
-                            </a>
-                        </div>
-                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6" data-aos="fade-up"
-                             data-aos-duration="700">
-                            <a href="index.html" class="brand-logo d-flex align-items-center justify-content-center">
-                                <img src="assets/img/brand/2.png" alt="img">
-                            </a>
-                        </div>
-                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6" data-aos="fade-up"
-                             data-aos-duration="700">
-                            <a href="index.html" class="brand-logo d-flex align-items-center justify-content-center">
-                                <img src="assets/img/brand/3.png" alt="img">
-                            </a>
-                        </div>
-                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6" data-aos="fade-up"
-                             data-aos-duration="700">
-                            <a href="index.html" class="brand-logo d-flex align-items-center justify-content-center">
-                                <img src="assets/img/brand/4.png" alt="img">
-                            </a>
-                        </div>
-                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6" data-aos="fade-up"
-                             data-aos-duration="700">
-                            <a href="index.html" class="brand-logo d-flex align-items-center justify-content-center">
-                                <img src="assets/img/brand/5.png" alt="img">
-                            </a>
-                        </div>
-                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6" data-aos="fade-up"
-                             data-aos-duration="700">
-                            <a href="index.html" class="brand-logo d-flex align-items-center justify-content-center">
-                                <img src="assets/img/brand/6.png" alt="img">
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- brand logo end -->--}}
 </div>
 

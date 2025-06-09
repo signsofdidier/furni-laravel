@@ -133,7 +133,7 @@
                         {{-- MOBILE filter --}}
                         <div class="filter-widget d-lg-none d-flex align-items-center justify-content-between">
                             <h5 class="heading_24">Filter By</h5>
-                                <button type="button" class="btn-close text-reset filter-drawer-trigger d-lg-none"></button>
+                            <button type="button" class="btn-close text-reset filter-drawer-trigger d-lg-none"></button>
                         </div>
 
                         {{-- MOBILE SORT BY filter --}}
@@ -313,21 +313,21 @@
                                 Product Tags
                             </div>
                             <ul x-show="open" x-collapse class="filter-lists list-unstyled mb-0">
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" wire:model.live="featured" value="1" />
-                                            <input type="checkbox" wire:model.live="featured" value="1" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            <span class="filter-text">Featured Products</span>
-                                        </label>
-                                    </li>
-                                    <li class="filter-item">
-                                        <label class="filter-label">
-                                            <input type="checkbox" wire:model.live="on_sale" value="1" />
-                                            <span class="filter-checkbox rounded me-2"></span>
-                                            <span class="filter-text">On Sale</span>
-                                        </label>
-                                    </li>
+                                <li class="filter-item">
+                                    <label class="filter-label">
+                                        <input type="checkbox" wire:model.live="featured" value="1" />
+                                        <input type="checkbox" wire:model.live="featured" value="1" />
+                                        <span class="filter-checkbox rounded me-2"></span>
+                                        <span class="filter-text">Featured Products</span>
+                                    </label>
+                                </li>
+                                <li class="filter-item">
+                                    <label class="filter-label">
+                                        <input type="checkbox" wire:model.live="on_sale" value="1" />
+                                        <span class="filter-checkbox rounded me-2"></span>
+                                        <span class="filter-text">On Sale</span>
+                                    </label>
+                                </li>
                             </ul>
                         </div>
                         {{-- END FILTERS --}}
@@ -339,22 +339,15 @@
         </div>
     </div>
 
+    {{-- COLOR FILTER STYLING --}}
+    <style>
+        /* Zorg dat bij selectie een duidelijke outline/ring verschijnt */
+        .color-lists input[type="checkbox"]:checked + .color-swatch {
+            border: 3px solid #F76B6A;
+            box-shadow: 0 0 0 2px #F76B6A;
+        }
+        .color-swatch {
+            transition: border 0.2s, box-shadow 0.2s;
+        }
+    </style>
 </div>
-
-{{-- COLOR FILTER STYLING --}}
-<style>
-    /* Zorg dat bij selectie een duidelijke outline/ring verschijnt */
-    .color-lists input[type="checkbox"]:checked + .color-swatch {
-        border: 3px solid #F76B6A;
-        box-shadow: 0 0 0 2px #F76B6A;
-    }
-    .color-swatch {
-        transition: border 0.2s, box-shadow 0.2s;
-    }
-</style>
-
-
-
-
-
-

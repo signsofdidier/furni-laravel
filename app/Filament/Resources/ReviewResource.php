@@ -18,7 +18,9 @@ class ReviewResource extends Resource
 {
     protected static ?string $model = Review::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-star';
+
+    protected static ?int $navigationSort = 7;
 
     public static function form(Form $form): Form
     {
@@ -72,10 +74,16 @@ class ReviewResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListReviews::route('/'),
+            'index' => Pages\ManageReviewsWithStats::route('/'),
             'create' => Pages\CreateReview::route('/create'),
             'edit' => Pages\EditReview::route('/{record}/edit'),
         ];
+    }
+
+    // DE TITEL VAN DE RESOURCE
+    public static function getLabel(): string
+    {
+        return 'Reviews & Ratings';
     }
 
     public static function canCreate(): bool

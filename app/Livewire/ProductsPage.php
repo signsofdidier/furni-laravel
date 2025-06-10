@@ -60,15 +60,6 @@ class ProductsPage extends Component
 
         // LIVEWIRE SWEETALERT
         $this->dispatch('alert');
-
-        /*$this->dispatch('alert',
-            type: 'success',
-            title: 'Product added to cart',
-            position: 'bottom-end',
-            timer: 3000,
-            toast: true
-        );*/
-
     }
 
     public function render()
@@ -76,60 +67,60 @@ class ProductsPage extends Component
         // Start een query om alleen actieve producten op te halen
         $productQuery = Product::query()->where('is_active', 1);
 
-
         // Filter de producten op basis van de geselecteerde categorieën, als er categorieën zijn geselecteerd
         if(!empty($this->selected_categories)) {
             $productQuery->whereIn('category_id', $this->selected_categories);
         }
 
+        // Selected COLORS filter
         if (!empty($this->selected_colors)) {
             $productQuery->whereHas('colors', function($query) {
                 $query->whereIn('colors.id', $this->selected_colors);
             });
         }
 
-        // Brand filter
+        // BRANDS filter
         if(!empty($this->selected_brands)) {
             $productQuery->whereIn('brand_id', $this->selected_brands);
         }
 
-        // Features Product filter
+        // FEATURES Product filter
         if($this->featured) {
             $productQuery->where('is_featured', 1);
         }
 
-        // On Sale filter
+        // ON SALE filter
         if($this->on_sale){
             $productQuery->where('on_sale', 1);
         }
 
-        // In Stock filter
+        // IN STOCK filter
         if($this->in_stock) {
             $productQuery->where('in_stock', 1);
         }
 
-        // Price Range filter
+        // PRICE RANGE filter
         if($this->price_range) {
             // Filter op prijs tussen 0 en de geselecteerde prijs
             $productQuery->whereBetween('price', [0, $this->price_range]);
         }
 
-        // Sorteer de laatste toegevoegde producten
+        // Sorteer de LAATSTE toegevoegde producten
         if($this->sort == 'latest'){
             $productQuery->latest();
         }
 
-        // Sorteer de producten op prijs van laag naar hoog
+        // Sorteer de producten op prijs van LAAG NAAR HOOG
         if($this->sort == 'lowest_price'){
             $productQuery->orderBy('price', 'asc');
         }
 
-        // Sorteer de producten op prijs van hoog naar laag
+        // Sorteer de producten op prijs van HOOG NAAR LAAG
         if($this->sort == 'highest_price'){
             $productQuery->orderBy('price', 'desc');
         }
 
-        // Filter de producten op basis van de geselecteerde categorieën, als er categorieën zijn geselecteerd
+        // TEL de producten op basis van de geselecteerde categorieën
         $totalFilteredCount = (clone $productQuery)->count();
 
         return view('livewire.products-page', [

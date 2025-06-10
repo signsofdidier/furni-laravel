@@ -93,11 +93,20 @@
     <flux:modal name="cart" variant="flyout" position="right" max-width="lg" class="!ml-auto !mr-0 h-screen">
         <div class="h-full flex flex-col">
             {{-- Header --}}
-            <div class="flex justify-between items-center border-b border-gray-200 py-2">
-                <h5 class="text-lg font-bold">Your Cart ({{ $total_count }})</h5>
-                {{--<flux:modal.trigger name="cart">
-                    <button class="text-gray-500 hover:text-black text-xl leading-none">&times;</button>
-                </flux:modal.trigger>--}}
+            <div class="border-b border-gray-200 py-2">
+                <h5 class="text-lg font-bold mb-3">Your Cart ({{ $total_count }})</h5>
+
+                {{-- CART CLEAR --}}
+                @if($cart_items)
+                    <button
+                        x-data
+                        @click.prevent="if (confirm('Are you sure you want to clear the cart?')) { $wire.clearCart() }"
+                        class="w-full py-2 text-sm text-red-600 border border-red-600 rounded hover:bg-red-50">
+                        Clear Cart
+                    </button>
+                @endif
+
+
             </div>
 
             {{-- Scrollbare inhoud --}}
@@ -143,7 +152,9 @@
                     </div>
                     <p class="text-xs text-gray-500 mt-2">Taxes and shipping will be calculated at checkout.</p>
 
-                    <div class="mt-4 flex gap-2">
+
+
+                    <div class="mt-2 flex gap-2">
                         <a href="/cart"
                            class="flex-1 text-center py-2 border text-sm rounded hover:bg-gray-50">View Cart</a>
                         <a href="/checkout"

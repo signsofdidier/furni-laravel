@@ -45,19 +45,20 @@
                                         </td>
                                         <td class="cart-item-quantity d-md-flex flex-md-column">
                                             <div class="quantity d-flex align-items-center justify-content-between">
+
                                                 {{-- DECREMENT --}}
-                                                <button wire:click="decreaseQuantity({{ $item['product_id'] }}, {{ $item['color_id'] }})" class="qty-btn dec-qty">
+                                                <button wire:click="decreaseQuantity({{ $item['product_id'] }}, {{ $item['color_id'] }})" class="qty-btn dec-qty" {{ $item['quantity'] <= 1 ? 'disabled' : '' }}>
                                                     <img src="{{ asset('assets/img/icon/minus.svg') }}" alt="minus">
                                                 </button>
 
                                                 {{-- QUANTITY --}}
-                                                {{--<input class="qty-input" type="number" name="qty" value="1" min="0">--}}
-                                                <span class="qty-input">{{ $item['quantity'] }}</span>
+                                                <span class="qty-input">{{ max($item['quantity'], 1) }}</span>
 
                                                 {{-- INCREMENT --}}
                                                 <button wire:click="increaseQuantity({{ $item['product_id'] }}, {{ $item['color_id'] }})" class="qty-btn inc-qty">
                                                     <img src="{{ asset('assets/img/icon/plus.svg') }}" alt="plus">
                                                 </button>
+
                                             </div>
                                             <button wire:click="removeItem({{ $item['product_id'] }}, {{ $item['color_id'] }})" type="button" class="product-remove mt-2 text-danger">Remove
                                             </button>
@@ -72,7 +73,18 @@
                         @else
                             <h4>There are no items in your cart</h4>
                         @endif
+
+                        @if($cart_items)
+                                {{-- RESET CART --}}
+                                <button
+                                    x-data
+                                    @click.prevent="if (confirm('Are you sure you want to clear the cart?')) { $wire.clearCart() }"
+                                    class="w-full py-2 text-sm text-red-600 border border-red-600 rounded hover:bg-red-50">
+                                    Clear Cart
+                                </button>
+                        @endif
                     </div>
+
 
                     <div class="col-lg-5 col-md-12 col-12">
                         <div class="cart-total-area">
@@ -86,9 +98,12 @@
                                     <p class="shipping_text">Shipping, taxes & discount calculated at checkout</p>
                                     <div class="d-flex justify-content-center mt-4">
                                         @if($cart_items)
-                                            <a href="{{ url('/checkout') }}" class="position-relative btn-primary text-uppercase">
-                                                Proceed to checkout
-                                            </a>
+                                            <div class="d-flex gap-2">
+
+                                                <a href="{{ url('/checkout') }}" class="btn btn-primary text-uppercase">
+                                                    Proceed to checkout
+                                                </a>
+                                            </div>
                                         @else
                                             <p disabled class="position-relative btn-primary text-uppercase">
                                                 No items in cart

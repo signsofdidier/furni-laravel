@@ -54,7 +54,7 @@ class OrderResource extends Resource
 
                         Select::make('payment_method')
                             ->options([
-                                'stripe' => 'Stripe',
+                                'bancontact' => 'Bancontact',
                                 'cod' => 'Cash on Delivery',
                             ])
                             ->required(),
@@ -97,17 +97,14 @@ class OrderResource extends Resource
                         Select::make('currency')
                             ->options([
                                 'EUR' => 'EUR',
-                                'USD' => 'USD',
-                                'GBP' => 'GBP',
                             ])
                             ->default('EUR')
                             ->required(),
 
                         Select::make('shipping_method')
                             ->options([
-                                'bpost' => 'Bpost',
-                                'dhl' => 'DHL',
-                                'ups' => 'UPS',
+                                'truck' => 'Truck Delivery',
+                                'pickup' => 'Pickup at store',
                             ]),
 
                         TextArea::make('notes')

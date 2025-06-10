@@ -80,6 +80,19 @@ class CartPage extends Component
         )->to(Navbar::class);
     }
 
+    // CART RESET KNOP
+    public function clearCart()
+    {
+        CartManagement::clearCartItems();
+        $this->cart_items = [];
+        $this->sub_total = 0;
+
+        // Update de navbar count
+        $this->dispatch('update-cart-count',
+            array_sum(array_column($this->cart_items, 'quantity'))
+        )->to(Navbar::class);
+    }
+
     public function render()
     {
         return view('livewire.cart-page', [

@@ -69,7 +69,9 @@ class CheckoutPage extends Component
 
         // Maak de line_items voor Stripe
         $line_items = [];
-        foreach($cart_items as $item){
+
+        // PRIJS VOOR STRIPE
+        foreach ($cart_items as $item) {
             $line_items[] = [
                 'price_data' => [
                     'currency' => 'eur',
@@ -79,6 +81,20 @@ class CheckoutPage extends Component
                     ],
                 ],
                 'quantity' => $item['quantity'],
+            ];
+        }
+
+        // SHIPPINGCOST VOOR STRIPE
+        if ($this->shipping_amount > 0) {
+            $line_items[] = [
+                'price_data' => [
+                    'currency' => 'eur',
+                    'unit_amount' => $this->shipping_amount * 100,
+                    'product_data' => [
+                        'name' => 'Shipping',
+                    ],
+                ],
+                'quantity' => 1,
             ];
         }
 

@@ -69,7 +69,7 @@
                         <div class="card-body d-flex align-items-center">
                             <i class="fas fa-credit-card fa-2x text-secondary me-3"></i>
                             <div>
-                                <p class="text-uppercase text-muted mb-1">Payment</p>
+                                <p class="text-uppercase text-muted mb-1">Payment <span class="text-small text-lowercase">({{ $order->payment_method == 'stripe' ? 'Bancontact' : 'Cash On Delivery' }} )</span></p>
                                 <span class="badge bg-{{ str_replace('bg-','',$paymentStatusColor) }} text-white">{{ ucfirst($order->payment_status) }}</span>
                             </div>
                         </div>
@@ -158,10 +158,13 @@
                                 <span>Total</span>
                                 <span>{{ Number::currency($order->grand_total, 'EUR') }}</span>
                             </div>
-                            <div class="d-flex justify-content-between text-muted mt-3">
-                                <span>Transactie-ID:</span>
-                                <span class="text-break">{{ $order->transaction_id }}</span>
-                            </div>
+                            @if($order->transaction_id)
+                                <div class="d-flex justify-content-between text-muted mt-3">
+                                    <span>Transactie-ID:</span>
+                                    <span class="text-break">{{ $order->transaction_id }}</span>
+                                </div>
+                            @endif
+
                         </div>
                     </div>
                 </div>

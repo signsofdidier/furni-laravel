@@ -121,9 +121,7 @@
                                         <div class="col-lg-6 col-md-12 col-12">
                                             <fieldset>
                                                 <label for="country" class="label">Country</label>
-                                                <select disabled class="form-select">
-                                                    <option>Belgium</option>
-                                                </select>
+                                                <input type="text" class="form-control" value="Belgium" disabled readonly>
                                             </fieldset>
                                         </div>
 
@@ -135,7 +133,7 @@
                                                     <input type="radio" id="payment-cod" wire:model="payment_method" value="cod" class="btn-check">
                                                     <label for="payment-cod" class="btn btn-outline-secondary flex-fill">CASH ON DELIVERY</label>
                                                     <input type="radio" id="payment-stripe" wire:model="payment_method" value="stripe" class="btn-check">
-                                                    <label for="payment-stripe" class="btn btn-outline-secondary flex-fill">STRIPE</label>
+                                                    <label for="payment-stripe" class="btn btn-outline-secondary flex-fill">BANCONTACT</label>
                                                 </div>
                                             </fieldset>
                                             @error('payment_method')
@@ -187,7 +185,7 @@
                             @endforelse
 
                             {{-- Veld voor kortingscode (optioneel) --}}
-                            <div class="mb-4">
+                            {{--<div class="mb-4">
                                 <label for="discount_code" class="form-label">Discount code:</label>
                                 <input
                                     type="text"
@@ -198,7 +196,7 @@
                                 @error('discount_code')
                                 <span class="text-danger">{{ $message }}</span>
                                 @enderror
-                            </div>
+                            </div>--}}
 
                             <div class="cart-total-box mt-4 bg-transparent p-0">
 

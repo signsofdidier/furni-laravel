@@ -59,8 +59,12 @@ class CartManagement {
     // voegt een product toe met specifieke hoeveelheid en kleur als die er is
     static public function addItemToCartWithQuantity(int $product_id, int $quantity, ?int $color_id = null): int
     {
-        $cart_items = self::getCartItemsFromSession();
+        // QUANTITY NOOIT ONDER 1
+        if ($quantity < 1) {
+            $quantity = 1;
+        }
 
+        $cart_items = self::getCartItemsFromSession();
         $existing_item = null;
 
         foreach($cart_items as $key => $item){
@@ -74,8 +78,8 @@ class CartManagement {
         }
 
         if ($existing_item !== null) {
-            // Update hoeveelheid
-            $cart_items[$existing_item]['quantity'] = $quantity;
+            // Voeg toe aan de bestaande hoeveelheid
+            $cart_items[$existing_item]['quantity'] += $quantity;
             $cart_items[$existing_item]['total_amount'] = $cart_items[$existing_item]['quantity'] *
                 $cart_items[$existing_item]['unit_amount'];
         } else {
@@ -168,7 +172,7 @@ class CartManagement {
     }
 
     static public function calculateGrandTotal($items){
-        return array_sum(array_column($items, 'total_amount'));
+        return max(array_sum(array_column($items, 'total_amount')), 0); // Minimaal 0
     }
 
     /**
@@ -199,6 +203,7 @@ class CartManagement {
         return $subtotal + $shipping;
     }
 
+    /* SHIPPING COST*/
     public static function calculateShippingAmount(array $cart_items): float
     {
         // 1) Bereken sub_total zodat we kunnen checken op gratis verzending

@@ -65,6 +65,19 @@ class DrawerCartModal extends Component
 
     }
 
+    // CART RESET KNOP
+    public function clearCart()
+    {
+        CartManagement::clearCartItems();
+        $this->cart_items = [];
+        $this->grand_total = 0;
+        $this->total_count = 0;
+
+        // Update de navbar count
+        $this->dispatch('update-cart-count', total_count: 0)->to(Navbar::class);
+        $this->dispatch('cart-updated');
+    }
+
 
 
     public function render()

@@ -34,12 +34,12 @@
                                 </div>
                                 <div class="col-6 text-end">
                                     <strong>Payment Method:</strong>
-                                    <div>{{ $order->payment_method == 'cod' ? 'Cash on Delivery' : 'Card' }}</div>
+                                    <div>{{ $order->payment_method == 'cod' ? 'Cash on Delivery' : 'Bancontact' }}</div>
                                 </div>
                             </div>
 
-                            @if($order)
-                                <p>Transactie-ID (Stripe): <strong>{{ $order->transaction_id }}</strong></p>
+                            @if($order -> payment_method == 'stripe')
+                                <p>Transactie-ID: <strong>{{ $order->transaction_id }}</strong></p>
                             @endif
 
                             <div class="card border bg-light mb-4">
@@ -58,9 +58,9 @@
                                     <div class="d-flex justify-content-between mb-2">
                                         <span>Subtotal</span><span>{{ Number::currency($order->sub_total, 'EUR') }}</span>
                                     </div>
-                                    <div class="d-flex justify-content-between mb-2">
+                                    {{--<div class="d-flex justify-content-between mb-2">
                                         <span>Discount</span><span>{{ Number::currency(0, 'EUR') }}</span>
-                                    </div>
+                                    </div>--}}
                                     <div class="d-flex justify-content-between mb-2">
                                         <span class="text-muted">Taxes (21%) incl.</span><span class="text-muted">{{ Number::currency($order->sub_total * 0.21 , 'EUR') }}</span>
                                     </div>

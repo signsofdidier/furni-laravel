@@ -40,7 +40,6 @@ class ProductDetailPage extends Component
 
     // add product to cart method
     public function addToCart($product_id){
-        $this->quantity = max(1, $this->quantity); // Minimaal 1
         // Voeg product met geselecteerde kleur toe aan cart
         $total_count = CartManagement::addItemToCartWithQuantity(
             $product_id,

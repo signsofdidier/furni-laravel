@@ -4,10 +4,10 @@
             <div class="row justify-content-center">
                 <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-6">
                     <div class="text-center mb-5">
-                        <h1 class="fw-bold mb-3" style="color: #2c5aa0;">Sign up</h1>
+                        <h1 class="fw-bold mb-3" style="color: #00234D;">Sign up</h1>
                         <p class="text-muted">
                             Already have an account?
-                            <a href="/login" class="text-decoration-none fw-semibold" style="color: #2c5aa0;">Sign in here</a>
+                            <a href="/login" class="text-decoration-none fw-semibold" style="color: #00234D;">Sign in here</a>
                         </p>
                     </div>
 
@@ -93,9 +93,9 @@
                         <!-- Submit Button -->
                         <button type="submit"
                                 class="btn btn-primary w-100 py-3 fw-semibold"
-                                style="background: #2c5aa0; border: none; border-radius: 8px; font-size: 1.1rem; transition: all 0.3s ease;"
-                                onmouseover="this.style.background='#1e40af'"
-                                onmouseout="this.style.background='#2c5aa0'">
+                                style="background: #00234D; border: none; border-radius: 8px; font-size: 1.1rem; transition: all 0.3s ease;"
+                                onmouseover="this.style.background='#F76B6A'"
+                                onmouseout="this.style.background='#00234D'">
                             Sign up
                         </button>
                     </form>
@@ -106,7 +106,7 @@
 
     <style>
         .form-control:focus {
-            border-color: #2c5aa0 !important;
+            border-color: #00234D !important;
             box-shadow: 0 0 0 0.2rem rgba(44, 90, 160, 0.1) !important;
         }
     </style>

@@ -53,6 +53,7 @@ class HomePage extends Component
         $featuredProducts = Product::query()
             ->where('is_active', 1)
             ->where('is_featured', 1)
+            ->latest()
             ->take(8)
             ->get();
 
@@ -61,7 +62,5 @@ class HomePage extends Component
             'categories' => $categories,
             'featuredProducts' => $featuredProducts
         ]);
-
-
     }
 }

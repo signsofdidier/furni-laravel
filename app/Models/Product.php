@@ -45,24 +45,27 @@ class Product extends Model
         return $this->belongsToMany(Color::class);
     }
 
-    /* RATING RELATIONS */
+    /* PREVIEW EN RATING RELATIONS */
 
-    // product heeft meerdere ratings
-    public function ratings()
+    // reviews heeft meerdere reviews
+    public function reviews()
     {
-        return $this->hasMany(ProductRating::class);
+        return $this->hasMany(Review::class);
     }
 
-    // berekenen van gemiddelde rating
+    // Gemiddelde score via product relatie
     public function averageRating(): float
     {
-        return round($this->ratings()->avg('rating') ?? 0, 1);
+        return round($this->reviews()->avg('rating') ?? 0);
     }
 
-    // aantal ratings
-    public function totalRatings(): int
+    // Totaal aantal reviews
+    public function totalReviews(): int
     {
-        return $this->ratings()->count();
+        return $this->reviews()->count();
     }
+
+
+
 
 }

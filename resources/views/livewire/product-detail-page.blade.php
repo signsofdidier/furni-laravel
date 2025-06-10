@@ -226,11 +226,7 @@
                 <div id="preview" class="tab-pane fade">
                     <div class="review-area accordion-parent">
                         <h4 class="heading_18 mb-3">Customer Reviews</h4>
-                        <div class="review-header d-flex justify-content-between align-items-center">
-                            <p class="text_16">No reviews yet.</p>
-                            <button class="text_14 bg-transparent text-decoration-underline write-btn" type="button">Write a review</button>
-                        </div>
-                        <div class="review-form-area accordion-child">
+                        {{--<div class="review-form-area accordion-child">
                             <form action="#">
                                 <fieldset>
                                     <label class="label">Full Name</label>
@@ -271,7 +267,11 @@
 
                                 <button type="submit" class="position-relative review-submit-btn">SUBMIT</button>
                             </form>
-                        </div>
+                        </div>--}}
+                        <livewire:product-review-form :product="$product" />
+                        <livewire:product-review-list :product="$product" />
+
+
                     </div>
                 </div>
             </div>

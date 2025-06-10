@@ -49,8 +49,15 @@ class User extends Authenticatable implements FilamentUser
         ];
     }
 
+    // user heeft meerdere orders
     public function orders(){
         return $this->hasMany(Order::class);
+    }
+
+    // reviews heeft meerdere reviews
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
     }
 
     // Alleen user met deze email (admin) kan in de admin panel (backend) inloggen
@@ -61,4 +68,7 @@ class User extends Authenticatable implements FilamentUser
             'didier.v@hotmail.com',
             ]);
     }
+
+
+
 }

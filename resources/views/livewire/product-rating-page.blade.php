@@ -7,7 +7,7 @@
                     width="16"
                     height="17"
                     viewBox="0 0 16 15"
-                    fill="{{ $i <= $average ? '#FFAE00' : '#B2B2B2' }}"
+                    fill="{{ $i <= round($average) ? '#FFAE00' : '#B2B2B2' }}"
                     style="margin-right: 4px;"
                     title="{{ $i }} star{{ $i > 1 ? 's' : '' }}"
                 >
@@ -15,6 +15,9 @@
                 </svg>
             @endfor
         </div>
+
+        {{-- ⭐ Gemiddelde score --}}
+        <span class="ms-2 text-muted">{{ number_format($average) }}/5</span>
 
         {{-- Totaal aantal ratings --}}
         <span class="ms-2">({{ $total }})</span>

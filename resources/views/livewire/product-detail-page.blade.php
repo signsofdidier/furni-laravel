@@ -176,38 +176,13 @@
         <div class="container">
             <div class="tab-list product-tab-list">
                 <nav class="nav product-tab-nav">
-                    <a class="product-tab-link tab-link active" href="#pdescription" data-bs-toggle="tab">Description</a>
+                    <a class="product-tab-link tab-link active" href="#preview" data-bs-toggle="tab">Reviews</a>
                     <a class="product-tab-link tab-link" href="#pshipping" data-bs-toggle="tab">Shipping & Returns</a>
                     <a class="product-tab-link tab-link" href="#pstyle" data-bs-toggle="tab">Style with</a>
-                    <a class="product-tab-link tab-link" href="#preview" data-bs-toggle="tab">Reviews</a>
+
                 </nav>
             </div>
             <div class="tab-content product-tab-content">
-                <div id="pdescription" class="tab-pane fade show active">
-                    <div class="row">
-                        <div class="col-lg-7 col-md-12 col-12">
-                            <div class="desc-content">
-                                <h4 class="heading_18 mb-3">{{ $product->name }}</h4>
-                                <div class="[&>ul]:list-disc [&>ul]">
-                                    <p class="max-w-md text-gray-700 dark:text-gray-400">
-                                        {{--install composer require league/commonmark om markdown te doen werken--}}
-                                        {!!
-                                            str($product->description)
-                                                ->markdown([
-                                                    // Strip alle raw HTML-tags uit de bron
-                                                    'html_input' => 'strip',
-                                                    // Blokkeer links die beginnen met “javascript:” of andere onveilige protocollen
-                                                    'allow_unsafe_links' => false,
-                                                ])
-                                                // Verwijder alles wat niet in de standaard allowlist valt (XSS-preventie)
-                                                ->sanitizeHtml()
-                                        !!}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div id="pshipping" class="tab-pane fade">
                     <div class="desc-content">
                         <h4 class="heading_18 mb-3">Returns within the European Union</h4>
@@ -223,51 +198,10 @@
                         <p class="text_16 mb-4">You have to pay for return shipping if you want to exchange your product for another size or the package is returned because it has not been picked up at the post office.</p>
                     </div>
                 </div>
-                <div id="preview" class="tab-pane fade">
-                    <div class="review-area accordion-parent">
-                        <h4 class="heading_18 mb-3">Customer Reviews</h4>
-                        {{--<div class="review-form-area accordion-child">
-                            <form action="#">
-                                <fieldset>
-                                    <label class="label">Full Name</label>
-                                    <input type="text" placeholder="Enter your name" />
-                                </fieldset>
-                                <fieldset>
-                                    <label class="label">Email</label>
-                                    <input type="email" placeholder="john.smith@example.com" />
-                                </fieldset>
-                                <fieldset>
-                                    <label class="label">Rating</label>
-                                    <div class="star-rating">
-                                        <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M15.168 5.77344L10.082 5.23633L8 0.566406L5.91797 5.23633L0.832031 5.77344L4.63086 9.19727L3.57031 14.1992L8 11.6445L12.4297 14.1992L11.3691 9.19727L15.168 5.77344Z" fill="#B2B2B2"/>
-                                        </svg>
-                                        <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M15.168 5.77344L10.082 5.23633L8 0.566406L5.91797 5.23633L0.832031 5.77344L4.63086 9.19727L3.57031 14.1992L8 11.6445L12.4297 14.1992L11.3691 9.19727L15.168 5.77344Z" fill="#B2B2B2"/>
-                                        </svg>
-                                        <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M15.168 5.77344L10.082 5.23633L8 0.566406L5.91797 5.23633L0.832031 5.77344L4.63086 9.19727L3.57031 14.1992L8 11.6445L12.4297 14.1992L11.3691 9.19727L15.168 5.77344Z" fill="#B2B2B2"/>
-                                        </svg>
-                                        <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M15.168 5.77344L10.082 5.23633L8 0.566406L5.91797 5.23633L0.832031 5.77344L4.63086 9.19727L3.57031 14.1992L8 11.6445L12.4297 14.1992L11.3691 9.19727L15.168 5.77344Z" fill="#B2B2B2"/>
-                                        </svg>
-                                        <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M15.168 5.77344L10.082 5.23633L8 0.566406L5.91797 5.23633L0.832031 5.77344L4.63086 9.19727L3.57031 14.1992L8 11.6445L12.4297 14.1992L11.3691 9.19727L15.168 5.77344Z" fill="#B2B2B2"/>
-                                        </svg>
-                                    </div>
-                                </fieldset>
-                                <fieldset>
-                                    <label class="label">Review Title</label>
-                                    <input type="text" placeholder="Give your review a title" />
-                                </fieldset>
-                                <fieldset>
-                                    <label class="label">Body of Review (2000)</label>
-                                    <textarea cols="30" rows="10" placeholder="Write your comments here"></textarea>
-                                </fieldset>
 
-                                <button type="submit" class="position-relative review-submit-btn">SUBMIT</button>
-                            </form>
-                        </div>--}}
+                {{-- REVIEWS --}}
+                <div id="preview" class="tab-pane fade show active">
+                    <div class="review-area accordion-parent">
                         <livewire:product-review-form :product="$product" />
                         <livewire:product-review-list :product="$product" />
 

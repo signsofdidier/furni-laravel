@@ -16,49 +16,28 @@ class ProductReviewForm extends Component
     public string $body = '';
 
     public bool $showForm = false;
-    public bool $editing = false;
-
-    protected $listeners = ['editReview' => 'enableEdit'];
 
     public function mount(Product $product)
     {
         $this->product = $product;
-
-        if (Auth::check()) {
-            $existingReview = $this->product->reviews()->where('user_id', Auth::id())->first();
-            if ($existingReview) {
-                $this->rating = $existingReview->rating;
-                $this->title = $existingReview->title;
-                $this->body = $existingReview->body;
-            }
-        }
     }
 
     public function showReviewForm()
     {
-        $this->showForm = true;
-        $this->editing = false;
-    }
-
-    public function enableEdit()
-    {
-        $this->showForm = true;
-        $this->editing = true;
-
-        if (Auth::check()) {
-            $review = $this->product->reviews()->where('user_id', Auth::id())->first();
-            if ($review) {
-                $this->rating = $review->rating;
-                $this->title = $review->title;
-                $this->body = $review->body;
-            }
+        if (! $this->hasUserReviewed()) {
+            $this->showForm = true;
         }
     }
 
     public function save()
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return redirect()->route('login');
+        }
+
+        if ($this->hasUserReviewed()) {
+            session()->flash('error', 'You have already submitted a review for this product.');
+            return;
         }
 
         $this->validate([
@@ -67,22 +46,26 @@ class ProductReviewForm extends Component
             'body' => 'nullable|string|max:2000',
         ]);
 
-        Review::updateOrCreate(
-            [
-                'user_id' => Auth::id(),
-                'product_id' => $this->product->id,
-            ],
-            [
-                'rating' => $this->rating,
-                'title' => $this->title,
-                'body' => $this->body,
-            ]
-        );
+        Review::create([
+            'user_id' => Auth::id(),
+            'product_id' => $this->product->id,
+            'rating' => $this->rating,
+            'title' => $this->title,
+            'body' => $this->body,
+        ]);
 
-        $this->reset(['rating', 'title', 'body', 'showForm', 'editing']);
+        $this->reset(['rating', 'title', 'body', 'showForm']);
 
         session()->flash('success', 'Review created!');
         $this->dispatch('reviewAdded');
+    }
+
+    public function hasUserReviewed(): bool
+    {
+        return $this->product
+            ->reviews()
+            ->where('user_id', Auth::id())
+            ->exists();
     }
 
     public function render()

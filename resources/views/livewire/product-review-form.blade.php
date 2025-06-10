@@ -1,23 +1,26 @@
 <div>
-    @if (!$showForm)
-        <div class="d-flex justify-content-end mb-2">
-            <button class="btn btn-outline-secondary" wire:click="showReviewForm">
-                ✍️ Write a review
-            </button>
-        </div>
-    @endif
+    {{-- Alleen toon "Write a review" als user nog geen review heeft --}}
+    @auth
+        @if (!$this->hasUserReviewed() && !$showForm)
+            <div class="d-flex justify-content-end mb-2">
+                <button class="btn btn-outline-secondary" wire:click="showReviewForm">
+                    ✍️ Write a review
+                </button>
+            </div>
+        @endif
+    @endauth
 
     @if ($showForm)
         <div class="card shadow-sm p-4 mb-4">
             @if (session()->has('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
+                <div class="alert alert-success">{{ session('success') }}</div>
+            @elseif (session()->has('error'))
+                <div class="alert alert-danger">{{ session('error') }}</div>
             @endif
 
-            <h5 class="mb-3">{{ $editing ? 'Edit your review' : 'Write a review' }}</h5>
+            <h5 class="mb-3">Write a review</h5>
 
-            {{-- Stars --}}
+            {{-- Rating --}}
             <div class="mb-3">
                 <label class="form-label">Rating</label>
                 <div class="d-flex">
@@ -52,7 +55,7 @@
 
             <div class="d-flex justify-content-between">
                 <button wire:click="save" class="btn btn-primary">
-                    {{ $editing ? 'Update' : 'Submit' }}
+                    Submit
                 </button>
                 <button wire:click="$set('showForm', false)" type="button" class="btn btn-outline-secondary">
                     Cancel

@@ -44,4 +44,25 @@ class Product extends Model
     public function colors(){
         return $this->belongsToMany(Color::class);
     }
+
+    /* RATING RELATIONS */
+
+    // product heeft meerdere ratings
+    public function ratings()
+    {
+        return $this->hasMany(ProductRating::class);
+    }
+
+    // berekenen van gemiddelde rating
+    public function averageRating(): float
+    {
+        return round($this->ratings()->avg('rating') ?? 0, 1);
+    }
+
+    // aantal ratings
+    public function totalRatings(): int
+    {
+        return $this->ratings()->count();
+    }
+
 }

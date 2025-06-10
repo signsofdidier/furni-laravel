@@ -67,27 +67,9 @@
                         <h2 class="product-title mb-3">{{$product->name }}</h2>
 
                         {{-- STAR RATINGS --}}
-                        <div class="product-rating d-flex align-items-center mb-3">
-                                    <span class="star-rating d-flex">
-                                        <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M15.168 5.77344L10.082 5.23633L8 0.566406L5.91797 5.23633L0.832031 5.77344L4.63086 9.19727L3.57031 14.1992L8 11.6445L12.4297 14.1992L11.3691 9.19727L15.168 5.77344Z" fill="#FFAE00"/>
-                                        </svg>
-                                        <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M15.168 5.77344L10.082 5.23633L8 0.566406L5.91797 5.23633L0.832031 5.77344L4.63086 9.19727L3.57031 14.1992L8 11.6445L12.4297 14.1992L11.3691 9.19727L15.168 5.77344Z" fill="#FFAE00"/>
-                                        </svg>
-                                        <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M15.168 5.77344L10.082 5.23633L8 0.566406L5.91797 5.23633L0.832031 5.77344L4.63086 9.19727L3.57031 14.1992L8 11.6445L12.4297 14.1992L11.3691 9.19727L15.168 5.77344Z" fill="#FFAE00"/>
-                                        </svg>
-                                        <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M15.168 5.77344L10.082 5.23633L8 0.566406L5.91797 5.23633L0.832031 5.77344L4.63086 9.19727L3.57031 14.1992L8 11.6445L12.4297 14.1992L11.3691 9.19727L15.168 5.77344Z" fill="#FFAE00"/>
-                                        </svg>
-                                        <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M15.168 5.77344L10.082 5.23633L8 0.566406L5.91797 5.23633L0.832031 5.77344L4.63086 9.19727L3.57031 14.1992L8 11.6445L12.4297 14.1992L11.3691 9.19727L15.168 5.77344Z" fill="#B2B2B2"/>
-                                        </svg>
-                                    </span>
-                            <span class="rating-count ms-2">(22)</span>
-                        </div>
-                        <div class="product-price-wrapper mb-4">
+                        <livewire:product-rating-page :product="$product"/>
+
+                        <div class="product-price-wrapper mt-3 mb-4">
                             <span class="product-price regular-price">{{ Number::currency($product->price, 'EUR') }}</span>
                             {{--<del class="product-price compare-price ms-2">$32.00</del>--}}
                         </div>
@@ -330,7 +312,7 @@
                     @foreach($featuredProducts as $featured)
                         <div class="new-item" data-aos="fade-up" data-aos-duration="300">
                                 <div class="product-card">
-                                    <div class="product-card-img">
+                                    <div class="product-card-img text-center">
                                         <a class="product-hover-zoom" href="{{ url('/products') }}/{{ $featured->slug }}">
                                             <img class="primary-img" src="{{ url('storage', $featured->images[0]) }}"
                                                  alt="product-img">
@@ -352,9 +334,18 @@
                                             </svg>
                                         </a>
                                     </div>
-                                    <div class="product-card-details text-center">
-                                        <h3 class="product-card-title"><a href="{{ url('/products') }}/{{ $featured->slug }}">{{ $featured->name }}</a>
+                                    <div class="product-card-details text-center mt-2">
+
+                                        {{-- STAR RATINGS --}}
+                                        <div class="d-flex justify-content-center">
+                                            <livewire:product-rating-page :product="$product" />
+                                        </div>
+
+                                        {{-- PRODUCT TITLE--}}
+                                        <h3 class="product-card-title mt-1"><a href="{{ url('/products') }}/{{ $featured->slug }}">{{ $featured->name }}</a>
                                         </h3>
+
+                                        {{-- PRODUCT PRICE--}}
                                         <div class="product-card-price">
                                             <span class="card-price-regular">{{ Number::currency($featured->price, 'EUR') }}</span>
                                             {{--<span class="card-price-compare text-decoration-line-through">$1759</span>--}}

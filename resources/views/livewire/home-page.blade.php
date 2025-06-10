@@ -264,7 +264,9 @@
                                             </li>
                                         @endforeach
                                     </ul>--}}
-                                    <h3 class="product-card-title">
+                                    {{-- STAR RATINGS --}}
+                                    <livewire:product-rating-page :product="$product" :wire:key="'rating-'.$product->id" />
+                                    <h3 class="product-card-title mt-1">
                                         <a href="{{ url('/products') }}/{{ $product->slug }}">Vita Lounge Chair</a>
                                     </h3>
                                     <div class="product-card-price">

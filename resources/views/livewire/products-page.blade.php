@@ -48,9 +48,11 @@
                                                      alt="product-img">
                                             </a>
 
-                                            {{--<div class="product-badge">
-                                                <span class="badge-label badge-percentage rounded">-44%</span>
-                                            </div>--}}
+                                            @if($product->on_sale == 1)
+                                                <div class="product-badge">
+                                                    <span class="badge-label badge-percentage rounded">On Sale</span>
+                                                </div>
+                                            @endif
 
                                             <div
                                                 class="product-card-action product-card-action-2 justify-content-center">
@@ -91,8 +93,11 @@
 
                                             </ul>
 
+                                            {{-- STAR RATINGS --}}
+                                            <livewire:product-rating-page :product="$product" :wire:key="'rating-'.$product->id" />
+
                                             {{-- PRODUCT TITLE --}}
-                                            <h3 class="product-card-title">
+                                            <h3 class="product-card-title mt-1">
                                                 <a href="{{ url('/products') }}/{{ $product->slug }}">{{ $product->name }}</a>
                                             </h3>
 
@@ -107,15 +112,6 @@
                             @endforeach
 
                         </div>
-
-
-                        {{--<div class="row">
-                            <div class="col-lg-9 offset-lg-3">
-                                <nav wire:navigate class="custom-pagination">
-                                    {{ $products->links('vendor.pagination.custom') }}
-                                </nav>
-                            </div>
-                        </div>--}}
                     </div>
 
                     <div class="mt-5">
@@ -236,18 +232,6 @@
                                     <span class="text-primary fw-bold">€5.000</span>
                                 </div>
                             </div>
-
-                            {{--<div class="filter-price d-flex align-items-center justify-content-between">
-                                <div class="filter-field">
-                                    <input class="field-input" type="number" placeholder="€0" min="0"
-                                           max="5000">
-                                </div>
-                                <div class="filter-separator px-3">To</div>
-                                <div class="filter-field">
-                                    <input class="field-input" type="number" min="0" placeholder="€5.000"
-                                           max="5000">
-                                </div>
-                            </div>--}}
                         </div>
 
                         {{-- Colors filter --}}

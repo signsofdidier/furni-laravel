@@ -13,8 +13,12 @@
                 </div>
                 <div class="col-lg-6 col-12">
                     <div class="announcement-text-wrapper d-flex align-items-center justify-content-center">
-                        <p class="announcement-text text-white">Free Shipping on all orders
-                            over {{ Number::currency($free_shipping_threshold, 'EUR') }}.</p>
+                        @if($free_shipping_enabled && $free_shipping_threshold > 0)
+                            <p class="announcement-text text-white">Free Shipping on all orders
+                                over {{ Number::currency($free_shipping_threshold, 'EUR') }}.</p>
+                        @else
+                            <p class="announcement-text text-white">Free Shipping on all orders.</p>
+                        @endif
                     </div>
                 </div>
                 <div class="col-lg-3 d-lg-block d-none">

@@ -21,6 +21,15 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
     protected static string $resource = ReviewResource::class;
     protected static string $view = 'filament.resources.review-resource.pages.manage-reviews-with-stats';
 
+    /*GEEN TITEL */
+    public function getTitle(): string
+    {
+        return '';
+    }
+
+    /* GEEN BREADCRUMB */
+    protected static bool $shouldRegisterBreadcrumbs = false;
+
     public string $activeTab = 'reviews';
 
     // COUNT VOOR NIET APPROVED REVIEWS
@@ -30,6 +39,7 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
     protected $listeners = ['refreshPendingCount' => '$refresh'];
 
     public function mount(): void{
+        $this->tableRecordsPerPage = 5; // aantal records per pagina
         $this->pendingReviewCount = Review::where('approved', false)->count();
     }
 
@@ -43,7 +53,7 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
     {
         if ($this->activeTab === 'reviews') {
             // Voor reviews: gebruik Review model met SoftDeletes
-            return Review::withTrashed()->with(['user', 'product'])->latest('created_at');
+            return Review::withTrashed()->with(['user', 'product'])/*->latest('created_at')*/;
 
         } else {
             // Voor ratings: gebruik Product model (geen SoftDeletes)
@@ -56,14 +66,16 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
     {
         return $this->activeTab === 'reviews'
             ? [
-                TextColumn::make('user.name')->label('User'),
+                TextColumn::make('user.name')->label('User')
+                    ->sortable(),
                 ImageColumn::make('product.images.0')
                     ->label('Image')
                     ->disk('public')
                     ->height(50),
 
                 TextColumn::make('product.name')->label('Product'),
-                TextColumn::make('rating'),
+                TextColumn::make('rating')
+                    ->sortable(),
                 TextColumn::make('title'),
                 TextColumn::make('created_at')->label('Date')->dateTime()->sortable(),
                 ToggleColumn::make('approved')
@@ -75,13 +87,17 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
                     }),
             ]
             : [
-                ImageColumn::make('images.0')->label('Image')->disk('public'),
-                TextColumn::make('name')->label('Product'),
+                ImageColumn::make('images.0')->label('Image')->disk('public')
+                    ->sortable(),
+                TextColumn::make('name')->label('Product')
+                    ->sortable(),
                 TextColumn::make('reviews_avg_rating')
                     ->label('AVG Rating')
+                    ->sortable()
                     ->formatStateUsing(fn ($state) => number_format($state, 1) . ' ★'),
-                TextColumn::make('reviews_count')->label('Total Reviews'),
+                TextColumn::make('reviews_count')->label('Total Reviews')->sortable(),
             ];
+
     }
 
     public function switchTab(string $tab): void
@@ -121,4 +137,23 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
         // Voor ratings tab andere acties of geen acties
         return [];
     }
+
+    /* HOEVEEL PER PAGE VOOR DE PAGINATION */
+    public function getTableRecordsPerPageSelectOptions(): array
+    {
+        return [5, 10, 25, 50];
+    }
+
+    /* SORTERING APPROVED */
+    protected function getDefaultTableSortColumn(): ?string
+    {
+        return $this->activeTab === 'reviews' ? 'approved' : 'reviews_avg_rating';
+    }
+
+    protected function getDefaultTableSortDirection(): ?string
+    {
+        return $this->activeTab === 'reviews' ? 'asc' : 'desc';
+    }
+
+
 }

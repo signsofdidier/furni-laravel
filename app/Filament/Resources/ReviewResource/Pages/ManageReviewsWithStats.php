@@ -21,7 +21,7 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
     protected static string $resource = ReviewResource::class;
     protected static string $view = 'filament.resources.review-resource.pages.manage-reviews-with-stats';
 
-    public string $activeTab = 'ratings';
+    public string $activeTab = 'reviews';
 
     // COUNT VOOR NIET APPROVED REVIEWS
     public int $pendingReviewCount = 0;
@@ -92,16 +92,19 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
 
     protected function getTableFilters(): array
     {
-        // Alleen TrashedFilter tonen voor reviews tab (omdat alleen Review SoftDeletes heeft)
         if ($this->activeTab === 'reviews') {
             return [
-                Tables\Filters\TrashedFilter::make(),
+                Tables\Filters\TrashedFilter::make()
+                    ->label('Deleted Reviews')
+                    ->trueLabel('All reviews')      // This shows only NON-deleted records
+                    ->falseLabel('Only deleted')    // This shows only deleted records
+                    ->default(true),                // This shows all records (active + deleted)
             ];
         }
 
-        // Voor ratings tab geen TrashedFilter
         return [];
     }
+
 
     protected function getTableActions(): array
     {

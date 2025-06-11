@@ -24,6 +24,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
+
 class ReviewResource extends Resource
 {
     protected static ?string $model = Review::class;
@@ -63,7 +64,7 @@ class ReviewResource extends Resource
                 ToggleColumn::make('approved')->label('Approved')->sortable()->toggleable(true),
             ])
             ->filters([
-                TrashedFilter::make(),
+                TrashedFilter::make()
             ])
             ->actions([
                 EditAction::make(),
@@ -120,13 +121,5 @@ class ReviewResource extends Resource
         return false; // alleen lezen of beheer
     }
 
-    // SOFT DELETES
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
-    }
 
 }

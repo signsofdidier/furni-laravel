@@ -39,13 +39,17 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
         $this->pendingReviewCount = Review::where('approved', false)->count();
     }
 
-
     protected function getTableQuery()
     {
-        return $this->activeTab === 'reviews'
-            ? Review::query()->with(['user', 'product'])->latest('created_at')
-            : Product::query()->withCount('reviews')
+        if ($this->activeTab === 'reviews') {
+            // Voor reviews: gebruik Review model met SoftDeletes
+            return Review::withTrashed()->with(['user', 'product'])->latest('created_at');
+
+        } else {
+            // Voor ratings: gebruik Product model (geen SoftDeletes)
+            return Product::query()->withCount('reviews')
                 ->withAvg('reviews', 'rating');
+        }
     }
 
     protected function getTableColumns(): array
@@ -88,31 +92,30 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
 
     protected function getTableFilters(): array
     {
-        return [
-            Tables\Filters\TrashedFilter::make(),
-        ];
-    }
+        // Alleen TrashedFilter tonen voor reviews tab (omdat alleen Review SoftDeletes heeft)
+        if ($this->activeTab === 'reviews') {
+            return [
+                Tables\Filters\TrashedFilter::make(),
+            ];
+        }
 
+        // Voor ratings tab geen TrashedFilter
+        return [];
+    }
 
     protected function getTableActions(): array
     {
-        return [
-            Tables\Actions\EditAction::make(),
-            Tables\Actions\DeleteAction::make(),       // Soft delete
-            Tables\Actions\ForceDeleteAction::make(),  // Permanent delete
-            Tables\Actions\RestoreAction::make(),      // Herstellen
-        ];
+        // Alleen soft delete acties voor reviews tab
+        if ($this->activeTab === 'reviews') {
+            return [
+                //Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),       // Soft delete
+                Tables\Actions\ForceDeleteAction::make(),  // Permanent delete
+                Tables\Actions\RestoreAction::make(),      // Herstellen
+            ];
+        }
+
+        // Voor ratings tab andere acties of geen acties
+        return [];
     }
-
-    protected function getTableBulkActions(): array
-    {
-        return [
-            Tables\Actions\DeleteBulkAction::make(),
-            Tables\Actions\ForceDeleteBulkAction::make(),
-            Tables\Actions\RestoreBulkAction::make(),
-        ];
-    }
-
-
-
 }

@@ -68,8 +68,15 @@ class Product extends Model
         return $this->reviews()->count();
     }
 
+    // product heeft meerdere productcolorstocks
     public function productColorStocks(){
         return $this->hasMany(ProductColorStock::class);
+    }
+
+    // kijk als product in stock is
+    public function getInStockAttribute()
+    {
+        return $this->productColorStocks->sum('stock') > 0;
     }
 
     public function stockForColor($colorId): int

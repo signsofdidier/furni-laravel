@@ -96,6 +96,11 @@
                             <strong class="label">Brand:</strong> {{ $product->brand->name }}
                         </div>
 
+                        @if(!$product->in_stock)
+                            {{-- alles is uitverkocht --}}
+                            <p class="text-danger">This product is out of stock</p>
+                        @endif
+
                         {{-- COLORS --}}
                         <div class="product-variant-wrapper">
                             <div class="product-variant product-variant-color">
@@ -119,7 +124,7 @@
                                             >
                                             <label
                                                 for="color-{{ $color->id }}"
-                                                class="variant-label rounded-circle d-inline-block"
+                                                class="variant-label rounded-circle d-inline-block position-relative"
                                                 style="
                                                     width: 1.5rem;
                                                     height: 1.5rem;
@@ -128,49 +133,47 @@
                                                     box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
                                                     cursor: {{ $isOutOfStock ? 'not-allowed' : 'pointer' }};
                                                     opacity: {{ $isOutOfStock ? '0.4' : '1' }};
+                                                    @if($isOutOfStock)
+                                                        background-image: linear-gradient(
+                                                            to top left,
+                                                            transparent 48%,
+                                                            #999 48.5%,
+                                                            #999 51.5%,
+                                                            transparent 52%
+                                                        );
+                                                    @endif
                                                 "
                                                 title="{{ $color->name }}{{ $isOutOfStock ? ' (Out of stock)' : '' }}"
                                             >
                                             </label>
                                         </li>
                                     @endforeach
-
-
                                 </ul>
-
-                                {{--  COLOR STOCK STATUS --}}
-                                @php
-                                    $soldOutColors = [];
-                                    $lastItemColors = [];
-
-                                    foreach ($product->colors as $color) {
-                                        $stock = $product->stockForColorId($color->id);
-                                        if ($stock === 0) {
-                                            $soldOutColors[] = $color->name;
-                                        } elseif ($stock < 10) {
-                                            $lastItemColors[] = $color->name;
-                                        }
-                                    }
-                                @endphp
-
-                                <div class="color-stock-status d-flex flex-column gap-1 mt-2">
-                                    @if(!empty($soldOutColors))
-                                        <span class="badge bg-danger text-white">
-                                        {{ implode(', ', $soldOutColors) }}: Sold Out
-                                    </span>
-                                                                @endif
-
-                                                                @if(!empty($lastItemColors))
-                                                                    <span class="badge bg-warning text-dark">
-                                        {{ implode(', ', $lastItemColors) }}: Last Items
-                                    </span>
-                                    @endif
+                                @error('selectedColorId')
+                                <div
+                                    x-data="{ show: true }"
+                                    x-init="setTimeout(() => show = false, 3000)"
+                                    x-show="show"
+                                    class="text-danger small"
+                                >
+                                    {{ $message }}
                                 </div>
-                                {{--  END COLOR STOCK STATUS --}}
+                                @enderror
 
                             </div>
                         </div>
 
+
+                        @error('quantity')
+                            <div
+                                x-data="{ show: true }"
+                                x-init="setTimeout(() => show = false, 3000)"
+                                x-show="show"
+                                class="text-danger small mt-1"
+                            >
+                            {{ $message }}
+                        </div>
+                        @enderror
                         <div class="misc d-flex align-items-end justify-content-between mt-4">
                             <div class="quantity d-flex align-items-center justify-content-between">
 
@@ -181,7 +184,7 @@
                                 <span class="qty-input">{{ max($quantity, 1) }}</span>
 
                                 {{-- INCREMENT --}}
-                                <button wire:click="increaseQuantity" class="qty-btn inc-qty"><img src="{{ asset('assets/img/icon/plus.svg') }}" alt="plus"></button>
+                                <button wire:click="increaseQuantity" {{ !$product->in_stock ? 'disabled' : '' }} class="qty-btn inc-qty" ><img src="{{ asset('assets/img/icon/plus.svg') }}" alt="plus"></button>
 
                             </div>
                         </div>
@@ -190,7 +193,7 @@
                             <div class="product-form-buttons d-flex align-items-center justify-content-between mt-4">
 
                                 {{-- ADD TO CART --}}
-                                <button wire:click="addToCart({{ $product->id }})" type="button" class="position-relative btn-atc btn-add-to-cart loader">
+                                <button wire:click="addToCart({{ $product->id }})" {{ !$product->in_stock ? 'disabled' : '' }} type="button" class="position-relative btn-atc btn-add-to-cart loader">
                                     ADD TO CART
                                 </button>
 
@@ -332,4 +335,13 @@
     </div>
     @endif
     <!-- you may also lik end -->
+
+    <style>
+        /* DISABLED BUTTON */
+        button[disabled] {
+            cursor: not-allowed !important;
+            opacity: 0.5;
+            pointer-events: all; /* nodig voor cursor effect */
+        }
+    </style>
 </div>

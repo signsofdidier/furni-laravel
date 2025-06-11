@@ -230,6 +230,27 @@ class CartManagement {
         return $maxShipping;
     }
 
+    // VOORKOM MEER VAN 1 VAN EEN PRODUCT IN DE CART DAN WAT IN STOCK IS
+    // Geeft terug hoeveel stuks van een bepaald product + kleur al in de winkelwagen zitten
+    public static function getQuantityInCart(int $product_id, ?int $color_id = null): int
+    {
+        // Haal huidige inhoud van de winkelwagen op uit de sessie
+        $cart_items = self::getCartItemsFromSession();
 
+        // Loop door elk item in de winkelwagen
+        foreach ($cart_items as $item) {
+            // Controleer of dit item hetzelfde product en dezelfde kleur heeft
+            if (
+                $item['product_id'] === $product_id &&
+                ($item['color_id'] ?? null) === $color_id
+            ) {
+                // Als er een match is, geef de huidige hoeveelheid in de cart terug
+                return $item['quantity'];
+            }
+        }
+
+        // Als het product (met kleur) niet in de cart zit, geef 0 terug
+        return 0;
+    }
 
 }

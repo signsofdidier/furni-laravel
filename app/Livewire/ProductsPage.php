@@ -66,10 +66,23 @@ class ProductsPage extends Component
         $selectedColorId = $this->selectedColorPerProduct[$product_id] ?? null;
 
 
-        // Als er geen kleur geselecteerd is, pak de eerste kleur
+        // Als er geen kleur geselecteerd is, voeg een foutmelding toe
         if (!$selectedColorId) {
-            $product = Product::with('colors')->findOrFail($product_id);
-            $selectedColorId = optional($product->colors->first())->id;
+
+            $this->addError("selectedColorPerProduct.$product_id", 'Please select a color first.');
+            return;
+        }
+
+        // Controleer of we niet over de max stock gaan
+        $product = Product::with('productColorStocks')->findOrFail($product_id);
+        $maxStock = $product->stockForColorId($selectedColorId); // Max stock voor geselecteerde kleur
+        $inCart = CartManagement::getQuantityInCart($product_id, $selectedColorId); // Hoeveel in winkelwagen
+
+        // dit zorgt ervoor dat de quantity niet groter kan worden dan de max stock
+        if ($inCart + 1 > $maxStock) {
+            $remaining = $maxStock - $inCart; // Hoeveel overblijft
+            $this->addError("selectedColorPerProduct.$product_id", "Only $remaining item(s) left in stock for this color.");
+            return;
         }
 
 
@@ -87,13 +100,17 @@ class ProductsPage extends Component
 
         // LIVEWIRE SWEETALERT
         $this->dispatch('alert');
+
+        // Reset gekozen kleur indien gewenst
+        unset($this->selectedColorPerProduct[$product_id]);
     }
 
 
     public function render()
     {
-        // Start een query om alleen actieve producten op te halen
-        $productQuery = Product::query()->where('is_active', 1);
+        // Start een query om alleen actieve producten op te halen en hun stock quantity
+        $productQuery = Product::with(['colors', 'productColorStocks'])
+            ->where('is_active', 1);
 
         // Filter de producten op basis van de geselecteerde categorieën, als er categorieën zijn geselecteerd
         if(!empty($this->selected_categories)) {

@@ -87,8 +87,8 @@
                                                 <button
                                                     type="button"
                                                     class="action-card action-addtocart"
-                                                    @if(!is_null($stock) && $stock === 0) disabled @endif
-                                                    wire:click.prevent='addToCart({{ $product->id }})'
+                                                    @if(!$product->in_stock) disabled @endif
+                                                    wire:click.prevent="addToCart({{ $product->id }})"
                                                 >
 
                                                 <svg class="icon icon-cart" width="24" height="26"
@@ -109,31 +109,60 @@
                                                 <input type="radio" wire:model.live="selectedColorPerProduct.{{ $product->id }}" value="" class="d-none">
 
                                                 @foreach($product->colors as $color)
-                                                    <li class="me-0">
-                                                        <label style="cursor:pointer;">
-                                                            <input
-                                                                type="radio"
-                                                                wire:model.live="selectedColorPerProduct.{{ $product->id }}"
-                                                                value="{{ $color->id }}"
-                                                                class="d-none"
-                                                                class="d-none"
-                                                            >
-                                                            <span
-                                                                class="color-swatch"
-                                                                style="
-                                                                    display: inline-block;
-                                                                    width: 16px;
-                                                                    height: 16px;
-                                                                    border-radius: 50%;
-                                                                    background: {{ $color->hex }};
-                                                                    border: 2px solid #ccc;
-                                                                "
-                                                                title="{{ $color->name }}"
-                                                            ></span>
+                                                    @php
+                                                        $stock = $product->stockForColorId($color->id);
+                                                        $isOutOfStock = $stock === 0;
+                                                    @endphp
+
+                                                    <li class="variant-item">
+                                                        <input
+                                                            type="radio"
+                                                            id="color-{{ $product->id }}-{{ $color->id }}"
+                                                            name="selectedColorPerProduct[{{ $product->id }}]"
+                                                            value="{{ $color->id }}"
+                                                            wire:model="selectedColorPerProduct.{{ $product->id }}"
+                                                            class="visually-hidden"
+                                                            {{ $isOutOfStock ? 'disabled' : '' }}
+                                                        >
+                                                        <label
+                                                            for="color-{{ $product->id }}-{{ $color->id }}"
+                                                            class="variant-label rounded-circle d-inline-block position-relative"
+                                                            style="
+                                                                width: 1rem;
+                                                                height: 1rem;
+                                                                background-color: {{ $color->hex }};
+                                                                border: 1px solid #ccc;
+                                                                box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+                                                                cursor: {{ $isOutOfStock ? 'not-allowed' : 'pointer' }};
+                                                                opacity: {{ $isOutOfStock ? '0.4' : '1' }};
+                                                                @if($isOutOfStock)
+                                                                    background-image: linear-gradient(
+                                                                        to top left,
+                                                                        transparent 48%,
+                                                                        #999 48.5%,
+                                                                        #999 51.5%,
+                                                                        transparent 52%
+                                                                    );
+                                                                @endif
+                                                            "
+                                                            title="{{ $color->name }}{{ $isOutOfStock ? ' (Out of stock)' : '' }}"
+                                                        >
                                                         </label>
                                                     </li>
                                                 @endforeach
+
                                             </ul>
+                                            @error("selectedColorPerProduct.$product->id")
+                                            <div
+                                                x-data="{ show: true }"
+                                                x-init="setTimeout(() => show = false, 3000)"
+                                                x-show="show"
+                                                class="text-danger small my-1"
+                                            >
+                                                {{ $message }}
+                                            </div>
+                                            @enderror
+
 
 
 
@@ -369,19 +398,22 @@
 
     {{-- COLOR FILTER STYLING --}}
     <style>
-        /* Zorg dat bij selectie een duidelijke outline/ring verschijnt */
-        .color-lists input[type="checkbox"]:checked + .color-swatch {
-            border: 3px solid #F76B6A;
-            box-shadow: 0 0 0 2px #F76B6A;
-        }
-        .color-swatch {
-            transition: border 0.2s, box-shadow 0.2s;
+        /* Visuele highlight voor geselecteerde kleur (radio button) */
+        input[type="radio"]:checked + label.variant-label {
+            border: 1px solid #F76B6A !important;
+            box-shadow: 0 0 0 2px #F76B6A !important;
         }
 
-        /* Zorg dat bij selectie van kleuren bij product een duidelijke outline/ring verschijnt */
-        .color-lists input[type="radio"]:checked + .color-swatch {
-            border: 3px solid #F76B6A;
-            box-shadow: 0 0 0 2px #F76B6A;
+        /* Soepel effect bij hover of selectie */
+        label.variant-label {
+            transition: border 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        /* Standaard style voor disabled buttons in je shop */
+        button[disabled] {
+            cursor: not-allowed !important;
+            opacity: 0.5;
+            pointer-events: all;
         }
     </style>
 </div>

@@ -21,35 +21,62 @@ class ProductsPage extends Component
     // moet worden gebruikt om de pagination te laten werken in livewire
     use WithPagination;
 
+    // CATEGORY FILTER
     #[Url] // Deze eigenschap wordt gesynchroniseerd met de URL, zodat filters via de URL gedeeld kunnen worden
     public $selected_categories = []; // deze naam komt van de wire:model.live="selected_categories" uit products page
 
+    // BRANDS FILTER
     #[Url] // Deze eigenschap wordt gesynchroniseerd met de URL, zodat filters via de URL gedeeld kunnen worden
     public $selected_brands = [];
 
+    // COLORS FILTER
     #[Url]
     public $selected_colors = [];
 
+    // FEATURED FILTER
     #[Url]
     public $featured;
 
+    // ON SALE FILTER
     #[Url]
     public $on_sale;
 
+    // IN STOCK FILTER
     #[Url]
     public $in_stock;
 
+    // PRICE RANGE FILTER
     #[Url]
     public $price_range = 0; // Zet dit op 0 zodat de filter niet actief blijft als je via bvb homepage categories filtert
 
-    // sort by
+    // SORT BY FILTER
     #[Url]
     public $sort = 'latest';
+
+    // selecter kleur voor addtocart
+    public $selectedColorPerProduct = [];
+
 
 
     // add product to cart method
     public function addToCart($product_id){
-        $total_count = CartManagement::addItemToCart($product_id);
+
+        // KLEUR ADD TO CART
+        // Haal de geselecteerde kleur op
+        $selectedColorId = $this->selectedColorPerProduct[$product_id] ?? null;
+
+
+        // Als er geen kleur geselecteerd is, pak de eerste kleur
+        if (!$selectedColorId) {
+            $product = Product::with('colors')->findOrFail($product_id);
+            $selectedColorId = optional($product->colors->first())->id;
+        }
+
+
+        $total_count = CartManagement::addItemToCartWithQuantity(
+            $product_id,  1, // standaard quantity op overzichtspagina
+            $selectedColorId // Geef de geselecteerde kleur
+        );
 
         //Hiermee kan je in de navbar class de 'update-cart-count' event triggeren met #[On('update-cart-count')]
         /*$this->dispatch('update-cart-count', total_count: $total_count)->to(Navbar::class);*/

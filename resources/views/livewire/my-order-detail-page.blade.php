@@ -90,6 +90,7 @@
                                 <thead class="table-light">
                                 <tr>
                                     <th>Product</th>
+                                    <th>Color</th>
                                     <th>Price</th>
                                     <th>Qty</th>
                                     <th>Total</th>
@@ -103,6 +104,15 @@
                                                 <img src="{{ url('storage', $item->product->images[0]) }}" alt="{{ $item->product->name }}" class="me-3" style="width:50px; height:50px; object-fit:cover;">
                                                 <span>{{ $item->product->name }}</span>
                                             </div>
+                                        </td>
+                                        <td class="align-middle">
+                                            @if($item->color)
+                                                <span class="d-inline-block me-1"
+                                                      style="width:12px; height:12px; border-radius:50%; background-color:{{ $item->color->hex }}; border:1px solid #ccc;"></span>
+                                                {{ $item->color->name }}
+                                            @else
+                                                <span class="text-muted">—</span>
+                                            @endif
                                         </td>
                                         <td class="align-middle">{{ Number::currency($item->unit_amount, 'EUR') }}</td>
                                         <td class="align-middle">{{ $item->quantity }}</td>

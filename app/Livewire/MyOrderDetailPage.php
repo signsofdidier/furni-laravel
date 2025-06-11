@@ -13,6 +13,7 @@ class MyOrderDetailPage extends Component
 {
     public $order_id;
 
+
     public function mount($order_id){
         $this->order_id = $order_id;
     }
@@ -20,9 +21,10 @@ class MyOrderDetailPage extends Component
     public function render()
     {
         // dit zal je order items ophalen
-        $order_items = OrderItem::with('product')->where('order_id', $this->order_id)->get();
+        $order_items = OrderItem::with(['product', 'color'])->where('order_id', $this->order_id)->get();
         $address = Address::where('order_id', $this->order_id)->first();
         $order = Order::where('id', $this->order_id)->first();
+
 
         // toon de order items, address en de order in de view
         return view('livewire.my-order-detail-page', [

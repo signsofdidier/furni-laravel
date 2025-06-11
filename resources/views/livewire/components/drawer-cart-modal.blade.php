@@ -117,7 +117,21 @@
 
                         <div class="flex-1 text-sm">
                             <a href="{{ url('/products') }}/{{ $item['slug'] }}" class="font-semibold text-sm !text-gray-900">{{ $item['name'] }}</a>
-                            <div class="text-gray-500 text-xs">{{ $item['variant'] ?? 'XS / Dove Gray' }}</div>
+
+                            {{-- COLOR IN CART --}}
+                            @if(!empty($item['color_name']) && !empty($item['color_hex']))
+                                <div class="text-gray-500 text-xs flex items-center gap-1">
+                                    <span
+                                        class="inline-block w-3 h-3 rounded-full border border-gray-300"
+                                        style="background-color: {{ $item['color_hex'] }};"
+                                        title="{{ $item['color_name'] }}"
+                                    ></span>
+                                    {{ $item['color_name'] }}
+                                </div>
+                            @else
+                                <div class="text-gray-400 text-xs">No color selected</div>
+                            @endif
+
 
                             <div class="flex justify-between items-center mt-2">
                                 <div class="flex items-center gap-1">

@@ -144,12 +144,11 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
         return [5, 10, 25, 50];
     }
 
-    /* SORTERING APPROVED */
+    /* SORTERING BIJ START VAN PAGINA */
     protected function getDefaultTableSortColumn(): ?string
     {
         return $this->activeTab === 'reviews' ? 'approved' : 'reviews_avg_rating';
     }
-
     protected function getDefaultTableSortDirection(): ?string
     {
         return $this->activeTab === 'reviews' ? 'asc' : 'desc';

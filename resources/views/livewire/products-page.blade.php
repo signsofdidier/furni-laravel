@@ -81,17 +81,40 @@
                                             </div>
                                         </div>
 
-                                        {{-- COLORS --}}
                                         <div class="product-card-details">
-                                            <ul class="color-lists list-unstyled d-flex align-items-center">
-                                                {{--@foreach($colors as $color)
-                                                    <li>
-                                                        <a href="#"
-                                                           class="color-swatch swatch-black active"></a>
-                                                    </li>
-                                                @endforeach--}}
+                                            {{-- COLOR SELECT --}}
+                                            <ul class="color-lists list-unstyled d-flex align-items-center mt-2 mb-2">
+                                                {{-- LEGE OPTIE (onzichtbaar) --}}
+                                                <input type="radio" wire:model.live="selectedColorPerProduct.{{ $product->id }}" value="" class="d-none">
 
+                                                @foreach($product->colors as $color)
+                                                    <li class="me-0">
+                                                        <label style="cursor:pointer;">
+                                                            <input
+                                                                type="radio"
+                                                                wire:model.live="selectedColorPerProduct.{{ $product->id }}"
+                                                                value="{{ $color->id }}"
+                                                                class="d-none"
+                                                                class="d-none"
+                                                            >
+                                                            <span
+                                                                class="color-swatch"
+                                                                style="
+                                                                    display: inline-block;
+                                                                    width: 16px;
+                                                                    height: 16px;
+                                                                    border-radius: 50%;
+                                                                    background: {{ $color->hex }};
+                                                                    border: 2px solid #ccc;
+                                                                "
+                                                                title="{{ $color->name }}"
+                                                            ></span>
+                                                        </label>
+                                                    </li>
+                                                @endforeach
                                             </ul>
+
+
 
                                             {{-- STAR RATINGS --}}
                                             <livewire:product-rating-page :product="$product" :wire:key="'rating-'.$product->id" />
@@ -242,7 +265,7 @@
                             <div x-show="open" x-collapse id="filter-color">
                                 <ul class="color-lists list-unstyled d-flex align-items-center flex-wrap">
                                     @foreach($colors as $color)
-                                        <li class="me-1 mb-2" wire:key="color-{{ $color->id }}">
+                                        <li class="mb-2" wire:key="color-{{ $color->id }}">
                                             <label style="cursor:pointer;">
                                                 <input
                                                     type="checkbox"
@@ -254,8 +277,8 @@
                                                     class="color-swatch"
                                                     style="
                                                         display: inline-block;
-                                                        width: 28px;
-                                                        height: 28px;
+                                                        width: 22px;
+                                                        height: 22px;
                                                         border-radius: 50%;
                                                         background: {{ $color->hex }};
                                                         border: 2px solid #bbb;
@@ -332,6 +355,12 @@
         }
         .color-swatch {
             transition: border 0.2s, box-shadow 0.2s;
+        }
+
+        /* Zorg dat bij selectie van kleuren bij product een duidelijke outline/ring verschijnt */
+        .color-lists input[type="radio"]:checked + .color-swatch {
+            border: 3px solid #F76B6A;
+            box-shadow: 0 0 0 2px #F76B6A;
         }
     </style>
 </div>

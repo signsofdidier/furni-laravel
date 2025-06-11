@@ -175,6 +175,24 @@
                                                 {{ $item['name'] }}
                                             </a>
                                         </h2>
+
+                                        {{-- COLOR --}}
+                                        @if(! empty($item['color_name']))
+                                            <p class="product-vendor d-flex align-items-center">
+                                                    <span
+                                                        class="me-2 rounded-circle"
+                                                        style="
+                                                          display:inline-block;
+                                                          width:0.7rem;
+                                                          height:0.7rem;
+                                                          background-color: {{ $item['color_hex'] }};
+                                                          border: 1px solid #ccc;
+                                                        ">
+                                                    </span>
+                                                {{ $item['color_name'] }}
+                                            </p>
+                                        @endif
+
                                         <p class="product-vendor mb-1">
                                             {{ Number::currency($item['unit_amount'], 'EUR') }} × {{ $item['quantity'] }}
                                         </p>

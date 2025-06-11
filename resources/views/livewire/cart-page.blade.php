@@ -24,6 +24,8 @@
                                             </div>
                                         </td>
                                         <td class="cart-item-details">
+
+                                            {{-- NAME --}}
                                             <h2 class="product-title"><a href="{{ url('/products') }}/{{ $item['slug'] }}">{{ $item['name'] }}</a></h2>
 
                                             {{-- COLOR --}}

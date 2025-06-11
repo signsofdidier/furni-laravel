@@ -1,4 +1,6 @@
 <div>
+
+
     {{-- Alleen toon "Write a review" als user nog geen review heeft --}}
     @auth
         @if (!$this->hasUserReviewed() && !$showForm)
@@ -10,13 +12,25 @@
         @endif
     @endauth
 
-    @if ($showForm)
+    @auth
+        @php
+            $pendingReview = $product->reviews()
+                ->where('user_id', auth()->id())
+                ->where('approved', false)
+                ->first();
+        @endphp
+
+        @if ($pendingReview)
+            <div class="alert alert-warning mt-3">
+                Your review is pending approval and will be shown once approved.
+            </div>
+        @endif
+    @endauth
+
+
+@if ($showForm)
         <div class="card shadow-sm p-4 mb-4">
-            @if (session()->has('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
-            @elseif (session()->has('error'))
-                <div class="alert alert-danger">{{ session('error') }}</div>
-            @endif
+
 
             <h5 class="mb-3">Write a review</h5>
 

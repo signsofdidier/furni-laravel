@@ -57,7 +57,7 @@ class ProductReviewForm extends Component
 
         $this->reset(['rating', 'title', 'body', 'showForm']);
 
-        session()->flash('success', 'Review submitted and is pending approval.');
+        //session()->flash('success', 'Review submitted and is pending approval.');
         $this->dispatch('reviewAdded');
     }
 

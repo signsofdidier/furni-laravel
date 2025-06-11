@@ -25,6 +25,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 
+// WE GEBRUIKEN ManageReviewsWithStats VOOR DE INHOUD VAN REVIEWS -> Dit omwille van de tabs split logica
+
 class ReviewResource extends Resource
 {
     protected static ?string $model = Review::class;
@@ -37,17 +39,7 @@ class ReviewResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('product_id')
-                    ->label('Product')
-                    ->relationship('product', 'name')
-                    ->required(),
-                Forms\Components\Select::make('user_id')
-                    ->label('User')
-                    ->relationship('user', 'name')
-                    ->required(),
-                Forms\Components\TextInput::make('rating')->numeric()->minValue(1)->maxValue(5)->required(),
-                Forms\Components\TextInput::make('title'),
-                Forms\Components\Textarea::make('body'),
+                // We gebruiken ManageReviewsWithStats voor de inhoud
             ]);
     }
 
@@ -55,28 +47,17 @@ class ReviewResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('user.name')->label('User')->sortable()->searchable(),
-                TextColumn::make('product.name')->label('Product')->sortable()->searchable(),
-                TextColumn::make('rating')->label('Rating'),
-                TextColumn::make('title')->label('Title'),
-                TextColumn::make('body')->label('Review')->limit(50),
-                TextColumn::make('created_at')->label('Submitted')->dateTime(),
-                ToggleColumn::make('approved')->label('Approved')->sortable()->toggleable(true),
+                //
             ])
             ->filters([
-                TrashedFilter::make()
+                //
             ])
             ->actions([
-                EditAction::make(),
-                DeleteAction::make(), // Soft delete
-                ForceDeleteAction::make(), // Hard delete
-                RestoreAction::make(),
+                //
             ])
             ->bulkActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                    ForceDeleteBulkAction::make(),
-                    RestoreBulkAction::make(),
+                    //
                 ]),
             ]);
     }

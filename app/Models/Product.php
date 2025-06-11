@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -23,6 +24,8 @@ class Product extends Model
         'brand_id',
         'shipping_cost',
     ];
+
+    protected $dates = ['deleted_at'];
 
     // hierdoor worden de images omgezet naar een array uit de JSON van images
     protected $casts = [

@@ -15,8 +15,8 @@ class ProductRatingPage extends Component
 
     public function render()
     {
-        $average = round($this->product->reviews()->avg('rating'), 1);
-        $total = $this->product->reviews()->count();
+        $average = round($this->product->reviews()->where('approved', true)->avg('rating'), 1);
+        $total = $this->product->reviews()->where('approved', true)->count();
 
         return view('livewire.product-rating-page', compact('average', 'total'));
     }

@@ -273,7 +273,6 @@
                                         {{-- STAR RATINGS --}}
                                         <div class="d-flex justify-content-center">
                                             <livewire:product-rating-page :product="$featured" />
-
                                         </div>
 
                                         {{-- PRODUCT TITLE--}}

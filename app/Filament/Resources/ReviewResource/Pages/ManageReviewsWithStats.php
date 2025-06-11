@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Review;
 use Filament\Resources\Pages\Page;
 use Filament\Tables;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 use Filament\Forms\Form;
 use Filament\Tables\Columns\TextColumn;
@@ -22,10 +23,27 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
 
     public string $activeTab = 'ratings';
 
+    // COUNT VOOR NIET APPROVED REVIEWS
+    public int $pendingReviewCount = 0;
+
+    // refresh pending count na goedkeuring
+    protected $listeners = ['refreshPendingCount' => '$refresh'];
+
+    public function mount(): void{
+        $this->pendingReviewCount = Review::where('approved', false)->count();
+    }
+
+    // refresh pending count na aanpassing toggle
+    public function refreshPendingCount(): void
+    {
+        $this->pendingReviewCount = Review::where('approved', false)->count();
+    }
+
+
     protected function getTableQuery()
     {
         return $this->activeTab === 'reviews'
-            ? Review::query()->with(['user', 'product'])
+            ? Review::query()->with(['user', 'product'])->latest('created_at')
             : Product::query()->withCount('reviews')
                 ->withAvg('reviews', 'rating');
     }
@@ -43,7 +61,14 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
                 TextColumn::make('product.name')->label('Product'),
                 TextColumn::make('rating'),
                 TextColumn::make('title'),
-                TextColumn::make('created_at')->label('Date')->dateTime(),
+                TextColumn::make('created_at')->label('Date')->dateTime()->sortable(),
+                ToggleColumn::make('approved')
+                    ->label('Approved')
+                    ->sortable()
+                    ->toggleable(true)
+                    ->afterStateUpdated(function () {
+                        $this->refreshPendingCount(); // refresh na aanpassing toggle
+                    }),
             ]
             : [
                 ImageColumn::make('images.0')->label('Image')->disk('public'),
@@ -60,4 +85,34 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
         $this->activeTab = $tab;
         $this->resetTable();
     }
+
+    protected function getTableFilters(): array
+    {
+        return [
+            Tables\Filters\TrashedFilter::make(),
+        ];
+    }
+
+
+    protected function getTableActions(): array
+    {
+        return [
+            Tables\Actions\EditAction::make(),
+            Tables\Actions\DeleteAction::make(),       // Soft delete
+            Tables\Actions\ForceDeleteAction::make(),  // Permanent delete
+            Tables\Actions\RestoreAction::make(),      // Herstellen
+        ];
+    }
+
+    protected function getTableBulkActions(): array
+    {
+        return [
+            Tables\Actions\DeleteBulkAction::make(),
+            Tables\Actions\ForceDeleteBulkAction::make(),
+            Tables\Actions\RestoreBulkAction::make(),
+        ];
+    }
+
+
+
 }

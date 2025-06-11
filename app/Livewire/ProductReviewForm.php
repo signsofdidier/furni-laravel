@@ -52,11 +52,12 @@ class ProductReviewForm extends Component
             'rating' => $this->rating,
             'title' => $this->title,
             'body' => $this->body,
+            'approved' => false,
         ]);
 
         $this->reset(['rating', 'title', 'body', 'showForm']);
 
-        session()->flash('success', 'Review created!');
+        session()->flash('success', 'Review submitted and is pending approval.');
         $this->dispatch('reviewAdded');
     }
 

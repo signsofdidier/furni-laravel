@@ -16,7 +16,7 @@
             @endfor
         </div>
 
-        {{-- ⭐ Gemiddelde score --}}
+        {{-- Gemiddelde score --}}
         <span class="ms-2 text-muted">{{ number_format($average) }}/5</span>
 
         {{-- Totaal aantal ratings --}}

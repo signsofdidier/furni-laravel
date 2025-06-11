@@ -12,6 +12,11 @@
             color="{{ $activeTab === 'reviews' ? 'primary' : 'gray' }}"
         >
             📋 Reviews
+            @if ($pendingReviewCount > 0)
+                <span class="ml-2 inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full bg-red-500 text-white">
+                    {{ $pendingReviewCount }}
+                </span>
+            @endif
         </x-filament::button>
     </div>
 

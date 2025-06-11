@@ -9,7 +9,17 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ForceDeleteAction;
+use Filament\Tables\Actions\ForceDeleteBulkAction;
+use Filament\Tables\Actions\RestoreAction;
+use Filament\Tables\Actions\RestoreBulkAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -50,16 +60,22 @@ class ReviewResource extends Resource
                 TextColumn::make('title')->label('Title'),
                 TextColumn::make('body')->label('Review')->limit(50),
                 TextColumn::make('created_at')->label('Submitted')->dateTime(),
+                ToggleColumn::make('approved')->label('Approved')->sortable()->toggleable(true),
             ])
             ->filters([
-                //
+                TrashedFilter::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
+                DeleteAction::make(), // Soft delete
+                ForceDeleteAction::make(), // Hard delete
+                RestoreAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                    ForceDeleteBulkAction::make(),
+                    RestoreBulkAction::make(),
                 ]),
             ]);
     }
@@ -86,8 +102,30 @@ class ReviewResource extends Resource
         return 'Reviews & Ratings';
     }
 
+    // DE COUNT BADGE IN DE SIDEBAR
+    public static function getNavigationBadge(): ?string
+    {
+        $count = Review::where('approved', false)->count();
+        return $count > 0 ? (string) $count : null;
+    }
+
+    // DE COUNT BADGE IN DE SIDEBAR KLEUR
+    public static function getNavigationBadgeColor(): string | array | null
+    {
+        return 'danger'; // rood
+    }
+
     public static function canCreate(): bool
     {
         return false; // alleen lezen of beheer
     }
+
+    // SOFT DELETES
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->withoutGlobalScopes([
+            SoftDeletingScope::class,
+        ]);
+    }
+
 }

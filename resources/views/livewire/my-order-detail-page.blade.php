@@ -27,6 +27,12 @@
 
             <!-- Top Cards -->
             <div class="row g-4 mb-5">
+
+                {{-- Download PDF --}}
+                <div class="col-12 text-start mt-3">
+                    <a href="{{ url('/my-orders') }}/{{ $order->id }}/invoice" class="btn btn-sm btn-outline-secondary">Download PDF</a>
+                </div>
+
                 <!-- Customer Card -->
                 <div class="col-12 col-md-6 col-lg-3">
                     <div class="card shadow-sm border-0">
@@ -148,10 +154,10 @@
                                 <span>Subtotal</span>
                                 <span>{{ Number::currency($order->sub_total, 'EUR') }}</span>
                             </div>
-                            <div class="d-flex justify-content-between mb-2">
+                            {{--<div class="d-flex justify-content-between mb-2">
                                 <span>discount</span>
                                 <span>{{ Number::currency(0, 'EUR') }}</span>
-                            </div>
+                            </div>--}}
                             <div class="d-flex justify-content-between mb-2">
                                 <span class="text-muted">Taxes (21%) incl.</span><span class="text-muted">{{ Number::currency($order->sub_total * 0.21 , 'EUR') }}</span>
                             </div>
@@ -177,6 +183,7 @@
 
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>

@@ -97,7 +97,7 @@
                                         <p class="subtotal-value">{{ Number::currency($sub_total, 'EUR') }}</p>
                                     </div>
                                     <hr />
-                                    <p class="shipping_text">Shipping & taxes calculated at checkout</p>
+                                    <p class="shipping_text">Shipping, taxes & discount calculated at checkout</p>
                                     <div class="d-flex justify-content-center mt-4">
                                         @if($cart_items)
                                             <div class="d-flex gap-2">

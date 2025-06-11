@@ -135,12 +135,35 @@ class OrderResource extends Resource
                             ->afterStateUpdated(fn ($state, Set $set) => $set('unit_amount', Product::find($state)->price ?? 0))
                             ->afterStateUpdated(fn ($state, Set $set) => $set('total_amount', Product::find($state)->price ?? 0)),
 
+                            // Na product kiezen worden de kleuren weergegeven van het product
+                            Select::make('color_id')
+
+                                // Verberg de optie om een kleur te kiezen tot er een product gekozen is
+                                ->label(fn (Get $get) => $get('product_id') ? 'Color' : 'Choose product first')
+
+                                ->options(function (Get $get) {
+                                    $productId = $get('product_id');
+                                    if (!$productId) return [];// Geen product gekozen
+
+                                    $product = \App\Models\Product::with('colors')->find($productId);
+                                    if (!$product) return [];
+
+                                    return $product->colors->pluck('name', 'id')->toArray();
+                                })
+                                ->searchable()
+                                ->preload() // Laad alle kleuren van het product
+                                ->required()
+                                ->columnSpan(3)
+                                ->reactive() // Toont automatisch de prijs bij het selecteren van een kleur
+                                ->disabled(fn (Get $get) => !$get('product_id')), // verberg tot er een product gekozen is
+
+
                             TextInput::make('quantity')
                                 ->numeric()
                                 ->required()
                                 ->default(1)
                                 ->minValue(1)
-                                ->columnSpan(2)
+                                ->columnSpan(1)
                                 ->reactive()
                                 // Function: neem de state van de quantity, vermenigvuldig met de unit_amount en sla dat op in total_amount
                                 ->afterStateUpdated(fn ($state, Set $set, Get $get) => $set('total_amount', $state * $get('unit_amount'))),
@@ -151,13 +174,13 @@ class OrderResource extends Resource
                                 ->disabled()
                                 // doordat disabled dingen niet opslaat in de database moet je dehydrated() gebruiken, waarbij je de waarde van de kolom opslaat
                                 ->dehydrated()
-                                ->columnSpan(3),
+                                ->columnSpan(2),
 
                             TextInput::make('total_amount')
                                 ->numeric()
                                 ->required()
                                 ->dehydrated()
-                                ->columnSpan(3),
+                                ->columnSpan(2),
 
 
                         ])->columns(12),

@@ -17,6 +17,10 @@ class OrderPlacedMail extends Mailable
     public function __construct(Order $order)
     {
         $this->order = $order;
+
+        // kleur en product laden
+        $this->order = $order->load('items.color', 'items.product', 'user');
+
     }
 
     // PDF IN MAIL

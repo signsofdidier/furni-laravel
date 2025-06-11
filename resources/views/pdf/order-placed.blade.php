@@ -121,9 +121,13 @@
                      alt="{{ $item->product->name }}">
             </td>
             <td>
-                {{ $item->product->name }}<br>
+                {{ $item->product->name }}
                 @if($item->color)
-                    <small>Color: {{ $item->color->name }}</small>
+                    <br>
+                    <small>
+                        <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background-color:{{ $item->color->hex }};border:1px solid #ccc;"></span>
+                        {{ $item->color->name }}
+                    </small>
                 @endif
             </td>
             <td>{{ $item->quantity }}</td>
@@ -139,9 +143,9 @@
     <p class="totals-subtotal">
         Subtotal: €{{ number_format($order->sub_total, 2) }}
     </p>
-    <p class="totals-small">
+    {{--<p class="totals-small">
         Discount: €{{ number_format(0, 2) }}
-    </p>
+    </p>--}}
     <p class="totals-small">
         Taxes (21%) incl.: €{{ number_format($order->sub_total * 0.21, 2) }}
     </p>

@@ -103,6 +103,10 @@
 
                                 <ul class="variant-list list-unstyled d-flex align-items-center flex-wrap">
                                     @foreach($product->colors as $color)
+                                        @php
+                                            $stock = $product->stockForColorId($color->id);
+                                            $isOutOfStock = $stock === 0;
+                                        @endphp
                                         <li class="variant-item">
                                             <input
                                                 type="radio"
@@ -111,7 +115,7 @@
                                                 value="{{ $color->id }}"
                                                 wire:model="selectedColorId"
                                                 class="visually-hidden"
-                                                checked
+                                                {{ $isOutOfStock ? 'disabled' : '' }}
                                             >
                                             <label
                                                 for="color-{{ $color->id }}"
@@ -122,15 +126,48 @@
                                                     background-color: {{ $color->hex }};
                                                     border: 1px solid #ccc;
                                                     box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
-                                                    cursor: pointer;
+                                                    cursor: {{ $isOutOfStock ? 'not-allowed' : 'pointer' }};
+                                                    opacity: {{ $isOutOfStock ? '0.4' : '1' }};
                                                 "
-                                                title="{{ $color->name }}"
+                                                title="{{ $color->name }}{{ $isOutOfStock ? ' (Out of stock)' : '' }}"
                                             >
                                             </label>
                                         </li>
                                     @endforeach
 
+
                                 </ul>
+
+                                {{--  COLOR STOCK STATUS --}}
+                                @php
+                                    $soldOutColors = [];
+                                    $lastItemColors = [];
+
+                                    foreach ($product->colors as $color) {
+                                        $stock = $product->stockForColorId($color->id);
+                                        if ($stock === 0) {
+                                            $soldOutColors[] = $color->name;
+                                        } elseif ($stock < 10) {
+                                            $lastItemColors[] = $color->name;
+                                        }
+                                    }
+                                @endphp
+
+                                <div class="color-stock-status d-flex flex-column gap-1 mt-2">
+                                    @if(!empty($soldOutColors))
+                                        <span class="badge bg-danger text-white">
+                                        {{ implode(', ', $soldOutColors) }}: Sold Out
+                                    </span>
+                                                                @endif
+
+                                                                @if(!empty($lastItemColors))
+                                                                    <span class="badge bg-warning text-dark">
+                                        {{ implode(', ', $lastItemColors) }}: Last Items
+                                    </span>
+                                    @endif
+                                </div>
+                                {{--  END COLOR STOCK STATUS --}}
+
                             </div>
                         </div>
 

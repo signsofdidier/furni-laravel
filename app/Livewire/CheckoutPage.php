@@ -7,6 +7,7 @@ use App\Mail\InvoicePaidMail;
 use App\Mail\OrderPlacedMail;
 use App\Models\Address;
 use App\Models\Order;
+use App\Models\ProductColorStock;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Attributes\Title;
@@ -154,6 +155,17 @@ class CheckoutPage extends Component
 
         // Sla alle item‐regels op in de “order_items”‐relatie (reflecteert wat in sessie zat)
         $order->items()->createMany($cart_items);
+
+        // VERLAAG STOCK VAN DE PRODUCTEN NA BESTELLING
+        foreach ($cart_items as $item) {
+            $stockEntry = ProductColorStock::where('product_id', $item['product_id'])
+                ->where('color_id', $item['color_id'])
+                ->first();
+
+            if ($stockEntry) {
+                $stockEntry->decrement('stock', $item['quantity']);
+            }
+        }
 
         // Na het plaatsen van de order wordt de cart geleegd
         CartManagement::clearCartItems();

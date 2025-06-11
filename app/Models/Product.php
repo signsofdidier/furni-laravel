@@ -68,7 +68,23 @@ class Product extends Model
         return $this->reviews()->count();
     }
 
+    public function productColorStocks(){
+        return $this->hasMany(ProductColorStock::class);
+    }
 
+    public function stockForColor($colorId): int
+    {
+        return $this->productColorStocks()
+            ->where('color_id', $colorId)
+            ->value('stock') ?? 0;
+    }
+
+    public function stockForColorId($colorId): int
+    {
+        return $this->productColorStocks()
+            ->where('color_id', $colorId)
+            ->value('stock') ?? 0;
+    }
 
 
 }

@@ -48,11 +48,25 @@
                                                      alt="product-img">
                                             </a>
 
-                                            @if($product->on_sale == 1)
-                                                <div class="product-badge">
+                                            @php
+                                                $stock = $stockPerProduct[$product->id] ?? null;
+                                            @endphp
+
+                                            {{-- PRODUCT BADGE, ON SALE, SOLD OUT, LAST ITEMS --}}
+                                            <div class="product-badge d-flex flex-column gap-1 position-absolute top-0 start-0 p-2">
+                                                @if($product->on_sale == 1)
                                                     <span class="badge-label badge-percentage rounded">On Sale</span>
-                                                </div>
-                                            @endif
+                                                @endif
+
+                                                @if(!is_null($stock))
+                                                    @if($stock === 0)
+                                                        <span class="badge-label bg-danger text-white rounded">Sold Out</span>
+                                                    @elseif($stock < 10)
+                                                        <span class="badge-label bg-warning text-dark rounded">Last Items</span>
+                                                    @endif
+                                                @endif
+                                            </div>
+
 
                                             <div
                                                 class="product-card-action product-card-action-2 justify-content-center">
@@ -69,8 +83,15 @@
                                                 </a>
 
                                                 {{--Add to cart button--}}
-                                                <button wire:click.prevent='addToCart({{ $product->id }})' type="button" class="action-card action-addtocart">
-                                                    <svg class="icon icon-cart" width="24" height="26"
+                                                {{-- Als de stock leeg is of 0, dan is de button disabled --}}
+                                                <button
+                                                    type="button"
+                                                    class="action-card action-addtocart"
+                                                    @if(!is_null($stock) && $stock === 0) disabled @endif
+                                                    wire:click.prevent='addToCart({{ $product->id }})'
+                                                >
+
+                                                <svg class="icon icon-cart" width="24" height="26"
                                                          viewBox="0 0 24 26" fill="none"
                                                          xmlns="http://www.w3.org/2000/svg">
                                                         <path

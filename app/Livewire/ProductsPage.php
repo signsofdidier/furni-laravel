@@ -89,6 +89,7 @@ class ProductsPage extends Component
         $this->dispatch('alert');
     }
 
+
     public function render()
     {
         // Start een query om alleen actieve producten op te halen

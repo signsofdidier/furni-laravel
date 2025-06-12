@@ -16,6 +16,7 @@ class DrawerCartModal extends Component
 
     // telt alle items in de cart op maar ook de quantity van een item
     public function mount(){
+
         $this->total_count = array_sum(array_column(CartManagement::getCartItemsFromSession(), 'quantity'));
 
         $this->cart_items = CartManagement::getCartItemsFromSession();
@@ -38,15 +39,15 @@ class DrawerCartModal extends Component
     }
 
 
-    public function removeItem($product_id){
-        $this->cart_items = CartManagement::removeCartItem($product_id);
+    public function removeItem($product_id, $color_id){
+        $this->cart_items = CartManagement::removeCartItem($product_id, $color_id);
         $this->grand_total = CartManagement::calculateGrandTotal($this->cart_items);
         $this->dispatch('update-cart-count', total_count: count($this->cart_items))->to(Navbar::class);
         $this->dispatch('cart-updated');
     }
 
-    public function increaseQuantity($product_id){
-        CartManagement::incrementQuantityToCartItem($product_id);
+    public function increaseQuantity($product_id, $color_id){
+        CartManagement::incrementQuantityToCartItem($product_id, $color_id);
         $this->cart_items = CartManagement::getCartItemsFromSession();
         $this->grand_total = CartManagement::calculateGrandTotal($this->cart_items);
         // zorgt ervoor dat de navbar count zich ook aanpast bij het increasen
@@ -55,8 +56,8 @@ class DrawerCartModal extends Component
 
     }
 
-    public function decreaseQuantity($product_id){
-        CartManagement::decrementQuantityToCartItem($product_id);
+    public function decreaseQuantity($product_id, $color_id){
+        CartManagement::decrementQuantityToCartItem($product_id, $color_id);
         $this->cart_items = CartManagement::getCartItemsFromSession();
         $this->grand_total = CartManagement::calculateGrandTotal($this->cart_items);
         // zorgt ervoor dat de navbar count zich ook aanpast bij het decreasen

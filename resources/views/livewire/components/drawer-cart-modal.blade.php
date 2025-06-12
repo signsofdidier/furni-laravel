@@ -44,10 +44,12 @@
 
                             <div class="flex justify-between items-center mt-2">
                                 <div class="flex items-center gap-1">
-                                    <button wire:click="decreaseQuantity({{ $item['product_id'] }})"
+                                    <button wire:click="decreaseQuantity({{ $item['product_id'] }}, {{ $item['color_id'] ?? 'null' }})"
                                             class="w-9 h-9 rounded border border-gray-300 text-lg leading-none flex items-center justify-center hover:bg-gray-100">−</button>
+
                                     <span class="text-sm w-6 text-center">{{ $item['quantity'] }}</span>
-                                    <button wire:click="increaseQuantity({{ $item['product_id'] }})"
+
+                                    <button wire:click="increaseQuantity({{ $item['product_id'] }}, {{ $item['color_id'] ?? 'null' }})"
                                             class="w-9 h-9 rounded border border-gray-300 text-lg leading-none flex items-center justify-center hover:bg-gray-100">+</button>
                                 </div>
 
@@ -55,7 +57,7 @@
                                     <div class="text-sm font-semibold text-gray-900 whitespace-nowrap">
                                         {{ Number::currency($item['total_amount'], 'EUR') }}
                                     </div>
-                                    <button wire:click="removeItem({{ $item['product_id'] }})"
+                                    <button wire:click="removeItem({{ $item['product_id'] }}, {{ $item['color_id'] ?? 'null' }})"
                                             class="text-xs text-red-600 hover:underline mt-0.5">Remove</button>
                                 </div>
                             </div>

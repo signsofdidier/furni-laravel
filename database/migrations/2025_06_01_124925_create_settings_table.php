@@ -19,6 +19,9 @@ return new class extends Migration
                 ->default(1000.00)
                 ->comment('Bedrag vanaf waar de klant geen verzendkosten meer betaalt');
 
+            // Voeg een boolean-kolom toe, standaard op true (actief)
+            $table->boolean('free_shipping_enabled')->default(true);
+
             $table->timestamps();
         });
 

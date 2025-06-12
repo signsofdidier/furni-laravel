@@ -25,6 +25,7 @@ return new class extends Migration
             $table->boolean('in_stock')->default(true);
             $table->boolean('on_sale')->default(false);
             $table->decimal('shipping_cost', 8, 2)->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

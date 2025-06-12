@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Blog extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = ['title', 'slug', 'excerpt', 'content', 'user_id', 'image', 'blockquote', 'blockquote_author', ];
 
     // blog heeft een user

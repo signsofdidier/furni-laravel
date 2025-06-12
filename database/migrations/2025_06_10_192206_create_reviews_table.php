@@ -18,6 +18,8 @@ return new class extends Migration
             $table->unsignedTinyInteger('rating'); // 1-5 sterren
             $table->string('title')->nullable();
             $table->text('body')->nullable();
+            $table->boolean('approved')->default(false);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->unique(['user_id', 'product_id']); // 1 review per product per gebruiker

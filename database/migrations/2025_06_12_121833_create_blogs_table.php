@@ -17,7 +17,9 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('excerpt')->nullable();
             $table->longText('content');
-            $table->timestamp('published_at')->nullable();
+            $table->string('image')->nullable();
+            $table->text('blockquote')->nullable();
+            $table->string('blockquote_author')->nullable();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('category_id')->nullable()->constrained()->onDelete('set null');
             $table->foreignId('brand_id')->nullable()->constrained()->onDelete('set null');

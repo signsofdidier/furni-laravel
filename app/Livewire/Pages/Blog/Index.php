@@ -12,9 +12,8 @@ class Index extends Component
 
     public function render()
     {
-        $blogs = Blog::whereNotNull('published_at')
-            ->orderByDesc('published_at')
-            ->paginate(6);
+        // haal alle blogs op en sorteer volgens de datum
+        $blogs = Blog::with(['categories', 'user'])->orderByDesc('created_at')->paginate(6);
 
         return view('livewire.pages.blog.index', [
             'blogs' => $blogs,

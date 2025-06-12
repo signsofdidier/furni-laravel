@@ -11,9 +11,8 @@ class Show extends Component
 
     public function mount($slug)
     {
-        $this->blog = Blog::where('slug', $slug)
-            ->whereNotNull('published_at')
-            ->firstOrFail();
+        // haal de blog op volgens de slug
+        $this->blog = Blog::with(['categories', 'user'])->where('slug', $slug)->firstOrFail();
     }
 
     public function render()

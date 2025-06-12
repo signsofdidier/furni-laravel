@@ -7,14 +7,14 @@
                         <div class="col-lg-4 col-md-6 col-12" data-aos="fade-up" data-aos-duration="700">
                             <div class="article-card bg-transparent p-0 shadow-none">
                                 <a class="article-card-img-wrapper" href="{{ route('blog.show', $blog->slug) }}">
-                                    <img src="{{ asset('assets/img/blog/furniture-1.jpg') }}" alt="img"
+                                    <img src="{{ url('storage', $blog->image) }}" alt="img"
                                          class="article-card-img rounded">
 
                                     {{-- CATEGORY --}}
-                                    @if ($blog->category)
-                                        <span class="article-tag article-tag-absolute rounded">{{ $blog->category->name }}</span>
-                                    @endif
+                                    <span class="article-tag article-tag-absolute rounded">{{ $blog->categories->pluck('name')->join(', ') }}</span>
                                 </a>
+
+
                                 <p class="article-card-published text_12 d-flex align-items-center">
                                         <span class="article-date d-flex align-items-center">
                                             <span class="icon-publish">
@@ -25,7 +25,7 @@
                                                         fill="#00234D" />
                                                 </svg>
                                             </span>
-                                            <span class="ms-2">{{ $blog->published_at->translatedFormat('d F Y') }}</span>
+                                            <span class="ms-2">{{ $blog->updated_at->translatedFormat('d F Y') }}</span>
                                         </span>
                                     <span class="article-author d-flex align-items-center ms-4">
                                             <span class="icon-author"><svg width="15" height="17"
@@ -52,36 +52,6 @@
 
                 </div>
 
-                <div class="pagination justify-content-center mt-100">
-                    <nav>
-                        <ul class="pagination m-0 d-flex align-items-center">
-                            <li class="item disabled">
-                                <a class="link">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                         class="icon icon-left">
-                                        <polyline points="15 18 9 12 15 6"></polyline>
-                                    </svg>
-                                </a>
-                            </li>
-                            <li class="item"><a class="link" href="#">1</a></li>
-                            <li class="item active"><a class="link" href="#">2</a></li>
-                            <li class="item"><a class="link" href="#">3</a></li>
-                            <li class="item"><a class="link" href="#">4</a></li>
-                            <li class="item">
-                                <a class="link" href="#">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                         class="icon icon-right">
-                                        <polyline points="9 18 15 12 9 6"></polyline>
-                                    </svg>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
             </div>
         </div>
     </div>

@@ -6,11 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Blog extends Model
 {
-    protected $fillable = ['title', 'slug', 'excerpt', 'content', 'published_at', 'user_id'];
-
-    protected $casts = [
-        'published_at' => 'datetime',
-    ];
+    protected $fillable = ['title', 'slug', 'excerpt', 'content', 'user_id', 'image', 'blockquote', 'blockquote_author', ];
 
     // blog heeft een user
     public function user() {
@@ -18,9 +14,9 @@ class Blog extends Model
     }
 
     // blog heeft meerdere categories
-    public function category()
+    public function categories()
     {
-        return $this->belongsTo(\App\Models\Category::class);
+        return $this->belongsToMany(Category::class, 'blog_category');
     }
 
 

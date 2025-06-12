@@ -11,6 +11,8 @@ use App\Livewire\CheckoutPage;
 use App\Livewire\HomePage;
 use App\Livewire\MyOrderDetailPage;
 use App\Livewire\MyOrdersPage;
+use App\Livewire\Pages\Blog\Index;
+use App\Livewire\Pages\Blog\Show;
 use App\Livewire\ProductDetailPage;
 use App\Livewire\ProductsPage;
 use App\Livewire\SuccessPage;
@@ -22,6 +24,8 @@ Route::get('/categories', CategoriesPage::class);
 Route::get('/products', ProductsPage::class);
 Route::get('/cart', CartPage::class);
 Route::get('/products/{slug}', ProductDetailPage::class);
+Route::get('/blog', Index::class)->name('blog.index');
+Route::get('/blog/{slug}', Show::class)->name('blog.show');
 
 // openbare routes voor niet ingelogde users
 Route::middleware('guest')->group(function() {

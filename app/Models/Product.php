@@ -18,7 +18,7 @@ class Product extends Model
         'images',
         'is_active',
         'is_featured',
-        'in_stock',
+        //'in_stock',
         'on_sale',
         'category_id',
         'brand_id',

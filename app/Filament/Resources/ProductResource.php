@@ -120,9 +120,9 @@ class ProductResource extends Resource
                     ]),
 
                     Section::make('status')->schema([
-                        Toggle::make('in_stock')
+                        /*Toggle::make('in_stock')
                             ->required()
-                            ->default(true),
+                            ->default(true),*/
 
                         Toggle::make('is_active')
                             ->required()
@@ -163,13 +163,19 @@ class ProductResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 IconColumn::make('is_featured')
-                ->boolean(),
+                    ->boolean()
+                    ->sortable(),
                 IconColumn::make('on_sale')
-                ->boolean(),
+                    ->boolean()
+                    ->sortable(),
                 IconColumn::make('in_stock')
-                ->boolean(),
+                    ->label('In Stock')
+                    ->boolean()
+                    ->sortable()
+                    // kijkt naar product model getInStockAttribute()
+                    ->getStateUsing(fn ($record) => $record->in_stock),
                 IconColumn::make('is_active')
-                ->boolean(),
+                     ->boolean(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

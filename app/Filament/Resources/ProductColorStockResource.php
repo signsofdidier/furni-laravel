@@ -86,4 +86,32 @@ class ProductColorStockResource extends Resource
             'edit' => Pages\EditProductColorStock::route('/{record}/edit'),
         ];
     }
+
+    // PRODUCT STOCK BADGE
+    public static function getNavigationBadge(): ?string
+    {
+        // Producten opvragen
+        $outOfStock = Product::with('productColorStocks')
+            ->get() // Producten opvragen
+            // Producten waarbij de som van stock op 0 staat
+            ->filter(fn ($product) => $product->productColorStocks->sum('stock') <= 0)
+            ->count(); // Totaal aantal producten
+
+        $lowStock = Product::with('productColorStocks')
+            ->get() // Producten opvragen
+             // Producten waarbij de som van stock lager dan 10 is
+            ->filter(fn ($product) => $product->productColorStocks->sum('stock') < 10 && $product->productColorStocks->sum('stock') > 0)
+            ->count(); // Totaal aantal producten
+
+        return ($outOfStock > 0 || $lowStock > 0) ? "{$outOfStock} out / {$lowStock} low " : null;
+
+    }
+    // PRODUCT STOCK BADGE KLEUR
+    public static function getNavigationBadgeColor(): string | array | null
+    {
+        return 'danger';
+    }
+
+
+
 }

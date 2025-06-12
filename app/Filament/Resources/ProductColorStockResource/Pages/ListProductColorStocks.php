@@ -13,7 +13,13 @@ class ListProductColorStocks extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            //Actions\CreateAction::make(),
         ];
     }
+
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+
 }

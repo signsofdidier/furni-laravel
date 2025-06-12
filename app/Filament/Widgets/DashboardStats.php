@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Product;
+use App\Models\ProductColorStock;
 use App\Models\Review;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
@@ -15,21 +16,14 @@ class DashboardStats extends BaseWidget
     // Hier definieer je de 3 stat-kaarten naast elkaar
     protected function getStats(): array
     {
-        // Tel alle reviews die nog niet goedgekeurd zijn
+        // Reviews die nog niet goedgekeurd zijn
         $pendingReviews = Review::where('approved', false)->count();
 
-        // Laad alle producten met voorraadgegevens
-        $products = Product::with('productColorStocks')->get();
+        // Totaal aantal uitverkochte kleurcombinaties
+        $outOfStock = ProductColorStock::where('stock', 0)->count();
 
-        // Tel producten met totaal 0 voorraad
-        $outOfStock = $products->filter(
-            fn ($product) => $product->productColorStocks->sum('stock') <= 0
-        )->count();
-
-        // Tel producten met voorraad kleiner dan 10, maar meer dan 0
-        $lowStock = $products->filter(
-            fn ($product) => $product->productColorStocks->sum('stock') < 10 && $product->productColorStocks->sum('stock') > 0
-        )->count();
+        // Kleurcombinaties met lage voorraad (tussen 1 en 9)
+        $lowStock = ProductColorStock::whereBetween('stock', [1, 9])->count();
 
         return [
             // Stat 1: aantal reviews die nog goedgekeurd moeten worden

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Pages\ManageProductStock;
 use App\Filament\Resources\ProductColorStockResource\Pages;
 use App\Filament\Resources\ProductColorStockResource\RelationManagers;
 use App\Models\Color;
@@ -12,8 +13,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ProductColorStockResource extends Resource
 {
@@ -24,6 +23,9 @@ class ProductColorStockResource extends Resource
     protected static ?string $navigationLabel = 'Product Stock';
     protected static ?string $modelLabel = 'Product Stock';
     protected static ?string $pluralModelLabel = 'Product Stocks';
+
+    // Dit bepaald de volgorde in de sidebar
+    protected static ?int $navigationSort = 5;
 
     public static function form(Form $form): Form
     {
@@ -53,11 +55,28 @@ class ProductColorStockResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('product.name')->label('Product'),
-                Tables\Columns\TextColumn::make('color.name')->label('Color'),
-                Tables\Columns\TextColumn::make('stock')->label('Stock'),
-                Tables\Columns\TextColumn::make('updated_at')->dateTime(),
+                Tables\Columns\TextColumn::make('product.name')
+                    ->label('Product')
+                    ->sortable()
+                    ->searchable(),
+
+                Tables\Columns\ImageColumn::make('product.images')
+                    ->label('Image')
+                    ->alignCenter()
+                    ->getStateUsing(fn ($record) => $record->product->images[0] ?? null)
+                    ->size(40),
+
+                Tables\Columns\TextColumn::make('color.name')
+                    ->label('Kleur')
+                    ->sortable()
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('stock')
+                    ->label('Stock')
+                    ->sortable()
+                    ->searchable()
             ])
+            ->defaultSort('product_id')
             ->filters([
                 //
             ])
@@ -82,7 +101,7 @@ class ProductColorStockResource extends Resource
     {
         return [
             'index' => Pages\ListProductColorStocks::route('/'),
-            'create' => Pages\CreateProductColorStock::route('/create'),
+            //'create' => Pages\CreateProductColorStock::route('/create'),
             'edit' => Pages\EditProductColorStock::route('/{record}/edit'),
         ];
     }
@@ -90,21 +109,12 @@ class ProductColorStockResource extends Resource
     // PRODUCT STOCK BADGE
     public static function getNavigationBadge(): ?string
     {
-        // Producten opvragen
-        $outOfStock = Product::with('productColorStocks')
-            ->get() // Producten opvragen
-            // Producten waarbij de som van stock op 0 staat
-            ->filter(fn ($product) => $product->productColorStocks->sum('stock') <= 0)
-            ->count(); // Totaal aantal producten
+        $outOfStock = ProductColorStock::where('stock', 0)->count();
+        $lowStock = ProductColorStock::whereBetween('stock', [1, 9])->count();
 
-        $lowStock = Product::with('productColorStocks')
-            ->get() // Producten opvragen
-             // Producten waarbij de som van stock lager dan 10 is
-            ->filter(fn ($product) => $product->productColorStocks->sum('stock') < 10 && $product->productColorStocks->sum('stock') > 0)
-            ->count(); // Totaal aantal producten
-
-        return ($outOfStock > 0 || $lowStock > 0) ? "{$outOfStock} out / {$lowStock} low " : null;
-
+        return ($outOfStock > 0 || $lowStock > 0)
+            ? "{$outOfStock} out / {$lowStock} low"
+            : null;
     }
     // PRODUCT STOCK BADGE KLEUR
     public static function getNavigationBadgeColor(): string | array | null

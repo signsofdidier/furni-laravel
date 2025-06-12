@@ -38,7 +38,7 @@ class OrderResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
 
     // Dit bepaald de volgorde in de sidebar
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 6;
 
     public static function form(Form $form): Form
     {

@@ -150,12 +150,7 @@
                                     @endforeach
                                 </ul>
                                 @error('selectedColorId')
-                                <div
-                                    x-data="{ show: true }"
-                                    x-init="setTimeout(() => show = false, 3000)"
-                                    x-show="show"
-                                    class="text-danger small"
-                                >
+                                <div class="text-danger small">
                                     {{ $message }}
                                 </div>
                                 @enderror

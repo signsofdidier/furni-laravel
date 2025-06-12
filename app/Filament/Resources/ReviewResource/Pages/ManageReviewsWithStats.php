@@ -68,16 +68,23 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
             ? [
                 TextColumn::make('user.name')->label('User')
                     ->sortable(),
+
                 ImageColumn::make('product.images.0')
                     ->label('Image')
                     ->disk('public')
                     ->height(50),
 
                 TextColumn::make('product.name')->label('Product'),
+
                 TextColumn::make('rating')
                     ->sortable(),
-                TextColumn::make('title'),
+
+                TextColumn::make('title')
+                    ->label('Title')
+                    ->limit(20),// max 20 tekens
+
                 TextColumn::make('created_at')->label('Date')->dateTime()->sortable(),
+
                 ToggleColumn::make('approved')
                     ->label('Approved')
                     ->sortable()
@@ -89,12 +96,15 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
             : [
                 ImageColumn::make('images.0')->label('Image')->disk('public')
                     ->sortable(),
+
                 TextColumn::make('name')->label('Product')
                     ->sortable(),
+
                 TextColumn::make('reviews_avg_rating')
                     ->label('AVG Rating')
                     ->sortable()
                     ->formatStateUsing(fn ($state) => number_format($state, 1) . ' ★'),
+
                 TextColumn::make('reviews_count')->label('Total Reviews')->sortable(),
             ];
 
@@ -112,9 +122,9 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
             return [
                 Tables\Filters\TrashedFilter::make()
                     ->label('Deleted Reviews')
-                    ->trueLabel('All reviews')      // This shows only NON-deleted records
-                    ->falseLabel('Only deleted')    // This shows only deleted records
-                    ->default(true),                // This shows all records (active + deleted)
+                    ->trueLabel('All reviews')      // NIET VERWIJDERDE REVIEWS
+                    ->falseLabel('Only deleted')    // VERWIJDERDE REVIEWS
+                    ->default(true),                // ALLE REVIEWS
             ];
         }
 

@@ -92,6 +92,4 @@ class Product extends Model
             ->where('color_id', $colorId)
             ->value('stock') ?? 0;
     }
-
-
 }

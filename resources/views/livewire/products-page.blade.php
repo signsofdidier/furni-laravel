@@ -53,18 +53,28 @@
                                             @endphp
 
                                             {{-- PRODUCT BADGE, ON SALE, SOLD OUT, LAST ITEMS --}}
-                                            <div class="product-badge d-flex flex-column gap-1 position-absolute top-0 start-0 p-2">
-                                                @if($product->on_sale == 1)
-                                                    <span class="badge-label badge-percentage rounded">On Sale</span>
-                                                @endif
+                                            <div class="product-badge d-flex gap-1 position-absolute top-0 start-0 p-2">
+                                                @php
+                                                    $stockCount = $product->productColorStocks->sum('stock');
+                                                @endphp
 
-                                                @if(!is_null($stock))
-                                                    @if($stock === 0)
-                                                        <span class="badge-label bg-danger text-white rounded">Sold Out</span>
-                                                    @elseif($stock < 10)
-                                                        <span class="badge-label bg-warning text-dark rounded">Last Items</span>
+                                                {{--ON SALE--}}
+                                                <div>
+                                                    @if($product->on_sale == 1 && $stockCount > 0)
+                                                        <span class="badge-label badge-percentage rounded">On Sale</span>
                                                     @endif
-                                                @endif
+                                                </div>
+
+                                                {{-- SOLD OUT EN LAST ITEMS --}}
+                                                    <div>
+                                                        @if($stockCount == 0)
+                                                            <span class="badge-label bg-danger text-white rounded">Sold Out</span>
+                                                        @elseif($stockCount < 11)
+                                                            <span class="badge-label bg-warning text-white rounded">Last Items</span>
+                                                        @endif
+                                                    </div>
+
+
                                             </div>
 
 
@@ -153,14 +163,14 @@
 
                                             </ul>
                                             @error("selectedColorPerProduct.$product->id")
-                                            <div
-                                                x-data="{ show: true }"
-                                                x-init="setTimeout(() => show = false, 3000)"
-                                                x-show="show"
-                                                class="text-danger small my-1"
-                                            >
-                                                {{ $message }}
-                                            </div>
+                                                <div
+                                                    x-data="{ show: true }"
+                                                    x-init="setTimeout(() => show = false, 3000)"
+                                                    x-show="show"
+                                                    class="text-danger small my-1"
+                                                >
+                                                    {{ $message }}
+                                                </div>
                                             @enderror
 
 

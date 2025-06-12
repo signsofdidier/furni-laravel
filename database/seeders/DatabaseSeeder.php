@@ -8,6 +8,8 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Product;
+use App\Models\ProductColorStock;
+use App\Models\Review;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -16,57 +18,21 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // USERS
-        User::create([
-            'name' => 'Admin',
-            'email' => 'admin@gmail.com',
-            'password' => Hash::make('password'),
-        ]);
-        User::create([
-            'name' => 'Didier Vanassche',
-            'email' => 'didier.v@hotmail.com',
-            'password' => Hash::make('password'),
-        ]);
-        User::create([
-            'name' => 'Sophie Adams',
-            'email' => 'sophie@gmail.com',
-            'password' => Hash::make('password'),
-        ]);
-        User::create([
-            'name' => 'Charles Peters',
-            'email' => 'charles@gmail.com',
-            'password' => Hash::make('password'),
-        ]);
+        User::create(['name' => 'Admin', 'email' => 'admin@gmail.com', 'password' => Hash::make('password')]);
+        User::create(['name' => 'Didier Vanassche', 'email' => 'didier.v@hotmail.com', 'password' => Hash::make('password')]);
+        User::create(['name' => 'Sophie Adams', 'email' => 'sophie@gmail.com', 'password' => Hash::make('password')]);
+        User::create(['name' => 'Charles Peters', 'email' => 'charles@gmail.com', 'password' => Hash::make('password')]);
 
         // BRANDS
-        $brands = [
-            'Designo',
-            'SitWell',
-            'NordicHome',
-            'UrbanCraft',
-            'VintageVibe'
-        ];
+        $brands = ['Designo', 'SitWell', 'NordicHome', 'UrbanCraft', 'VintageVibe'];
         foreach ($brands as $brand) {
-            Brand::create([
-                'name' => $brand,
-                'slug' => Str::slug($brand),
-            ]);
+            Brand::create(['name' => $brand, 'slug' => Str::slug($brand)]);
         }
 
         // CATEGORIES
-        $categories = [
-            'Chairs',
-            'Sofas',
-            'Tables',
-            'Coffee Tables',
-            'Cabinets',
-            'Cupboards',
-            'Accessories'
-        ];
+        $categories = ['Chairs', 'Sofas', 'Tables', 'Coffee Tables', 'Cabinets', 'Cupboards', 'Accessories'];
         foreach ($categories as $cat) {
-            Category::create([
-                'name' => $cat,
-                'slug' => Str::slug($cat),
-            ]);
+            Category::create(['name' => $cat, 'slug' => Str::slug($cat)]);
         }
 
         // COLORS
@@ -82,7 +48,7 @@ class DatabaseSeeder extends Seeder
             Color::create($color);
         }
 
-        // PRODUCTS DATA
+        // PRODUCTS
         $products = [
             [
                 'name' => 'Nordic Lounge Chair',
@@ -216,7 +182,7 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
-        // JE EIGEN PLAATJES NAAR KEUZE (gewoon bestandsnamen!):
+        // IMAGES
         $localImages = [
             'chairs'   => ['plantkast-1.jpg', 'plantkast-2.jpg', 'plantkast-3.jpg'],
             'sofas'    => ['zetel-1.jpg', 'zetel-2.jpg', 'zetel-3.jpg', 'zetel-4.jpg'],
@@ -241,27 +207,87 @@ class DatabaseSeeder extends Seeder
                 $imgs = $localImages['default'];
             }
 
-            // Per product 1 tot 3 afbeeldingen (random aantal)
             $imgs = array_slice($imgs, 0, rand(1, count($imgs)));
-
-            // ALTIJD 'products/' VOOR PAD!
             $imgs = array_map(fn($img) => 'products/' . ltrim($img, '/'), $imgs);
 
             $product = Product::create([
-                'name'        => $productData['name'],
-                'slug'        => Str::slug($productData['name']),
-                'brand_id'    => $productData['brand_id'],
+                'name' => $productData['name'],
+                'slug' => Str::slug($productData['name']),
+                'brand_id' => $productData['brand_id'],
                 'category_id' => $productData['category_id'],
-                'images'      => $imgs,
+                'images' => $imgs,
                 'description' => $productData['description'],
-                'price'       => $productData['price'],
-                'is_active'   => $productData['is_active'],
+                'price' => $productData['price'],
+                'is_active' => $productData['is_active'],
                 'is_featured' => $productData['is_featured'],
-                'in_stock'    => $productData['in_stock'],
-                'on_sale'     => $productData['on_sale'],
+                'in_stock' => $productData['in_stock'],
+                'on_sale' => $productData['on_sale'],
                 'shipping_cost' => $productData['shipping_cost'],
             ]);
+
             $product->colors()->attach($productData['colors']);
+
+            // STOCK per kleur
+            // Bepaal of dit product uitverkocht moet zijn (max 2)
+            static $outOfStockCount = 0;
+            $forceOutOfStock = $outOfStockCount < 2 && rand(0, 1) === 1;
+
+            foreach ($productData['colors'] as $colorId) {
+                $stock = $forceOutOfStock ? 0 : rand(1, 20);
+
+                ProductColorStock::create([
+                    'product_id' => $product->id,
+                    'color_id' => $colorId,
+                    'stock' => $stock,
+                ]);
+            }
+
+            if ($forceOutOfStock) {
+                $outOfStockCount++;
+            }
+
+            // REVIEWS
+            $reviewCount = rand(0, 4);
+            $availableUserIds = [1, 2, 3, 4];
+            shuffle($availableUserIds);
+
+            for ($i = 0; $i < $reviewCount; $i++) {
+                $userId = $availableUserIds[$i] ?? null;
+                if (!$userId) break;
+
+                static $unapprovedReviewCount = 0;
+                $isApproved = true;
+
+                if ($unapprovedReviewCount < 3 && rand(0, 1) === 1) {
+                    $isApproved = false;
+                    $unapprovedReviewCount++;
+                }
+
+                // Betere verdeling van ratings
+                // Gebalanceerde ratingverdeling
+                $chance = rand(1, 100);
+                if ($chance <= 10) {
+                    $rating = 1;
+                } elseif ($chance <= 25) {
+                    $rating = 2;
+                } elseif ($chance <= 45) {
+                    $rating = 3;
+                } elseif ($chance <= 70) {
+                    $rating = 4;
+                } else {
+                    $rating = 5;
+                }
+
+                Review::create([
+                    'product_id' => $product->id,
+                    'user_id' => $userId,
+                    'rating' => $rating, // ✅ Beter verdeelde rating
+                    'title' => fake()->sentence(),
+                    'body' => fake()->paragraph(2),
+                    'approved' => $isApproved,
+                ]);
+            }
+
         }
     }
 }

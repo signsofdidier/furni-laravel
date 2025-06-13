@@ -24,6 +24,7 @@ class ProductColorStockResource extends Resource
     protected static ?string $modelLabel = 'Product Stock';
     protected static ?string $pluralModelLabel = 'Product Stocks';
 
+
     // Dit bepaald de volgorde in de sidebar
     protected static ?int $navigationSort = 5;
 

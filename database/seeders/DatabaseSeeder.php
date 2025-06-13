@@ -10,18 +10,44 @@ use App\Models\Color;
 use App\Models\Product;
 use App\Models\ProductColorStock;
 use App\Models\Review;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // USERS
-        User::create(['name' => 'Admin', 'email' => 'admin@gmail.com', 'password' => Hash::make('password')]);
-        User::create(['name' => 'Didier Vanassche', 'email' => 'didier.v@hotmail.com', 'password' => Hash::make('password')]);
-        User::create(['name' => 'Sophie Adams', 'email' => 'sophie@gmail.com', 'password' => Hash::make('password')]);
-        User::create(['name' => 'Charles Peters', 'email' => 'charles@gmail.com', 'password' => Hash::make('password')]);
+        Artisan::call('shield:install', ['panel' => 'admin']); // Installeer Shield volledig
+
+// 2. Roles & Permissions
+        $role = Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
+        $role->syncPermissions(Permission::all()); // ✅ Alle permissies
+
+// 3. Gebruiker maken en rol toewijzen
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@gmail.com'],
+            ['name' => 'Admin', 'password' => Hash::make('password')]
+        );
+        $admin->assignRole($role);
+
+        User::firstOrCreate(
+            ['email' => 'didier.v@hotmail.com'],
+            ['name' => 'Didier Vanassche', 'password' => Hash::make('password')]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'sophie@gmail.com'],
+            ['name' => 'Sophie Adams', 'password' => Hash::make('password')]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'charles@gmail.com'],
+            ['name' => 'Charles Peters', 'password' => Hash::make('password')]
+        );
+
 
         // BRANDS
         $brands = ['Designo', 'SitWell', 'NordicHome', 'UrbanCraft', 'VintageVibe'];

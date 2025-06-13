@@ -38,6 +38,7 @@ class ProductResource extends Resource
     // Dit bepaald de volgorde in de sidebar
     protected static ?int $navigationSort = 4;
 
+
     public static function form(Form $form): Form
     {
         return $form

@@ -29,6 +29,7 @@ class ColorResource extends Resource
 
     protected static ?int $navigationSort = 7;
 
+
     public static function form(Form $form): Form
     {
         return $form

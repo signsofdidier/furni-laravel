@@ -95,7 +95,7 @@ class BlogPolicy
      */
     public function replicate(User $user, Blog $blog): bool
     {
-        return $user->can('{{ Replicate }}');
+        return $user->can('replicate_blog');
     }
 
     /**
@@ -103,6 +103,6 @@ class BlogPolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('{{ Reorder }}');
+        return $user->can('reorder_blog');
     }
 }

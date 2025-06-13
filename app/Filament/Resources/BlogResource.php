@@ -159,9 +159,20 @@ class BlogResource extends Resource
 
             ])
             ->defaultSort('updated_at', 'desc')
-            ->modifyQueryUsing(fn (Builder $query) => $query->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]))
+            ->modifyQueryUsing(function (Builder $query) {
+
+                // SOFT DELETES
+                $query->withoutGlobalScopes([
+                    SoftDeletingScope::class,
+                ]);
+
+                // Als gebruiker blog author is, toon alleen hun eigen blogs
+                if (auth()->user()->hasRole('blog author')) {
+                    $query->where('user_id', auth()->id());
+                }
+
+                return $query;
+            })
             ->filters([
                 TrashedFilter::make(),
             ])
@@ -199,16 +210,4 @@ class BlogResource extends Resource
         ];
     }
 
-
-    public static function getEloquentQuery(): Builder
-    {
-        $query = parent::getEloquentQuery(); // dit toont alle blogs
-
-        // ENKEL EIGEN BLOGS ZIEN
-        if (auth()->user()?->hasRole('blog_author')) {
-            return $query->where('user_id', auth()->id());
-        }
-
-        return $query;
-    }
 }

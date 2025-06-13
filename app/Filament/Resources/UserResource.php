@@ -7,6 +7,7 @@ use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
@@ -39,6 +40,11 @@ class UserResource extends Resource
             ->schema([
                 TextInput::make('name')
                     ->required(),
+                Select::make('roles')
+                    ->relationship('roles', 'name')
+                    ->multiple()
+                    ->preload()
+                    ->searchable(),
                 TextInput::make('email')
                     ->label('Email Address')
                     ->email()
@@ -70,6 +76,9 @@ class UserResource extends Resource
                 ->searchable(),
                 TextColumn::make('email_verified_at')
                     ->dateTime()
+                    ->sortable(),
+                TextColumn::make('roles.name')
+                    ->badge()
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()

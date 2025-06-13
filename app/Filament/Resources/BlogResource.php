@@ -166,8 +166,8 @@ class BlogResource extends Resource
                     SoftDeletingScope::class,
                 ]);
 
-                // Als gebruiker blog author is, toon alleen hun eigen blogs
-                if (auth()->user()->hasRole('blog author')) {
+                // Filter voor blog authors
+                if (auth()->user()->hasRole('blog_author')) {
                     $query->where('user_id', auth()->id());
                 }
 
@@ -210,4 +210,16 @@ class BlogResource extends Resource
         ];
     }
 
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery(); // dit toont alle blogs
+
+        // ENKEL EIGEN BLOGS ZIEN
+        if (auth()->user()?->hasRole('blog_author')) {
+            return $query->where('user_id', auth()->id());
+        }
+
+        return $query;
+    }
 }

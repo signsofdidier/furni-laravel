@@ -198,4 +198,17 @@ class BlogResource extends Resource
             'edit' => Pages\EditBlog::route('/{record}/edit'),
         ];
     }
+
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery(); // dit toont alle blogs
+
+        // ENKEL EIGEN BLOGS ZIEN
+        if (auth()->user()?->hasRole('blog_author')) {
+            return $query->where('user_id', auth()->id());
+        }
+
+        return $query;
+    }
 }

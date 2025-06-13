@@ -95,7 +95,7 @@ class ColorPolicy
      */
     public function replicate(User $user, Color $color): bool
     {
-        return $user->can('replicate_color');
+        return $user->can('{{ Replicate }}');
     }
 
     /**
@@ -103,6 +103,6 @@ class ColorPolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_color');
+        return $user->can('{{ Reorder }}');
     }
 }

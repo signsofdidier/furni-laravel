@@ -95,7 +95,7 @@ class ReviewPolicy
      */
     public function replicate(User $user, Review $review): bool
     {
-        return $user->can('replicate_review');
+        return $user->can('{{ Replicate }}');
     }
 
     /**
@@ -103,6 +103,6 @@ class ReviewPolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_review');
+        return $user->can('{{ Reorder }}');
     }
 }

@@ -95,7 +95,7 @@ class SettingPolicy
      */
     public function replicate(User $user, Setting $setting): bool
     {
-        return $user->can('replicate_setting');
+        return $user->can('{{ Replicate }}');
     }
 
     /**
@@ -103,6 +103,6 @@ class SettingPolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_setting');
+        return $user->can('{{ Reorder }}');
     }
 }

@@ -95,7 +95,7 @@ class ProductColorStockPolicy
      */
     public function replicate(User $user, ProductColorStock $productColorStock): bool
     {
-        return $user->can('replicate_product::color::stock');
+        return $user->can('{{ Replicate }}');
     }
 
     /**
@@ -103,6 +103,6 @@ class ProductColorStockPolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_product::color::stock');
+        return $user->can('{{ Reorder }}');
     }
 }

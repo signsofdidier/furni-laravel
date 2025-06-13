@@ -68,10 +68,8 @@ class User extends Authenticatable implements FilamentUser
     // Alleen user met deze email (admin) kan in de admin panel (backend) inloggen
     public function canAccessPanel(Panel $panel): bool
     {
-        return in_array($this->email, [
-            'admin@gmail.com',
-            'didier.v@hotmail.com',
-            ]);
+        // toegang tot admin als user minstens 1 rol heeft
+        return $this->roles()->exists();
     }
 
 

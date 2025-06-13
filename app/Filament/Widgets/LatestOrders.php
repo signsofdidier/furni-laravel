@@ -4,6 +4,7 @@ namespace App\Filament\Widgets;
 
 use App\Filament\Resources\OrderResource;
 use App\Models\Order;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
@@ -12,6 +13,8 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class LatestOrders extends BaseWidget
 {
+
+    use HasWidgetShield;
 
     // full width
     protected int | string | array $columnSpan = 'full';

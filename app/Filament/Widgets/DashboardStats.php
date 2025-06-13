@@ -5,11 +5,14 @@ namespace App\Filament\Widgets;
 use App\Models\Product;
 use App\Models\ProductColorStock;
 use App\Models\Review;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class DashboardStats extends BaseWidget
 {
+    use HasWidgetShield;
+
     // Bepaalt de plaats van deze widget op het dashboard
     protected static ?int $sort = 1;
 

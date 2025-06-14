@@ -59,8 +59,13 @@ class CategoryResource extends Resource
                                 ->unique(Category::class, 'slug', ignoreRecord: true),
                         ]),
                     FileUpload::make('image')
+                        ->directory('categories')
                         ->image()
-                        ->directory('categories'),
+                        ->imageEditor() //editor voor afbeeldingen
+                        ->optimize('webp')
+                        ->resize(50)
+                        ->maxSize(2048),
+
                     Toggle::make('is_active')
                         ->required()
                         ->default(true),

@@ -45,7 +45,7 @@
                                         <div class="product-card-img">
                                             <a class="product-hover-zoom" href="{{ url('/products') }}/{{ $product->slug }}">
                                                 <img class="primary-img" src="{{ url('storage', $product->images[0]) }}"
-                                                     alt="product-img">
+                                                     alt="{{  $product->name }}">
                                             </a>
 
                                             @php

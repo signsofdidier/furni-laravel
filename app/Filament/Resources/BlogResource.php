@@ -41,6 +41,8 @@ class BlogResource extends Resource
 
     public static function form(Form $form): Form
     {
+        ini_set('memory_limit', '512M');
+
         return $form
             ->schema([
                 Group::make()->schema([
@@ -101,8 +103,14 @@ class BlogResource extends Resource
                         FileUpload::make('image')
                             ->directory('blogs')
                             ->required()
-                            ->imageEditor(), //editor voor afbeeldingen
-
+                            ->image()
+                            ->imageEditor() //editor voor afbeeldingen
+                            ->imageCropAspectRatio('200:167')
+                            ->imageResizeTargetWidth(1400)
+                            ->imageResizeTargetHeight(1169)
+                            ->optimize('webp')
+                            ->resize(50)
+                            ->maxSize(2048),
                     ]),
 
                     /* Blockquote section */

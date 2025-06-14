@@ -141,7 +141,9 @@ class ProductsPage extends Component
 
         // IN STOCK filter
         if($this->in_stock) {
-            $productQuery->where('in_stock', 1);
+            $productQuery->whereHas('productColorStocks', function($query) {
+                $query->where('stock', '>', 0);
+            });
         }
 
         // PRICE RANGE filter

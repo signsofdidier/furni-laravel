@@ -1,5 +1,5 @@
 .product-hover-zoom {
-    display: inline-block;  /* of ‘block’, afhankelijk van je layout */
+    display: block;  /* of ‘block’, afhankelijk van je layout */
     overflow: hidden;
 }
 

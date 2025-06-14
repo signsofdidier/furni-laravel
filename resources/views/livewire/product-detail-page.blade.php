@@ -15,7 +15,7 @@
                                 @foreach($product->images as $image)
                                     <div class="img-large-wrapper">
                                         <a href="{{ url('storage', $image) }}" data-fancybox="gallery">
-                                            <img src="{{ url('storage', $image) }}" alt="img">
+                                            <img class="w-100 h-100" src="{{ url('storage', $image) }}" alt="{{ $product->name }}">
                                         </a>
                                     </div>
                                 @endforeach

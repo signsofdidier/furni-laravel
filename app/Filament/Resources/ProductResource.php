@@ -83,10 +83,15 @@ class ProductResource extends Resource
                     Section::make('Images')->schema([
                         FileUpload::make('images')
                             ->multiple()
+                            ->required()
                             ->directory('products')
-                            ->maxFiles(5)
-                            ->reorderable()
-                            ->imageEditor() //editor voor afbeeldingen
+                            ->image()
+                            ->imageEditor()
+                            ->imageCropAspectRatio('125:161')
+                            ->imageResizeTargetWidth(1000)
+                            ->imageResizeTargetHeight(1288)
+                            ->optimize('webp')
+                            ->required(),
                     ])
 
                 ])->columnSpan(2),

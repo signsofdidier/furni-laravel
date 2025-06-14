@@ -8,7 +8,9 @@ use App\Models\Setting;
 
 class CartManagement {
 
-    // voegt een product en kleur toe aan de cart
+    // ========================
+    // ITEM TOEVOEGEN AAN CART (1 STUK)
+    // ========================
     static public function addItemToCart(int $product_id, ?int $color_id = null): int{
         $cart_items = self::getCartItemsFromSession();
 
@@ -16,10 +18,8 @@ class CartManagement {
 
         // Zoek bestaand item op basis van product + kleur
         foreach($cart_items as $key => $item){
-            if($item['product_id'] == $product_id
-                // controlleer kleur
-                && ($item['color_id'] ?? null) == $color_id
-            ){
+            if($item['product_id'] == $product_id && ($item['color_id'] ?? null) == $color_id)
+            {
                 $existing_item = $key;
                 break;
             }
@@ -28,8 +28,7 @@ class CartManagement {
         if ($existing_item !== null) {
             // Verhoog hoeveelheid bij bestaand item
             $cart_items[$existing_item]['quantity']++;
-            $cart_items[$existing_item]['total_amount'] =
-                $cart_items[$existing_item]['quantity'] * $cart_items[$existing_item]['unit_amount'];
+            $cart_items[$existing_item]['total_amount'] = $cart_items[$existing_item]['quantity'] * $cart_items[$existing_item]['unit_amount'];
         } else {
             // Haal product en kleur op
             $product = Product::find($product_id, ['id', 'name', 'price', 'images', 'slug', 'shipping_cost']);
@@ -56,6 +55,9 @@ class CartManagement {
         return count($cart_items);
     }
 
+    // ========================
+    // ADD ITEM TO CART MET QUANTITY
+    // ========================
     // voegt een product toe met specifieke hoeveelheid en kleur als die er is
     static public function addItemToCartWithQuantity(int $product_id, int $quantity, ?int $color_id = null): int
     {
@@ -69,8 +71,7 @@ class CartManagement {
 
         foreach($cart_items as $key => $item){
             if(
-                $item['product_id'] == $product_id
-                && ($item['color_id'] ?? null) === $color_id
+                $item['product_id'] == $product_id && ($item['color_id'] ?? null) === $color_id
             ){
                 $existing_item = $key;
                 break;
@@ -80,8 +81,7 @@ class CartManagement {
         if ($existing_item !== null) {
             // Voeg toe aan de bestaande hoeveelheid
             $cart_items[$existing_item]['quantity'] += $quantity;
-            $cart_items[$existing_item]['total_amount'] = $cart_items[$existing_item]['quantity'] *
-                $cart_items[$existing_item]['unit_amount'];
+            $cart_items[$existing_item]['total_amount'] = $cart_items[$existing_item]['quantity'] * $cart_items[$existing_item]['unit_amount'];
         } else {
             $product = Product::find($product_id, ['id', 'name', 'price', 'images', 'slug', 'shipping_cost']);
             $color = $color_id ? Color::find($color_id) : null;
@@ -113,9 +113,8 @@ class CartManagement {
         $cart_items = self::getCartItemsFromSession();
 
         foreach($cart_items as $key => $item){
-            if($item['product_id'] == $product_id
-            && ($item['color_id'] ?? null) === $color_id
-            ){
+            if($item['product_id'] == $product_id && ($item['color_id'] ?? null) === $color_id)
+            {
                 unset($cart_items[$key]);
             }
         }
@@ -143,8 +142,8 @@ class CartManagement {
     {
         $cart_items = self::getCartItemsFromSession();
         foreach($cart_items as $key => $item){
-            if($item['product_id'] == $product_id && ($item['color_id'] ?? null) === $color_id
-            ){
+            if($item['product_id'] == $product_id && ($item['color_id'] ?? null) === $color_id)
+            {
                 $cart_items[$key]['quantity']++;
                 $cart_items[$key]['total_amount'] = $cart_items[$key]['quantity'] *
                     $cart_items[$key]['unit_amount'];
@@ -159,12 +158,10 @@ class CartManagement {
     {
         $cart_items = self::getCartItemsFromSession();
         foreach($cart_items as $key => $item){
-            if($item['product_id'] == $product_id &&
-                ($item['color_id'] ?? null) === $color_id && $item['quantity'] > 1
-            ){
+            if($item['product_id'] == $product_id && ($item['color_id'] ?? null) === $color_id && $item['quantity'] > 1)
+            {
                 $cart_items[$key]['quantity']--;
-                $cart_items[$key]['total_amount'] = $cart_items[$key]['quantity'] *
-                    $cart_items[$key]['unit_amount'];
+                $cart_items[$key]['total_amount'] = $cart_items[$key]['quantity'] * $cart_items[$key]['unit_amount'];
                 break;
             }
         }

@@ -42,8 +42,8 @@ class ProductReviewForm extends Component
 
         $this->validate([
             'rating' => 'required|integer|min:1|max:5',
-            'title' => 'nullable|string|max:255',
-            'body' => 'nullable|string|max:2000',
+            'title' => 'required|string|max:255',
+            'body' => 'required|string|max:2000',
         ]);
 
         Review::create([

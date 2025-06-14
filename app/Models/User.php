@@ -66,8 +66,21 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(Review::class);
     }
 
+    // user heeft een adres
     public function address(){
         return $this->hasOne(Address::class);
+    }
+
+    // user heeft meerdere wishlists
+    public function wishlist(){
+        return $this->hasMany(Wishlist::class);
+    }
+
+
+    public function hasInWishlist($productId)
+    {
+        // user heeft dit product in de wishlist
+        return $this->wishlist()->where('product_id', $productId)->exists();
     }
 
     // Alleen user met deze email (admin) kan in de admin panel (backend) inloggen

@@ -17,6 +17,7 @@ use App\Livewire\ProductDetailPage;
 use App\Livewire\ProductsPage;
 use App\Livewire\ProfileForm;
 use App\Livewire\SuccessPage;
+use App\Livewire\WishlistPage;
 use Illuminate\Support\Facades\Route;
 
 // openbare routes voor alle users
@@ -49,6 +50,7 @@ Route::middleware('auth')->group(function() {
     Route::get('/my-orders/{order_id}', MyOrderDetailPage::class)->name('my-orders.show');
     Route::get('/success', SuccessPage::class)->name('success');
     Route::get('/cancel', CancelPage::class)->name('cancel');
+    Route::get('/wishlist', WishlistPage::class)->name('wishlist');
 
     Route::get('/my-orders/{order_id}/invoice', function ($order_id) {
         $order = \App\Models\Order::with('items.product', 'user', 'address')->findOrFail($order_id);

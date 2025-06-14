@@ -201,7 +201,7 @@
 
                             {{-- WISHLIST --}}
                             <a class="header-action-item header-wishlist ms-4 d-none d-lg-block"
-                               href="wishlist.html">
+                               href="{{ url('/wishlist') }}">
                                 <svg class="icon icon-wishlist" width="26" height="22" viewBox="0 0 26 22"
                                      fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path

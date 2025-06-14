@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Helpers\CartManagement;
+use App\Models\Blog;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
@@ -20,10 +21,15 @@ class HomePage extends Component
     public float $free_shipping_threshold  = 0;
 
 
+    public $blogs;
+
+
     public function mount(){
         // Haal de free_shipping_threshold uit de database (één record in settings)
         $setting = Setting::first();
         $this->free_shipping_threshold = $setting->free_shipping_threshold ?? 0.0;
+
+        $this->blogs = Blog::latest()->take(8)->get();
 
     }
 

@@ -40,7 +40,7 @@
                     <div class="collection-product-container">
                         <div class="row">
                             @foreach($products as $product)
-                                <div class="col-lg-4 col-md-6 col-6" wire:key="{{ $product->id }}">
+                                <div class="col-lg-4 col-md-6 col-12" wire:key="{{ $product->id }}">
                                     <div class="product-card">
                                         <div class="product-card-img">
                                             <a class="product-hover-zoom" href="{{ url('/products') }}/{{ $product->slug }}">
@@ -216,34 +216,6 @@
                         </div>
 
                         {{-- MOBILE SORT BY filter --}}
-                        <div class="filter-widget d-lg-none">
-                            <div class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom"
-                                 data-bs-toggle="collapse" data-bs-target="#filter-mobile-sort">
-                                        <span>
-                                            <span class="sorting-title me-2">Sort by:</span>
-                                            <span class="active-sorting">Featured</span>
-                                        </span>
-                                <span class="faq-heading-icon">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                 viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"
-                                                 stroke-linecap="round" stroke-linejoin="round" class="icon icon-down">
-                                                <polyline points="6 9 12 15 18 9"></polyline>
-                                            </svg>
-                                        </span>
-                            </div>
-                            <div id="filter-mobile-sort" class="accordion-collapse collapse show">
-                                <ul class="sorting-lists-mobile list-unstyled m-0">
-                                    <li><a href="#" class="text_14">Featured</a></li>
-                                    <li><a href="#" class="text_14">Best Selling</a></li>
-                                    <li><a href="#" class="text_14">Alphabetically, A-Z</a></li>
-                                    <li><a href="#" class="text_14">Alphabetically, Z-A</a></li>
-                                    <li><a href="#" class="text_14">Price, low to high</a></li>
-                                    <li><a href="#" class="text_14">Price, high to low</a></li>
-                                    <li><a href="#" class="text_14">Date, old to new</a></li>
-                                    <li><a href="#" class="text_14">Date, new to old</a></li>
-                                </ul>
-                            </div>
-                        </div>
 
                         {{-- Categories filter --}}
                         <div class="filter-widget">

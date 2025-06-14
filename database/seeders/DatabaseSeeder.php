@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
     {
         Artisan::call('shield:install', ['panel' => 'admin']); // Installeer Shield volledig
 
-// ✅ Alle permissies aanmaken
+// Alle permissies aanmaken
         Permission::firstOrCreate(['name' => 'create_blog']);
         Permission::firstOrCreate(['name' => 'create_brand']);
         Permission::firstOrCreate(['name' => 'create_category']);
@@ -152,6 +152,17 @@ class DatabaseSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'widget_DashboardStats']);
         Permission::firstOrCreate(['name' => 'widget_LatestOrders']);
         Permission::firstOrCreate(['name' => 'widget_OrderStats']);
+        // Address Permissions
+        Permission::firstOrCreate(['name' => 'view_address']);
+        Permission::firstOrCreate(['name' => 'view_any_address']);
+        Permission::firstOrCreate(['name' => 'create_address']);
+        Permission::firstOrCreate(['name' => 'update_address']);
+        Permission::firstOrCreate(['name' => 'delete_address']);
+        Permission::firstOrCreate(['name' => 'delete_any_address']);
+        Permission::firstOrCreate(['name' => 'restore_address']);
+        Permission::firstOrCreate(['name' => 'restore_any_address']);
+        Permission::firstOrCreate(['name' => 'force_delete_address']);
+        Permission::firstOrCreate(['name' => 'force_delete_any_address']);
 
         // Rollen en gebruikers aanmaken
 
@@ -172,7 +183,7 @@ class DatabaseSeeder extends Seeder
         ])->assignRole('content_editor');
 
         $role = Role::firstOrCreate(['name' => 'customer_service', 'guard_name' => 'web']);
-        $role->syncPermissions(['view_order', 'view_any_order', 'view_user', 'view_any_user']);
+        $role->syncPermissions(['view_order', 'view_any_order', 'view_user', 'view_any_user', 'view_address', 'view_any_address']);
         User::factory()->create([
             'name' => 'Customer Service',
             'email' => 'customer_service@gmail.com',
@@ -490,7 +501,7 @@ class DatabaseSeeder extends Seeder
                 Review::create([
                     'product_id' => $product->id,
                     'user_id' => $userId,
-                    'rating' => $rating, // ✅ Beter verdeelde rating
+                    'rating' => $rating,
                     'title' => fake()->sentence(),
                     'body' => fake()->paragraph(2),
                     'approved' => $isApproved,

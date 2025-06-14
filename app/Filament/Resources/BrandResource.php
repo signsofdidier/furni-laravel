@@ -35,7 +35,7 @@ class BrandResource extends Resource
     protected static ?string $recordTitleAttribute = 'name';
 
     // Dit bepaald de volgorde in de sidebar
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 6;
 
 
 

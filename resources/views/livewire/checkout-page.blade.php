@@ -10,14 +10,14 @@
 
                         <div class="checkout-user-area overflow-hidden d-flex align-items-center">
                             <div class="checkout-user-img me-4">
-                                <img src="{{ Auth::user()->avatar_url ?? asset('assets/img/checkout/user.jpg') }}" alt="{{ Auth::user()->name }}">
+                                <img class="rounded-circle" style="height: 80px; width: 80px;" src="{{ Auth::user()->profile_photo_path ? Storage::url(Auth::user()->profile_photo_path) : asset('assets/img/default-avatar.png') }}" alt="{{ Auth::user()->name }}">
                             </div>
                             <div class="checkout-user-details d-flex align-items-center justify-content-between w-100">
                                 <div class="checkout-user-info">
                                     <h2 class="checkout-user-name">{{ Auth::user()->name }}</h2>
                                     <p class="text-light mb-0">{{ Auth::user()->email }}</p>
                                 </div>
-                                <a href="#" class="edit-user btn">EDIT PROFILE</a>
+                                <a href="{{ route('profile') }}" class="edit-user btn">EDIT PROFILE</a>
                             </div>
                         </div>
 

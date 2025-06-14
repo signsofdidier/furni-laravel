@@ -47,6 +47,20 @@ class CheckoutPage extends Component
         // Bereken op mount meteen de sub_total en shipping_amount
         $this->sub_total = CartManagement::calculateGrandTotal($cart_items);
         $this->calculateShippingAmount($cart_items);
+
+
+
+        // AUTO-FILL adresgegevens indien beschikbaar
+        $user = auth()->user();
+        if ($user && $user->address) {
+            $this->first_name = $user->address->first_name;
+            $this->last_name = $user->address->last_name;
+            $this->phone = $user->address->phone;
+            $this->street_address = $user->address->street_address;
+            $this->city = $user->address->city;
+            $this->state = $user->address->state;
+            $this->zip_code = $user->address->zip_code;
+        }
     }
 
     public function placeOrder(){
@@ -114,8 +128,13 @@ class CheckoutPage extends Component
         $order->shipping_method = 'Flat Rate';
         $order->notes = 'Order placed by ' . auth()->user()->name;
 
-        // Maak het Address-object aan
+        // Sla eerst het order op, zodat er een ID is
+        $order->save();
+
+        // Maak het adres aan en koppel het aan order & user
         $address = new Address();
+        $address->order_id = $order->id;
+        $address->user_id = auth()->user()->id;
         $address->first_name = $this->first_name;
         $address->last_name = $this->last_name;
         $address->phone = $this->phone;
@@ -123,6 +142,14 @@ class CheckoutPage extends Component
         $address->city = $this->city;
         $address->state = $this->state;
         $address->zip_code = $this->zip_code;
+        $address->save();
+
+        // Sla als profieladres op als de user er nog geen heeft
+        $user = auth()->user();
+        if (!$user->address) {
+            $user->address()->associate($address);
+            $user->save();
+        }
 
         $redirect_url = '';
 
@@ -148,10 +175,6 @@ class CheckoutPage extends Component
         }
 
         $order->save();
-
-        // Koppel het adres aan het nieuw aangemaakte order
-        $address->order_id = $order->id;
-        $address->save();
 
         // Sla alle item‐regels op in de “order_items”‐relatie (reflecteert wat in sessie zat)
         $order->items()->createMany($cart_items);

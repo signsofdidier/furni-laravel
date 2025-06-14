@@ -27,11 +27,11 @@
                         <div class="d-flex align-items-center gap-4">
                             <div class="flex-shrink-0">
                                 @if ($new_profile_photo)
-                                    <img src="{{ $new_profile_photo->temporaryUrl() }}" alt="New photo" class="rounded-circle" width="80" height="80">
+                                    <img src="{{ $new_profile_photo->temporaryUrl() }}" alt="New photo" class="rounded-circle object-cover" style="width: 96px; height: 96px;">
                                 @elseif ($profile_photo)
-                                    <img src="{{ Storage::url($profile_photo) }}" alt="Current photo" class="rounded-circle" width="80" height="80">
+                                    <img src="{{ Storage::url($profile_photo) }}" alt="Current photo" class="rounded-circle object-cover" style="width: 96px; height: 96px;">
                                 @else
-                                    <img src="{{ asset('assets/img/default-avatar.png') }}" alt="Default photo" class="rounded-circle" width="80" height="80">
+                                    <img src="{{ asset('assets/img/default-avatar.png') }}" alt="Default photo" class="rounded-circle object-cover" style="width: 96px; height: 96px;">
                                 @endif
                             </div>
                             <div>

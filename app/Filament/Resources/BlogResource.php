@@ -34,7 +34,9 @@ class BlogResource extends Resource
 {
     protected static ?string $model = Blog::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-pencil-square';
+
+    protected static ?int $navigationSort = 9;
 
 
     public static function form(Form $form): Form
@@ -84,6 +86,7 @@ class BlogResource extends Resource
                             ->multiple()
                             ->preload()
                             ->searchable()
+                            ->required()
                             ->rules(['array', 'max:2']) // max 2 categories
 
                     ])->columns(1),

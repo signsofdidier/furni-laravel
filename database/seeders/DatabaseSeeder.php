@@ -22,31 +22,214 @@ class DatabaseSeeder extends Seeder
     {
         Artisan::call('shield:install', ['panel' => 'admin']); // Installeer Shield volledig
 
-// 2. Roles & Permissions
-        $role = Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
-        $role->syncPermissions(Permission::all()); // ✅ Alle permissies
+// ✅ Alle permissies aanmaken
+        Permission::firstOrCreate(['name' => 'create_blog']);
+        Permission::firstOrCreate(['name' => 'create_brand']);
+        Permission::firstOrCreate(['name' => 'create_category']);
+        Permission::firstOrCreate(['name' => 'create_color']);
+        Permission::firstOrCreate(['name' => 'create_order']);
+        Permission::firstOrCreate(['name' => 'create_product']);
+        Permission::firstOrCreate(['name' => 'create_product::color::stock']);
+        Permission::firstOrCreate(['name' => 'create_review']);
+        Permission::firstOrCreate(['name' => 'create_role']);
+        Permission::firstOrCreate(['name' => 'create_setting']);
+        Permission::firstOrCreate(['name' => 'create_user']);
+        Permission::firstOrCreate(['name' => 'delete_any_blog']);
+        Permission::firstOrCreate(['name' => 'delete_any_brand']);
+        Permission::firstOrCreate(['name' => 'delete_any_category']);
+        Permission::firstOrCreate(['name' => 'delete_any_color']);
+        Permission::firstOrCreate(['name' => 'delete_any_order']);
+        Permission::firstOrCreate(['name' => 'delete_any_product']);
+        Permission::firstOrCreate(['name' => 'delete_any_product::color::stock']);
+        Permission::firstOrCreate(['name' => 'delete_any_review']);
+        Permission::firstOrCreate(['name' => 'delete_any_role']);
+        Permission::firstOrCreate(['name' => 'delete_any_setting']);
+        Permission::firstOrCreate(['name' => 'delete_any_user']);
+        Permission::firstOrCreate(['name' => 'delete_blog']);
+        Permission::firstOrCreate(['name' => 'delete_brand']);
+        Permission::firstOrCreate(['name' => 'delete_category']);
+        Permission::firstOrCreate(['name' => 'delete_color']);
+        Permission::firstOrCreate(['name' => 'delete_order']);
+        Permission::firstOrCreate(['name' => 'delete_product']);
+        Permission::firstOrCreate(['name' => 'delete_product::color::stock']);
+        Permission::firstOrCreate(['name' => 'delete_review']);
+        Permission::firstOrCreate(['name' => 'delete_role']);
+        Permission::firstOrCreate(['name' => 'delete_setting']);
+        Permission::firstOrCreate(['name' => 'delete_user']);
+        Permission::firstOrCreate(['name' => 'force_delete_any_blog']);
+        Permission::firstOrCreate(['name' => 'force_delete_any_brand']);
+        Permission::firstOrCreate(['name' => 'force_delete_any_category']);
+        Permission::firstOrCreate(['name' => 'force_delete_any_color']);
+        Permission::firstOrCreate(['name' => 'force_delete_any_order']);
+        Permission::firstOrCreate(['name' => 'force_delete_any_product']);
+        Permission::firstOrCreate(['name' => 'force_delete_any_product::color::stock']);
+        Permission::firstOrCreate(['name' => 'force_delete_any_review']);
+        Permission::firstOrCreate(['name' => 'force_delete_any_setting']);
+        Permission::firstOrCreate(['name' => 'force_delete_any_user']);
+        Permission::firstOrCreate(['name' => 'force_delete_blog']);
+        Permission::firstOrCreate(['name' => 'force_delete_brand']);
+        Permission::firstOrCreate(['name' => 'force_delete_category']);
+        Permission::firstOrCreate(['name' => 'force_delete_color']);
+        Permission::firstOrCreate(['name' => 'force_delete_order']);
+        Permission::firstOrCreate(['name' => 'force_delete_product']);
+        Permission::firstOrCreate(['name' => 'force_delete_product::color::stock']);
+        Permission::firstOrCreate(['name' => 'force_delete_review']);
+        Permission::firstOrCreate(['name' => 'force_delete_setting']);
+        Permission::firstOrCreate(['name' => 'force_delete_user']);
+        Permission::firstOrCreate(['name' => 'reorder_blog']);
+        Permission::firstOrCreate(['name' => 'reorder_brand']);
+        Permission::firstOrCreate(['name' => 'reorder_category']);
+        Permission::firstOrCreate(['name' => 'reorder_color']);
+        Permission::firstOrCreate(['name' => 'reorder_order']);
+        Permission::firstOrCreate(['name' => 'reorder_product']);
+        Permission::firstOrCreate(['name' => 'reorder_product::color::stock']);
+        Permission::firstOrCreate(['name' => 'reorder_review']);
+        Permission::firstOrCreate(['name' => 'reorder_setting']);
+        Permission::firstOrCreate(['name' => 'reorder_user']);
+        Permission::firstOrCreate(['name' => 'replicate_blog']);
+        Permission::firstOrCreate(['name' => 'replicate_brand']);
+        Permission::firstOrCreate(['name' => 'replicate_category']);
+        Permission::firstOrCreate(['name' => 'replicate_color']);
+        Permission::firstOrCreate(['name' => 'replicate_order']);
+        Permission::firstOrCreate(['name' => 'replicate_product']);
+        Permission::firstOrCreate(['name' => 'replicate_product::color::stock']);
+        Permission::firstOrCreate(['name' => 'replicate_review']);
+        Permission::firstOrCreate(['name' => 'replicate_setting']);
+        Permission::firstOrCreate(['name' => 'replicate_user']);
+        Permission::firstOrCreate(['name' => 'restore_any_blog']);
+        Permission::firstOrCreate(['name' => 'restore_any_brand']);
+        Permission::firstOrCreate(['name' => 'restore_any_category']);
+        Permission::firstOrCreate(['name' => 'restore_any_color']);
+        Permission::firstOrCreate(['name' => 'restore_any_order']);
+        Permission::firstOrCreate(['name' => 'restore_any_product']);
+        Permission::firstOrCreate(['name' => 'restore_any_product::color::stock']);
+        Permission::firstOrCreate(['name' => 'restore_any_review']);
+        Permission::firstOrCreate(['name' => 'restore_any_setting']);
+        Permission::firstOrCreate(['name' => 'restore_any_user']);
+        Permission::firstOrCreate(['name' => 'restore_blog']);
+        Permission::firstOrCreate(['name' => 'restore_brand']);
+        Permission::firstOrCreate(['name' => 'restore_category']);
+        Permission::firstOrCreate(['name' => 'restore_color']);
+        Permission::firstOrCreate(['name' => 'restore_order']);
+        Permission::firstOrCreate(['name' => 'restore_product']);
+        Permission::firstOrCreate(['name' => 'restore_product::color::stock']);
+        Permission::firstOrCreate(['name' => 'restore_review']);
+        Permission::firstOrCreate(['name' => 'restore_setting']);
+        Permission::firstOrCreate(['name' => 'restore_user']);
+        Permission::firstOrCreate(['name' => 'update_blog']);
+        Permission::firstOrCreate(['name' => 'update_brand']);
+        Permission::firstOrCreate(['name' => 'update_category']);
+        Permission::firstOrCreate(['name' => 'update_color']);
+        Permission::firstOrCreate(['name' => 'update_order']);
+        Permission::firstOrCreate(['name' => 'update_product']);
+        Permission::firstOrCreate(['name' => 'update_product::color::stock']);
+        Permission::firstOrCreate(['name' => 'update_review']);
+        Permission::firstOrCreate(['name' => 'update_role']);
+        Permission::firstOrCreate(['name' => 'update_setting']);
+        Permission::firstOrCreate(['name' => 'update_user']);
+        Permission::firstOrCreate(['name' => 'view_any_blog']);
+        Permission::firstOrCreate(['name' => 'view_any_brand']);
+        Permission::firstOrCreate(['name' => 'view_any_category']);
+        Permission::firstOrCreate(['name' => 'view_any_color']);
+        Permission::firstOrCreate(['name' => 'view_any_order']);
+        Permission::firstOrCreate(['name' => 'view_any_product']);
+        Permission::firstOrCreate(['name' => 'view_any_product::color::stock']);
+        Permission::firstOrCreate(['name' => 'view_any_review']);
+        Permission::firstOrCreate(['name' => 'view_any_role']);
+        Permission::firstOrCreate(['name' => 'view_any_setting']);
+        Permission::firstOrCreate(['name' => 'view_any_user']);
+        Permission::firstOrCreate(['name' => 'view_blog']);
+        Permission::firstOrCreate(['name' => 'view_brand']);
+        Permission::firstOrCreate(['name' => 'view_category']);
+        Permission::firstOrCreate(['name' => 'view_color']);
+        Permission::firstOrCreate(['name' => 'view_order']);
+        Permission::firstOrCreate(['name' => 'view_product']);
+        Permission::firstOrCreate(['name' => 'view_product::color::stock']);
+        Permission::firstOrCreate(['name' => 'view_review']);
+        Permission::firstOrCreate(['name' => 'view_role']);
+        Permission::firstOrCreate(['name' => 'view_setting']);
+        Permission::firstOrCreate(['name' => 'view_user']);
+        Permission::firstOrCreate(['name' => 'widget_DashboardStats']);
+        Permission::firstOrCreate(['name' => 'widget_LatestOrders']);
+        Permission::firstOrCreate(['name' => 'widget_OrderStats']);
 
-// 3. Gebruiker maken en rol toewijzen
+        // Rollen en gebruikers aanmaken
+
+        $role = Role::firstOrCreate(['name' => 'blog_author', 'guard_name' => 'web']);
+        $role->syncPermissions(['view_blog', 'view_any_blog', 'create_blog', 'update_blog']);
+        User::factory()->create([
+            'name' => 'Blog Author',
+            'email' => 'blog_author@gmail.com',
+            'password' => Hash::make('password'),
+        ])->assignRole('blog_author');
+
+        $role = Role::firstOrCreate(['name' => 'content_editor', 'guard_name' => 'web']);
+        $role->syncPermissions(['view_blog', 'view_any_blog', 'create_blog', 'update_blog', 'restore_blog', 'restore_any_blog', 'delete_blog', 'delete_any_blog', 'view_brand', 'view_any_brand', 'view_category', 'view_any_category', 'create_category', 'update_category', 'restore_category', 'restore_any_category', 'widget_DashboardStats']);
+        User::factory()->create([
+            'name' => 'Content Editor',
+            'email' => 'content_editor@gmail.com',
+            'password' => Hash::make('password'),
+        ])->assignRole('content_editor');
+
+        $role = Role::firstOrCreate(['name' => 'customer_service', 'guard_name' => 'web']);
+        $role->syncPermissions(['view_order', 'view_any_order', 'view_user', 'view_any_user']);
+        User::factory()->create([
+            'name' => 'Customer Service',
+            'email' => 'customer_service@gmail.com',
+            'password' => Hash::make('password'),
+        ])->assignRole('customer_service');
+
+        $role = Role::firstOrCreate(['name' => 'product_manager', 'guard_name' => 'web']);
+        $role->syncPermissions(['view_brand', 'view_any_brand', 'create_brand', 'update_brand', 'restore_brand', 'restore_any_brand', 'delete_brand', 'delete_any_brand', 'force_delete_brand', 'force_delete_any_brand', 'view_category', 'view_any_category', 'create_category', 'update_category', 'restore_category', 'restore_any_category', 'delete_category', 'delete_any_category', 'force_delete_category', 'force_delete_any_category', 'view_color', 'view_any_color', 'create_color', 'update_color', 'restore_color', 'restore_any_color', 'delete_color', 'delete_any_color', 'force_delete_color', 'force_delete_any_color', 'view_order', 'view_any_order', 'create_order', 'update_order', 'restore_order', 'restore_any_order', 'delete_order', 'delete_any_order', 'force_delete_order', 'force_delete_any_order', 'view_product', 'view_any_product', 'create_product', 'update_product', 'restore_product', 'restore_any_product', 'delete_product', 'delete_any_product', 'force_delete_product', 'force_delete_any_product', 'view_product::color::stock', 'view_any_product::color::stock', 'create_product::color::stock', 'update_product::color::stock', 'restore_product::color::stock', 'restore_any_product::color::stock', 'delete_product::color::stock', 'delete_any_product::color::stock', 'force_delete_product::color::stock', 'force_delete_any_product::color::stock', 'widget_OrderStats', 'widget_DashboardStats', 'widget_LatestOrders']);
+        User::factory()->create([
+            'name' => 'Product Manager',
+            'email' => 'product_manager@gmail.com',
+            'password' => Hash::make('password'),
+        ])->assignRole('product_manager');
+
+        $role = Role::firstOrCreate(['name' => 'review_moderator', 'guard_name' => 'web']);
+        $role->syncPermissions(['view_review', 'view_any_review', 'create_review', 'update_review', 'restore_review', 'restore_any_review', 'delete_review', 'delete_any_review', 'force_delete_review', 'force_delete_any_review', 'widget_DashboardStats']);
+        User::factory()->create([
+            'name' => 'Review Moderator',
+            'email' => 'review_moderator@gmail.com',
+            'password' => Hash::make('password'),
+        ])->assignRole('review_moderator');
+
+        $role = Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
+        $role->syncPermissions(['view_role', 'view_any_role', 'create_role', 'update_role', 'delete_role', 'delete_any_role', 'view_blog', 'view_any_blog', 'create_blog', 'update_blog', 'restore_blog', 'restore_any_blog', 'replicate_blog', 'reorder_blog', 'delete_blog', 'delete_any_blog', 'force_delete_blog', 'force_delete_any_blog', 'view_brand', 'view_any_brand', 'create_brand', 'update_brand', 'restore_brand', 'restore_any_brand', 'replicate_brand', 'reorder_brand', 'delete_brand', 'delete_any_brand', 'force_delete_brand', 'force_delete_any_brand', 'view_category', 'view_any_category', 'create_category', 'update_category', 'restore_category', 'restore_any_category', 'replicate_category', 'reorder_category', 'delete_category', 'delete_any_category', 'force_delete_category', 'force_delete_any_category', 'view_color', 'view_any_color', 'create_color', 'update_color', 'restore_color', 'restore_any_color', 'replicate_color', 'reorder_color', 'delete_color', 'delete_any_color', 'force_delete_color', 'force_delete_any_color', 'view_order', 'view_any_order', 'create_order', 'update_order', 'restore_order', 'restore_any_order', 'replicate_order', 'reorder_order', 'delete_order', 'delete_any_order', 'force_delete_order', 'force_delete_any_order', 'view_product', 'view_any_product', 'create_product', 'update_product', 'restore_product', 'restore_any_product', 'replicate_product', 'reorder_product', 'delete_product', 'delete_any_product', 'force_delete_product', 'force_delete_any_product', 'view_product::color::stock', 'view_any_product::color::stock', 'create_product::color::stock', 'update_product::color::stock', 'restore_product::color::stock', 'restore_any_product::color::stock', 'replicate_product::color::stock', 'reorder_product::color::stock', 'delete_product::color::stock', 'delete_any_product::color::stock', 'force_delete_product::color::stock', 'force_delete_any_product::color::stock', 'view_review', 'view_any_review', 'create_review', 'update_review', 'restore_review', 'restore_any_review', 'replicate_review', 'reorder_review', 'delete_review', 'delete_any_review', 'force_delete_review', 'force_delete_any_review', 'view_setting', 'view_any_setting', 'create_setting', 'update_setting', 'restore_setting', 'restore_any_setting', 'replicate_setting', 'reorder_setting', 'delete_setting', 'delete_any_setting', 'force_delete_setting', 'force_delete_any_setting', 'view_user', 'view_any_user', 'create_user', 'update_user', 'restore_user', 'restore_any_user', 'replicate_user', 'reorder_user', 'delete_user', 'delete_any_user', 'force_delete_user', 'force_delete_any_user', 'widget_OrderStats', 'widget_DashboardStats', 'widget_LatestOrders']);
+        User::factory()->create([
+            'name' => 'Didier Vanassche',
+            'email' => 'didier.v@hotmail.com',
+            'password' => Hash::make('password'),
+        ])->assignRole('super_admin');
+
+        // 2. Roles & Permissions
+        $role = Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
+        $role->syncPermissions(Permission::all()); // Alle permissies
+
+        // 3. Gebruiker maken en rol toewijzen
         $admin = User::firstOrCreate(
             ['email' => 'admin@gmail.com'],
-            ['name' => 'Admin', 'password' => Hash::make('password')]
+            ['name' => 'Admin', 'password' => Hash::make('password'), 'email_verified_at' => now(),]
         );
         $admin->assignRole($role);
 
         User::firstOrCreate(
-            ['email' => 'didier.v@hotmail.com'],
-            ['name' => 'Didier Vanassche', 'password' => Hash::make('password')]
+            ['email' => 'jan@gmail.com'],
+            ['name' => 'Jan Dorie', 'password' => Hash::make('password'), 'email_verified_at' => now(),]
         );
 
         User::firstOrCreate(
             ['email' => 'sophie@gmail.com'],
-            ['name' => 'Sophie Adams', 'password' => Hash::make('password')]
+            ['name' => 'Sophie Adams', 'password' => Hash::make('password'), 'email_verified_at' => now(),]
         );
 
         User::firstOrCreate(
             ['email' => 'charles@gmail.com'],
-            ['name' => 'Charles Peters', 'password' => Hash::make('password')]
+            ['name' => 'Charles Peters', 'password' => Hash::make('password'), 'email_verified_at' => now(),]
         );
+
+
 
 
         // BRANDS

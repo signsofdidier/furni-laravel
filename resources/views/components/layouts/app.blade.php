@@ -237,6 +237,7 @@
 
     <!-- Livewire Alert JS -->
     <script>
+        // LIVEWIRE PRODUCT ALERT
         Livewire.on('alert', (params) => {
             Swal.fire({
                 icon: params.icon || 'success',
@@ -249,6 +250,22 @@
                 timerProgressBar: params.timerProgressBar !== undefined ? params.timerProgressBar : true,
             });
         });
+
+        // LIVEWIRE PROFILE ALERT
+        Livewire.on('profile-alert', (params) => {
+            Swal.fire({
+                icon: params.icon || 'success',
+                title: params.title || 'Profile updated',
+                html: params.html || 'Your changes were saved successfully.',
+                position: params.position || 'bottom-end',
+                toast: params.toast !== undefined ? params.toast : true,
+                timer: params.timer || 1800,
+                showConfirmButton: params.showConfirmButton !== undefined ? params.showConfirmButton : false,
+                timerProgressBar: params.timerProgressBar !== undefined ? params.timerProgressBar : true,
+            });
+        });
+
+
     </script>
 
     {{-- Zorgt dat de bootstrap dropdowns werken met Livewire --}}

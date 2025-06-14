@@ -47,7 +47,7 @@
                                        aria-expanded="false">
                                         {{-- Optioneel een avatar, anders deze icon --}}
                                         <img
-                                            src="{{ Auth::user()->avatar_url ?? asset('assets/img/checkout/user.jpg') }}"
+                                            src="{{ Auth::user()->profile_photo_path ? Storage::url(Auth::user()->profile_photo_path) : asset('assets/img/default-avatar.png') }}"
                                             alt="Avatar"
                                             class="rounded-circle me-2"
                                             width="32" height="32">
@@ -59,10 +59,10 @@
                                         <li class="px-3 py-2">
                                             <div class="d-flex align-items-center">
                                                 <img
-                                                    src="{{ Auth::user()->avatar_url ?? asset('assets/img/checkout/user.jpg') }}"
-                                                    alt="Avatar"
+                                                    src="{{ Auth::user()->profile_photo_path ? Storage::url(Auth::user()->profile_photo_path) : asset('assets/img/checkout/user.jpg') }}"
+                                                    alt="{{ Auth::user()->name }} Profile Photo"
                                                     class="rounded-circle me-2"
-                                                    width="40" height="40">
+                                                    width="50" height="50">
                                                 <div>
                                                     <div class="fw-bold">{{ Auth::user()->name }}</div>
                                                 </div>
@@ -74,7 +74,7 @@
 
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center py-2"
-                                               href="{{ url('/my-orders') }}">
+                                               href="{{ url('/profile') }}">
                                                 {{-- Profile-icon --}}
                                                 <svg class="me-2" width="18" height="18" fill="currentColor"
                                                      viewBox="0 0 16 16">

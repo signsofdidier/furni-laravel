@@ -26,6 +26,7 @@ class User extends Authenticatable implements FilamentUser
         'email',
         'email_verified_at',
         'password',
+        'profile_photo_path',
     ];
 
     protected $dates = ['deleted_at'];
@@ -63,6 +64,10 @@ class User extends Authenticatable implements FilamentUser
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+
+    public function address(){
+        return $this->hasOne(Address::class);
     }
 
     // Alleen user met deze email (admin) kan in de admin panel (backend) inloggen

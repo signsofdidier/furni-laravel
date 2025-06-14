@@ -12,6 +12,7 @@ class Address extends Model
 
     protected $fillable = [
         'order_id',
+        'user_id',
         'first_name',
         'last_name',
         'phone',
@@ -24,6 +25,11 @@ class Address extends Model
 
     public function order(){
         return $this->belongsTo(Order::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     // Zet voor en achternaam samen als 1 attribute

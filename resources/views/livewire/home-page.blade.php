@@ -353,7 +353,7 @@
                                             <img src="{{ url('storage', $blog->image) }}" alt="{{ $blog->title }}"
                                                  class="article-card-img rounded">
 
-                                            <span class="article-tag article-tag-absolute rounded">{{ $blog->categories->pluck('name')->join(', ') }}</span>
+                                                  <span class="article-tag article-tag-absolute rounded">{{ $blog->categories->pluck('name')->join(', ') }}</span>
                                         </a>
                                         <p class="article-card-published text_12 d-flex align-items-center">
                                             <span class="article-date d-flex align-items-center">

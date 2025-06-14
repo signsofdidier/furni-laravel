@@ -425,5 +425,11 @@
             opacity: 0.5;
             pointer-events: all;
         }
+
+        /* Geselecteerde kleurfilter krijgt accentkleur (roze) */
+        input[type="checkbox"]:checked + .color-swatch {
+            border: 2px solid #F76B6A !important;
+            box-shadow: 0 0 0 2px rgba(247, 107, 106, 0.4);
+        }
     </style>
 </div>

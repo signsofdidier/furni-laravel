@@ -179,7 +179,19 @@
                                 <span class="qty-input">{{ max($quantity, 1) }}</span>
 
                                 {{-- INCREMENT --}}
-                                <button wire:click="increaseQuantity" {{ !$product->in_stock ? 'disabled' : '' }} class="qty-btn inc-qty" ><img src="{{ asset('assets/img/icon/plus.svg') }}" alt="plus"></button>
+                                @php
+                                    $maxStock = $this->maxStock;
+                                @endphp
+
+                                <button
+                                    wire:click="increaseQuantity"
+                                    class="qty-btn inc-qty"
+                                    title="{{ $maxStock !== null && $quantity >= $maxStock ? 'Max stock reached for selected color' : '' }}"
+                                    {{ $maxStock !== null && $quantity >= $maxStock ? 'disabled' : '' }}
+                                >
+                                    <img src="{{ asset('assets/img/icon/plus.svg') }}" alt="plus">
+                                </button>
+
 
                             </div>
                         </div>

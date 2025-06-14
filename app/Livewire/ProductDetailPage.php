@@ -27,9 +27,12 @@ class ProductDetailPage extends Component
 
     public function increaseQuantity(){
         // dit zorgt ervoor dat de quantity niet groter kan worden dan de max stock
-        if ($this->maxStock !== null && $this->quantity < $this->maxStock) {
-            $this->quantity++;
+        if ($this->maxStock !== null && $this->quantity >= $this->maxStock) {
+            $this->addError('quantity', 'Max stock reached for selected color.');
+            return;
         }
+
+        $this->quantity++;
     }
 
     public function decreaseQuantity()
@@ -47,17 +50,21 @@ class ProductDetailPage extends Component
             return;
         }
 
-        // Controleer of we niet over de max stock gaan
-        $inCart = CartManagement::getQuantityInCart($product_id, $this->selectedColorId); // Hoeveel in winkelwagen
+
+        // CONTROLE NIET OVER MAX STOCK GAAN
+        // Hoeveel in winkelwagen
+        $inCart = CartManagement::getQuantityInCart($product_id, $this->selectedColorId);
         $maxStock = $this->maxStock; // Max stock voor geselecteerde kleur
 
-        // dit zorgt ervoor dat de quantity niet groter kan worden dan de max stock
+        // QUANTITY KAN NIET GROTER WORDEN DAN MAX STOCK
         if ($inCart + $this->quantity > $maxStock) {
             $remaining = $maxStock - $inCart;
             $itemText = $remaining === 1 ? 'item' : 'items';
             $this->addError('quantity', "Only $remaining $itemText left in stock for this color.");
             return;
         }
+
+
 
         // Voeg product met geselecteerde kleur toe aan cart
         $total_count = CartManagement::addItemToCartWithQuantity(

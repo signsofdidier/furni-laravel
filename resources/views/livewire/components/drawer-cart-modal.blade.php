@@ -49,8 +49,15 @@
 
                                     <span class="text-sm w-6 text-center">{{ $item['quantity'] }}</span>
 
-                                    <button wire:click="increaseQuantity({{ $item['product_id'] }}, {{ $item['color_id'] ?? 'null' }})"
-                                            class="w-9 h-9 rounded border border-gray-300 text-lg leading-none flex items-center justify-center hover:bg-gray-100">+</button>
+                                    <button
+                                        wire:click="increaseQuantity({{ $item['product_id'] }}, {{ $item['color_id'] ?? 'null' }})"
+                                        class="w-9 h-9 rounded border border-gray-300 text-lg leading-none flex items-center justify-center hover:bg-gray-100"
+                                        {{ $item['quantity'] >= $item['max_stock'] ? 'disabled' : '' }}
+                                        title="{{ $item['quantity'] >= $item['max_stock'] ? 'Max stock reached' : '' }}"
+                                    >
+                                        +
+                                    </button>
+
                                 </div>
 
                                 <div class="text-right">
@@ -101,6 +108,12 @@
         .hide-scrollbar::-webkit-scrollbar { /* WebKit */
             width: 0px;
             height: 0px;
+        }
+
+        button[disabled] {
+            cursor: not-allowed !important;
+            opacity: 0.5;
+            pointer-events: all;
         }
     </style>
 

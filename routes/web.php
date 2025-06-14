@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', HomePage::class);
 Route::get('/categories', CategoriesPage::class);
 Route::get('/products', ProductsPage::class);
-Route::get('/cart', CartPage::class);
+Route::get('/cart', CartPage::class)->name('cart');
 Route::get('/products/{slug}', ProductDetailPage::class);
 Route::get('/blog', Index::class)->name('blog.index');
 Route::get('/blog/{slug}', Show::class)->name('blog.show');

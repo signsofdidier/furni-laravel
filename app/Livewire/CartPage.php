@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Helpers\CartManagement;
 use App\Livewire\Partials\Navbar;
+use App\Models\Product;
 use App\Models\Setting;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -26,7 +27,13 @@ class CartPage extends Component
         // 1) Haal items op
         $this->cart_items  = CartManagement::getCartItemsFromSession();
 
-        // 2) Bereken “sub_total” = sum(total_amount) van alle items
+        // 2) Voeg max_stock toe aan elk item
+        foreach ($this->cart_items as &$item) {
+            $product = Product::find($item['product_id']); // haal product op
+            $item['max_stock'] = $product?->stockForColorId($item['color_id']) ?? 0; // 0 als er geen voorraad is
+        }
+
+        // 3) Bereken “sub_total” = sum(total_amount) van alle items
         $this->sub_total = CartManagement::calculateGrandTotal($this->cart_items);
     }
 
@@ -54,6 +61,21 @@ class CartPage extends Component
      */
     public function increaseQuantity(int $product_id, ?int $color_id = null): void
     {
+        // Huidige hoeveelheid in winkelmand
+        $currentQuantity = CartManagement::getQuantityInCart($product_id, $color_id);
+
+        // Haal actuele voorraad op
+        $product = Product::find($product_id);
+        if (!$product) return;
+
+        $availableStock = $product->stockForColorId($color_id);
+
+        if ($currentQuantity >= $availableStock) {
+            session()->flash('error', 'Not enough stock for this product.');
+            return;
+        }
+
+        // Voeg toe als er nog ruimte is
         CartManagement::incrementQuantityToCartItem($product_id, $color_id);
 
         // Herlaad ALLES

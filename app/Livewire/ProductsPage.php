@@ -21,6 +21,10 @@ class ProductsPage extends Component
     // moet worden gebruikt om de pagination te laten werken in livewire
     use WithPagination;
 
+    // SEARCH FILTER
+    #[Url]
+    public $search;
+
     // CATEGORY FILTER
     #[Url] // Deze eigenschap wordt gesynchroniseerd met de URL, zodat filters via de URL gedeeld kunnen worden
     public $selected_categories = []; // deze naam komt van de wire:model.live="selected_categories" uit products page
@@ -147,6 +151,14 @@ class ProductsPage extends Component
         if($this->in_stock) {
             $productQuery->whereHas('productColorStocks', function($query) {
                 $query->where('stock', '>', 0);
+            });
+        }
+
+        // SEARCH filter NAVBAR
+        if (!empty($this->search)) {
+            $productQuery->where(function ($query) {
+                $query->where('name', 'like', '%' . $this->search . '%')
+                    ->orWhere('description', 'like', '%' . $this->search . '%');
             });
         }
 

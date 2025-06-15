@@ -39,33 +39,34 @@
                     <!-- Products -->
                     <div class="collection-product-container">
                         <div class="row">
-                            @foreach($products as $product)
-                                <div class="col-lg-4 col-md-6 col-12" wire:key="{{ $product->id }}">
-                                    <div class="product-card">
-                                        <div class="product-card-img">
-                                            <a class="product-hover-zoom" href="{{ url('/products') }}/{{ $product->slug }}">
-                                                <img class="primary-img" src="{{ url('storage', $product->images[0]) }}"
-                                                     alt="{{  $product->name }}">
-                                            </a>
+                           @if($products->count() > 0)
+                                @foreach($products as $product)
+                                    <div class="col-lg-4 col-md-6 col-12" wire:key="{{ $product->id }}">
+                                        <div class="product-card">
+                                            <div class="product-card-img">
+                                                <a class="product-hover-zoom" href="{{ url('/products') }}/{{ $product->slug }}">
+                                                    <img class="primary-img" src="{{ url('storage', $product->images[0]) }}"
+                                                         alt="{{  $product->name }}">
+                                                </a>
 
-                                            @php
-                                                $stock = $stockPerProduct[$product->id] ?? null;
-                                            @endphp
-
-                                            {{-- PRODUCT BADGE, ON SALE, SOLD OUT, LAST ITEMS --}}
-                                            <div class="product-badge d-flex gap-1 position-absolute top-0 start-0 p-2">
                                                 @php
-                                                    $stockCount = $product->productColorStocks->sum('stock');
+                                                    $stock = $stockPerProduct[$product->id] ?? null;
                                                 @endphp
 
-                                                {{--ON SALE--}}
-                                                <div>
-                                                    @if($product->on_sale == 1 && $stockCount > 0)
-                                                        <span class="badge-label badge-percentage rounded">On Sale</span>
-                                                    @endif
-                                                </div>
+                                                {{-- PRODUCT BADGE, ON SALE, SOLD OUT, LAST ITEMS --}}
+                                                <div class="product-badge d-flex gap-1 position-absolute top-0 start-0 p-2">
+                                                    @php
+                                                        $stockCount = $product->productColorStocks->sum('stock');
+                                                    @endphp
 
-                                                {{-- SOLD OUT EN LAST ITEMS --}}
+                                                    {{--ON SALE--}}
+                                                    <div>
+                                                        @if($product->on_sale == 1 && $stockCount > 0)
+                                                            <span class="badge-label badge-percentage rounded">On Sale</span>
+                                                        @endif
+                                                    </div>
+
+                                                    {{-- SOLD OUT EN LAST ITEMS --}}
                                                     <div>
                                                         @if($stockCount == 0)
                                                             <span class="badge-label bg-danger text-white rounded">Sold Out</span>
@@ -75,63 +76,63 @@
                                                     </div>
 
 
-                                            </div>
-
-
-                                            <div
-                                                class="product-card-action product-card-action-2 justify-content-center">
-
-                                                {{-- WISHLIST BUTTON --}}
-                                                <div class="action-card action-wishlist">
-                                                    <livewire:wishlist-button :product="$product" :wire:key="'wishlist-'.$product->id.'-'.Str::uuid()" />
                                                 </div>
 
-                                                {{--ADD TO CART BUTTON--}}
-                                                {{-- Als de stock leeg is of 0, dan is de button disabled --}}
-                                                <button
-                                                    type="button"
-                                                    class="action-card action-addtocart"
-                                                    @if(!$product->in_stock) disabled @endif
-                                                    wire:click.prevent="addToCart({{ $product->id }})"
-                                                >
 
-                                                <svg class="icon icon-cart" width="24" height="26"
-                                                         viewBox="0 0 24 26" fill="none"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <path
-                                                            d="M12 0.000183105C9.25391 0.000183105 7 2.25409 7 5.00018V6.00018H2.0625L2 6.93768L1 24.9377L0.9375 26.0002H23.0625L23 24.9377L22 6.93768L21.9375 6.00018H17V5.00018C17 2.25409 14.7461 0.000183105 12 0.000183105ZM12 2.00018C13.6562 2.00018 15 3.34393 15 5.00018V6.00018H9V5.00018C9 3.34393 10.3438 2.00018 12 2.00018ZM3.9375 8.00018H7V11.0002H9V8.00018H15V11.0002H17V8.00018H20.0625L20.9375 24.0002H3.0625L3.9375 8.00018Z"
-                                                            fill="#00234D" />
-                                                    </svg>
-                                                </button>
+                                                <div
+                                                    class="product-card-action product-card-action-2 justify-content-center">
+
+                                                    {{-- WISHLIST BUTTON --}}
+                                                    <div class="action-card action-wishlist">
+                                                        <livewire:wishlist-button :product="$product" :wire:key="'wishlist-'.$product->id.'-'.Str::uuid()" />
+                                                    </div>
+
+                                                    {{--ADD TO CART BUTTON--}}
+                                                    {{-- Als de stock leeg is of 0, dan is de button disabled --}}
+                                                    <button
+                                                        type="button"
+                                                        class="action-card action-addtocart"
+                                                        @if(!$product->in_stock) disabled @endif
+                                                        wire:click.prevent="addToCart({{ $product->id }})"
+                                                    >
+
+                                                        <svg class="icon icon-cart" width="24" height="26"
+                                                             viewBox="0 0 24 26" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M12 0.000183105C9.25391 0.000183105 7 2.25409 7 5.00018V6.00018H2.0625L2 6.93768L1 24.9377L0.9375 26.0002H23.0625L23 24.9377L22 6.93768L21.9375 6.00018H17V5.00018C17 2.25409 14.7461 0.000183105 12 0.000183105ZM12 2.00018C13.6562 2.00018 15 3.34393 15 5.00018V6.00018H9V5.00018C9 3.34393 10.3438 2.00018 12 2.00018ZM3.9375 8.00018H7V11.0002H9V8.00018H15V11.0002H17V8.00018H20.0625L20.9375 24.0002H3.0625L3.9375 8.00018Z"
+                                                                fill="#00234D" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div class="product-card-details">
-                                            {{-- COLOR SELECT --}}
-                                            <ul class="color-lists list-unstyled d-flex align-items-center mt-2 mb-2">
-                                                {{-- LEGE OPTIE (onzichtbaar) --}}
-                                                <input type="radio" wire:model.live="selectedColorPerProduct.{{ $product->id }}" value="" class="d-none">
+                                            <div class="product-card-details">
+                                                {{-- COLOR SELECT --}}
+                                                <ul class="color-lists list-unstyled d-flex align-items-center mt-2 mb-2">
+                                                    {{-- LEGE OPTIE (onzichtbaar) --}}
+                                                    <input type="radio" wire:model.live="selectedColorPerProduct.{{ $product->id }}" value="" class="d-none">
 
-                                                @foreach($product->colors as $color)
-                                                    @php
-                                                        $stock = $product->stockForColorId($color->id);
-                                                        $isOutOfStock = $stock === 0;
-                                                    @endphp
+                                                    @foreach($product->colors as $color)
+                                                        @php
+                                                            $stock = $product->stockForColorId($color->id);
+                                                            $isOutOfStock = $stock === 0;
+                                                        @endphp
 
-                                                    <li class="variant-item">
-                                                        <input
-                                                            type="radio"
-                                                            id="color-{{ $product->id }}-{{ $color->id }}"
-                                                            name="selectedColorPerProduct[{{ $product->id }}]"
-                                                            value="{{ $color->id }}"
-                                                            wire:model="selectedColorPerProduct.{{ $product->id }}"
-                                                            class="visually-hidden"
-                                                            {{ $isOutOfStock ? 'disabled' : '' }}
-                                                        >
-                                                        <label
-                                                            for="color-{{ $product->id }}-{{ $color->id }}"
-                                                            class="variant-label rounded-circle d-inline-block position-relative"
-                                                            style="
+                                                        <li class="variant-item">
+                                                            <input
+                                                                type="radio"
+                                                                id="color-{{ $product->id }}-{{ $color->id }}"
+                                                                name="selectedColorPerProduct[{{ $product->id }}]"
+                                                                value="{{ $color->id }}"
+                                                                wire:model="selectedColorPerProduct.{{ $product->id }}"
+                                                                class="visually-hidden"
+                                                                {{ $isOutOfStock ? 'disabled' : '' }}
+                                                            >
+                                                            <label
+                                                                for="color-{{ $product->id }}-{{ $color->id }}"
+                                                                class="variant-label rounded-circle d-inline-block position-relative"
+                                                                style="
                                                                 width: 1rem;
                                                                 height: 1rem;
                                                                 background-color: {{ $color->hex }};
@@ -149,14 +150,14 @@
                                                                     );
                                                                 @endif
                                                             "
-                                                            title="{{ $color->name }}{{ $isOutOfStock ? ' (Out of stock)' : '' }}"
-                                                        >
-                                                        </label>
-                                                    </li>
-                                                @endforeach
+                                                                title="{{ $color->name }}{{ $isOutOfStock ? ' (Out of stock)' : '' }}"
+                                                            >
+                                                            </label>
+                                                        </li>
+                                                    @endforeach
 
-                                            </ul>
-                                            @error("selectedColorPerProduct.$product->id")
+                                                </ul>
+                                                @error("selectedColorPerProduct.$product->id")
                                                 <div
                                                     x-data="{ show: true }"
                                                     x-init="setTimeout(() => show = false, 3000)"
@@ -165,28 +166,33 @@
                                                 >
                                                     {{ $message }}
                                                 </div>
-                                            @enderror
+                                                @enderror
 
 
 
 
-                                            {{-- STAR RATINGS --}}
-                                            <livewire:product-rating-page :product="$product" :wire:key="'rating-'.$product->id" />
+                                                {{-- STAR RATINGS --}}
+                                                <livewire:product-rating-page :product="$product" :wire:key="'rating-'.$product->id" />
 
-                                            {{-- PRODUCT TITLE --}}
-                                            <h3 class="product-card-title mt-1">
-                                                <a href="{{ url('/products') }}/{{ $product->slug }}">{{ $product->name }}</a>
-                                            </h3>
+                                                {{-- PRODUCT TITLE --}}
+                                                <h3 class="product-card-title mt-1">
+                                                    <a href="{{ url('/products') }}/{{ $product->slug }}">{{ $product->name }}</a>
+                                                </h3>
 
-                                            {{-- PRODUCT PRICE --}}
-                                            <div class="product-card-price">
-                                                <span class="card-price-regular">{{ Number::currency($product->price ?? 0, 'EUR') }}</span>
-                                                {{--<span class="card-price-compare text-decoration-line-through">$1759</span>--}}
+                                                {{-- PRODUCT PRICE --}}
+                                                <div class="product-card-price">
+                                                    <span class="card-price-regular">{{ Number::currency($product->price ?? 0, 'EUR') }}</span>
+                                                    {{--<span class="card-price-compare text-decoration-line-through">$1759</span>--}}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                @endforeach
+                            @else
+                                <div class="alert alert-warning mt-4">
+                                    No products found.
                                 </div>
-                            @endforeach
+                            @endif
 
                         </div>
                     </div>

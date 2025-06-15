@@ -242,8 +242,11 @@
             </div>
             <div class="search-wrapper">
                 <div class="container">
-                    <form action="#" class="search-form d-flex align-items-center">
-                        <button type="submit" class="search-submit bg-transparent pl-0 text-start">
+
+                    {{-- SEARCHBAR --}}
+                    <form method="GET" action="{{ url('/products') }}" class="search-form d-flex align-items-center">
+
+                    <button type="submit" class="search-submit bg-transparent pl-0 text-start">
                             <svg class="icon icon-search" width="20" height="20" viewBox="0 0 20 20" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -251,8 +254,10 @@
                                     fill="black"/>
                             </svg>
                         </button>
+
+                        {{--SEARCHBAR NAME--}}
                         <div class="search-input mr-4">
-                            <input type="text" placeholder="Search your products..." autocomplete="off">
+                            <input type="text" name="search" placeholder="Search your products..." autocomplete="off">
                         </div>
                         <div class="search-close">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"

@@ -71,7 +71,7 @@
                                         <li class="px-3 py-2">
                                             <div class="d-flex align-items-center">
                                                 <img
-                                                    src="{{ Auth::user()->profile_photo_path ? Storage::url(Auth::user()->profile_photo_path) : asset('assets/img/checkout/user.jpg') }}"
+                                                    src="{{ Auth::user()->profile_photo_path ? Storage::url(Auth::user()->profile_photo_path) : asset('assets/img/default-avatar.png') }}"
                                                     alt="{{ Auth::user()->name }} Profile Photo"
                                                     class="rounded-circle object-cover me-2"
                                                     style="width:50px ; height: 50px;">

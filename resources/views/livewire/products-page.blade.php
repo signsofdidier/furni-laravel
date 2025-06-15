@@ -86,7 +86,7 @@
                                                     <livewire:wishlist-button :product="$product" :wire:key="'wishlist-'.$product->id.'-'.Str::uuid()" />
                                                 </div>
 
-                                                {{--Add to cart button--}}
+                                                {{--ADD TO CART BUTTON--}}
                                                 {{-- Als de stock leeg is of 0, dan is de button disabled --}}
                                                 <button
                                                     type="button"

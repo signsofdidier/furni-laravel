@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use App\Models\Blog;
 
 class DatabaseSeeder extends Seeder
 {
@@ -412,7 +413,7 @@ class DatabaseSeeder extends Seeder
             'default'  => ['comode-1.jpg', 'comode-2.jpg', 'comode-3.jpg'],
         ];
 
-        foreach ($products as $productData) {
+        foreach ($products as $index => $productData) {
             $name = strtolower($productData['name']);
 
             if (str_contains($name, 'chair')) {
@@ -447,67 +448,224 @@ class DatabaseSeeder extends Seeder
 
             $product->colors()->attach($productData['colors']);
 
-            // STOCK per kleur
-            // Bepaal of dit product uitverkocht moet zijn (max 2)
-            static $outOfStockCount = 0;
-            $forceOutOfStock = $outOfStockCount < 2 && rand(0, 1) === 1;
-
-            foreach ($productData['colors'] as $colorId) {
-                $stock = $forceOutOfStock ? 0 : rand(1, 20);
-
-                ProductColorStock::create([
-                    'product_id' => $product->id,
-                    'color_id' => $colorId,
-                    'stock' => $stock,
-                ]);
-            }
-
-            if ($forceOutOfStock) {
-                $outOfStockCount++;
+            // STOCK per kleur op basis van index
+            if ($index === 9) {
+                // 4e product: volledig uitverkocht
+                foreach ($productData['colors'] as $colorId) {
+                    ProductColorStock::create([
+                        'product_id' => $product->id,
+                        'color_id' => $colorId,
+                        'stock' => 0,
+                    ]);
+                }
+            } elseif ($index === 8) {
+                // 8e product: enkel eerste kleur beschikbaar
+                $first = true;
+                foreach ($productData['colors'] as $colorId) {
+                    ProductColorStock::create([
+                        'product_id' => $product->id,
+                        'color_id' => $colorId,
+                        'stock' => $first ? 25 : 0,
+                    ]);
+                    $first = false;
+                }
+            } else {
+                // Alle andere: normale voorraad
+                foreach ($productData['colors'] as $colorId) {
+                    ProductColorStock::create([
+                        'product_id' => $product->id,
+                        'color_id' => $colorId,
+                        'stock' => rand(40, 60),
+                    ]);
+                }
             }
 
             // REVIEWS
-            $reviewCount = rand(0, 4);
-            $availableUserIds = [1, 2, 3, 4];
-            shuffle($availableUserIds);
+            if ($index < 6) {
+                // Vastgestelde reviews voor de eerste 6 producten
+                switch ($index) {
+                    case 0:
+                        $reviews = [
+                            ['user_id' => 8, 'rating' => 5, 'title' => 'Absolutely love it!', 'body' => 'The chair is incredibly comfortable and the Scandinavian design looks stunning in my living room.', 'approved' => true],
+                            ['user_id' => 9, 'rating' => 4, 'title' => 'Zeer mooie stoel', 'body' => 'Heel comfortabel, maar de kleur was iets lichter dan verwacht.', 'approved' => true],
+                            ['user_id' => 10,'rating' => 5,'title' => 'Perfect fit',    'body' => 'Fits perfectly and is very sturdy. Would recommend!', 'approved' => true],
+                        ];
+                        break;
+                    case 1:
+                        $reviews = [
+                            ['user_id' => 8, 'rating' => 4, 'title' => 'Good quality', 'body' => 'Nice table but delivery took longer than promised.', 'approved' => true],
+                            ['user_id' => 9, 'rating' => 5, 'title' => 'Uitstekend!',   'body' => 'Prachtig design en zeer stevig.', 'approved' => true],
+                            ['user_id' => 10,'rating' => 4,'title' => 'Solid build',    'body' => 'Well built coffee table, looks sleek.', 'approved' => true],
+                            ['user_id' => 7, 'rating' => 5, 'title' => 'Love it!',      'body' => 'Exactly as described, fantastic addition to my home.', 'approved' => true],
+                        ];
+                        break;
+                    case 2:
+                        $reviews = [
+                            ['user_id' => 8, 'rating' => 2, 'title' => 'Not great',  'body' => 'I found the sofa uncomfortable and the fabric feels cheap.', 'approved' => true],
+                            ['user_id' => 9, 'rating' => 2, 'title' => 'Teleurstellend', 'body' => 'Zit niet lekker en kwaliteit valt tegen.', 'approved' => true],
+                        ];
+                        break;
+                    case 3:
+                        $reviews = []; // geen reviews
+                        break;
+                    case 4:
+                        $reviews = [
+                            ['user_id' => 7, 'rating' => 3, 'title' => 'Decent cabinet', 'body' => 'Works well but the finish could be better.', 'approved' => true],
+                            ['user_id' => 9, 'rating' => 3, 'title' => 'Gemiddeld',      'body' => 'Prima kast voor de prijs, niets bijzonders.', 'approved' => true],
+                            ['user_id' => 10,'rating' => 3, 'title' => 'Average',        'body' => 'Does the job but scratches easily.', 'approved' => true],
+                        ];
+                        break;
+                    case 5:
+                        $reviews = [
+                            ['user_id' => 8, 'rating' => 5, 'title' => 'Love these legs',  'body' => 'The armchair is super cozy and the walnut legs look amazing.', 'approved' => true],
+                            ['user_id' => 7, 'rating' => 5, 'title' => 'Very comfortable', 'body' => 'Great for reading nooks, highly recommend.', 'approved' => true],
+                            ['user_id' => 9, 'rating' => 4, 'title' => 'Erg comfortabel',  'body' => 'Heerlijk om op te zitten, mooie kleur.', 'approved' => true],
+                        ];
+                        break;
+                }
+                // Insert the fixed reviews
+                foreach ($reviews as $r) {
+                    Review::create(array_merge($r, ['product_id' => $product->id]));
+                }
 
-            for ($i = 0; $i < $reviewCount; $i++) {
-                $userId = $availableUserIds[$i] ?? null;
-                if (!$userId) break;
-
+            } else {
+                // Voor producten na de eerste 6 houden we de originele random logica
+                $reviewCount = rand(0, 4);
+                $availableUserIds = [1, 2, 3, 4];
+                shuffle($availableUserIds);
                 static $unapprovedReviewCount = 0;
-                $isApproved = true;
 
-                if ($unapprovedReviewCount < 3 && rand(0, 1) === 1) {
-                    $isApproved = false;
-                    $unapprovedReviewCount++;
+                for ($i = 0; $i < $reviewCount; $i++) {
+                    $userId = $availableUserIds[$i] ?? null;
+                    if (!$userId) break;
+
+                    $isApproved = true;
+                    if ($unapprovedReviewCount < 3 && rand(0, 1) === 1) {
+                        $isApproved = false;
+                        $unapprovedReviewCount++;
+                    }
+
+                    $chance = rand(1, 100);
+                    if ($chance <= 10) {
+                        $rating = 1;
+                    } elseif ($chance <= 25) {
+                        $rating = 2;
+                    } elseif ($chance <= 45) {
+                        $rating = 3;
+                    } elseif ($chance <= 70) {
+                        $rating = 4;
+                    } else {
+                        $rating = 5;
+                    }
+
+                    Review::create([
+                        'product_id' => $product->id,
+                        'user_id'    => $userId,
+                        'rating'     => $rating,
+                        'title'      => fake()->sentence(),
+                        'body'       => fake()->paragraph(2),
+                        'approved'   => $isApproved,
+                    ]);
                 }
-
-                // Betere verdeling van ratings
-                // Gebalanceerde ratingverdeling
-                $chance = rand(1, 100);
-                if ($chance <= 10) {
-                    $rating = 1;
-                } elseif ($chance <= 25) {
-                    $rating = 2;
-                } elseif ($chance <= 45) {
-                    $rating = 3;
-                } elseif ($chance <= 70) {
-                    $rating = 4;
-                } else {
-                    $rating = 5;
-                }
-
-                Review::create([
-                    'product_id' => $product->id,
-                    'user_id' => $userId,
-                    'rating' => $rating,
-                    'title' => fake()->sentence(),
-                    'body' => fake()->paragraph(2),
-                    'approved' => $isApproved,
-                ]);
             }
 
         }
+
+        // BLOGS
+
+        $blogs = [
+            [
+                'user_email'        => 'didier.v@hotmail.com',
+                'image'             => 'blogs/furniture-9.jpg',
+                'title'             => 'Pure is the most furniture.',
+                'slug'              => Str::slug('Pure is the most furniture.'),
+                'excerpt'           => 'These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice hand, organizations have the need for integrating in IT departments new technologies.',
+                'content'           => 'These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice hand, organizations have the need for integrating in IT departments new technologies.
+
+A wonderful serenity has taken possssion of my entire souing like these sweet mornng spring with my whole heart I am alone, and feel the charm of existenceths spot whch was create of souls like mineing am so happy my dear frend so absori bed in the exquste sens of mere.
+
+A wonderful serenity has taken posseson of my entire soung like these sweet mornngs spring enjoy with my whole heart I am alone and feel the charm of exstenceths spot whch was created ouls like mineing am so happy my dear frend so absoribed in the exquste sense of mere tranquil that neglect my talentsr I should bye ncapable of drawng and single stroke at the A wonderful se taken possesson of my entre souing like.',
+                'blockquote'        => 'Words can be like X-rays, if you use them properly—they’ll go through anything. You read and you’re pierced.',
+                'blockquote_author' => 'Aldous Huxley',
+                'category_ids'      => [1], // Chairs
+            ],
+            [
+                'user_email'        => 'blog_author@gmail.com',
+                'image'             => 'blogs/furniture-8.jpg',
+                'title'             => 'Minimalism in your room.',
+                'slug'              => Str::slug('Minimalism in your room.'),
+                'excerpt'           => 'souls like mineing am so happy my dear frend so absori bed in the exquste sens of mere.',
+                'content'           => 'These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice hand, organizations have the need for integrating in IT departments new technologies.
+
+A wonderful serenity has taken possssion of my entire souing like these sweet mornng spring with my whole heart I am alone, and feel the charm of existenceths spot whch was create of souls like mineing am so happy my dear frend so absori bed in the exquste sens of mere.
+
+A wonderful serenity has taken posseson of my entire soung like these sweet mornngs spring enjoy with my whole heart I am alone and feel the charm of exstenceths spot whch was created ouls like mineing am so happy my dear frend so absoribed in the exquste sense of mere tranquil that neglect my talentsr I should bye ncapable of drawng and single stroke at the A wonderful se taken possesson of my entre souing like.',
+                'blockquote'        => 'I should bye ncapable of drawng and single.',
+                'blockquote_author' => 'Carl Larsson',
+                'category_ids'      => [2, 5], // Sofas, Cabinets
+            ],
+            [
+                'user_email'        => 'content_editor@gmail.com',
+                'image'             => 'blogs/furniture-7.jpg',
+                'title'             => 'Build up your kitchen.',
+                'slug'              => Str::slug('Build up your kitchen.'),
+                'excerpt'           => 'These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice hand, organizations',
+                'content'           => 'These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice hand, organizations have the need for integrating in IT departments new technologies.
+
+A wonderful serenity has taken possssion of my entire souing like these sweet mornng spring with my whole heart I am alone, and feel the charm of existenceths spot whch was create of souls like mineing am so happy my dear frend so absori bed in the exquste sens of mere.
+
+A wonderful serenity has taken posseson of my entire soung like these sweet mornngs spring enjoy with my whole heart I am alone and feel the charm of exstenceths spot whch was created ouls like mineing am so happy my dear frend so absoribed in the exquste sense of mere tranquil that neglect my talentsr I should bye ncapable of drawng and single stroke at the A wonderful se taken possesson of my entre souing like.',
+                'blockquote'        => 'Talentsr I should bye',
+                'blockquote_author' => 'Souing',
+                'category_ids'      => [3, 4], // Tables, Coffee Tables
+            ],
+            [
+                'user_email'        => 'didier.v@hotmail.com',
+                'image'             => 'blogs/furniture-6.jpg',
+                'title'             => 'Pure is the most furniture.',
+                'slug'              => Str::slug('Pure is like the most furniture.'),
+                'excerpt'           => 'A wonderful serenity has taken possssion of my entire souing like these sweet mornng spring with my whole heart I am alone, and feel the charm of existenceths spot whch was create of souls like mineing am so happy my dear frend so absori bed in the exquste sens of mere.',
+                'content'           => 'These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice hand, organizations have the need for integrating in IT departments new technologies.
+
+A wonderful serenity has taken possssion of my entire souing like these sweet mornng spring with my whole heart I am alone, and feel the charm of existenceths spot whch was create of souls like mineing am so happy my dear frend so absori bed in the exquste sens of mere.
+
+A wonderful serenity has taken posseson of my entire soung like these sweet mornngs spring enjoy with my whole heart I am alone and feel the charm of exstenceths spot whch was created ouls like mineing am so happy my dear frend so absoribed in the exquste sense of mere tranquil that neglect my talentsr I should bye ncapable of drawng and single stroke at the A wonderful se taken possesson of my entre souing like.',
+                'blockquote'        => 'These cases are perfectly simple and easy to distinguish.',
+                'blockquote_author' => 'Theo von Gogh',
+                'category_ids'      => [2, 7], // Sofas, Accessories
+            ],
+            [
+                'user_email'        => 'blog_author@gmail.com',
+                'image'             => 'blogs/furniture-5.jpg',
+                'title'             => 'Build up their kitchen.',
+                'slug'              => Str::slug('Build up their kitchen.'),
+                'excerpt'           => 'A wonderful serenity has taken posseson of my entire soung like these sweet mornngs spring enjoy with my whole heart I am alone and feel the charm of exstenceths.',
+                'content'           => 'These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice hand, organizations have the need for integrating in IT departments new technologies.
+
+A wonderful serenity has taken possssion of my entire souing like these sweet mornng spring with my whole heart I am alone, and feel the charm of existenceths spot whch was create of souls like mineing am so happy my dear frend so absori bed in the exquste sens of mere.
+
+A wonderful serenity has taken posseson of my entire soung like these sweet mornngs spring enjoy with my whole heart I am alone and feel the charm of exstenceths spot whch was created ouls like mineing am so happy my dear frend so absoribed in the exquste sense of mere tranquil that neglect my talentsr I should bye ncapable of drawng and single stroke at the A wonderful se taken possesson of my entre souing like.',
+                'blockquote'        => 'A wonderful serenity has taken posseson of my entire soung like these sweet mornngs spring enjoy with my whole heart I am alone and feel the charm of exstenceths spot whch was created ouls like mineing am so happy my dear frend so absoribed in the exquste sense of mere tranquil',
+                'blockquote_author' => 'Virginia Woolf',
+                'category_ids'      => [6], // Cupboards
+            ],
+        ];
+
+        foreach ($blogs as $b) {
+            $user = User::where('email', $b['user_email'])->first();
+            $blog = Blog::create([
+                'user_id'           => $user->id,
+                'image'             => $b['image'],
+                'title'             => $b['title'],
+                'slug'              => $b['slug'],
+                'excerpt'           => $b['excerpt'],
+                'content'           => $b['content'],
+                'blockquote'        => $b['blockquote'],
+                'blockquote_author' => $b['blockquote_author'],
+            ]);
+            $blog->categories()->attach($b['category_ids']);
+        }
+
+
     }
 }

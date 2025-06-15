@@ -45,7 +45,7 @@
                             </div>
                         @endforeach
                     @else
-                        <div class="col-12"><p class="text-lg pt-5">Your wishlist is empty.</p></div>
+                        <div class="col-12"><p class="text-lg">Your wishlist is empty.</p></div>
                     @endif
                 </div>
             </div>

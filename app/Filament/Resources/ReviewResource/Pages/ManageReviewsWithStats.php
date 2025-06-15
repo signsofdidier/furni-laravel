@@ -120,6 +120,14 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
     {
         if ($this->activeTab === 'reviews') {
             return [
+                Tables\Filters\Filter::make('approved')
+                    ->label('Approved')
+                    ->query(fn ($query) => $query->where('approved', true)),
+
+                Tables\Filters\Filter::make('pending')
+                    ->label('Not Approved')
+                    ->query(fn ($query) => $query->where('approved', false)),
+
                 Tables\Filters\TrashedFilter::make()
                     ->label('Deleted Reviews')
                     ->trueLabel('All reviews')      // NIET VERWIJDERDE REVIEWS

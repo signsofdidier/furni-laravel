@@ -16,8 +16,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\Filter;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -91,12 +89,6 @@ class UserResource extends Resource
                 SoftDeletingScope::class,
             ]))
             ->filters([
-                SelectFilter::make('role')
-                    ->relationship('roles', 'name')
-                    ->label('Filter by Role'),
-                Filter::make('no_role')
-                    ->label('No Role')
-                    ->query(fn ($query) => $query->doesntHave('roles')),
                 TrashedFilter::make(), // Verberg standaard en toon met toggle
             ])
             ->actions([

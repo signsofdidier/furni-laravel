@@ -12,6 +12,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 
 class ProductColorStockResource extends Resource
@@ -79,7 +80,13 @@ class ProductColorStockResource extends Resource
             ])
             ->defaultSort('product_id')
             ->filters([
-                //
+                Filter::make('out_of_stock')
+                    ->label('Out of Stock')
+                    ->query(fn ($query) => $query->where('stock', 0)),
+
+                Filter::make('low_stock')
+                    ->label('Low Stock (<10)')
+                    ->query(fn ($query) => $query->whereBetween('stock', [1, 9])),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

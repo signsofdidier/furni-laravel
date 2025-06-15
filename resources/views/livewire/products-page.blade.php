@@ -82,7 +82,9 @@
                                                 class="product-card-action product-card-action-2 justify-content-center">
 
                                                 {{-- WISHLIST BUTTON --}}
-                                                <livewire:wishlist-button :product="$product" :wire:key="'wishlist-'.$product->id" />
+                                                <div class="action-card action-wishlist">
+                                                    <livewire:wishlist-button :product="$product" :wire:key="'wishlist-'.$product->id.'-'.Str::uuid()" />
+                                                </div>
 
                                                 {{--Add to cart button--}}
                                                 {{-- Als de stock leeg is of 0, dan is de button disabled --}}

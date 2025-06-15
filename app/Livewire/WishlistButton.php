@@ -58,6 +58,12 @@ class WishlistButton extends Component
 
         // dispatched een Livewire event zodat andere componenten zoals WishlistPage kunnen updaten
         $this->dispatch('wishlistUpdated');
+
+        // LIVEWIRE SWEETALERT
+        if(!$existing){
+            $this->dispatch('wishlist-alert');
+        }
+
     }
 
     /**

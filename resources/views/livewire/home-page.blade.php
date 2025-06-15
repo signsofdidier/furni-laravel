@@ -209,51 +209,13 @@
 
                                     <div class="product-card-action product-card-action-2 justify-content-center">
                                         {{-- WISHLIST BUTTON --}}
-                                        <livewire:wishlist-button :product="$product" :wire:key="'wishlist-'.$product->id" />
+                                        <div class="action-card action-wishlist">
+                                            <livewire:wishlist-button :product="$product" :wire:key="'wishlist-'.$product->id" />
+                                        </div>
 
-                                        {{--Add to cart button--}}
-                                       {{-- <button wire:click.prevent='addToCart({{ $product->id }})' type="button" class="action-card action-addtocart">
-                                            <svg class="icon icon-cart" width="24" height="26"
-                                                 viewBox="0 0 24 26" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M12 0.000183105C9.25391 0.000183105 7 2.25409 7 5.00018V6.00018H2.0625L2 6.93768L1 24.9377L0.9375 26.0002H23.0625L23 24.9377L22 6.93768L21.9375 6.00018H17V5.00018C17 2.25409 14.7461 0.000183105 12 0.000183105ZM12 2.00018C13.6562 2.00018 15 3.34393 15 5.00018V6.00018H9V5.00018C9 3.34393 10.3438 2.00018 12 2.00018ZM3.9375 8.00018H7V11.0002H9V8.00018H15V11.0002H17V8.00018H20.0625L20.9375 24.0002H3.0625L3.9375 8.00018Z"
-                                                    fill="#00234D" />
-                                            </svg>
-                                        </button>--}}
                                     </div>
                                 </div>
                                 <div class="product-card-details">
-                                    {{-- colors --}}
-                                    {{--<ul class="variant-list list-unstyled d-flex align-items-center flex-wrap">
-                                        @foreach($product->colors as $color)
-                                            <li class="variant-item">
-                                                <input
-                                                    type="radio"
-                                                    id="color-{{ $color->id }}"
-                                                    name="selectedColorId"
-                                                    value="{{ $color->id }}"
-                                                    wire:model="selectedColorId"
-                                                    class="visually-hidden"
-                                                    checked
-                                                >
-                                                <label
-                                                    for="color-{{ $color->id }}"
-                                                    class="variant-label rounded-circle d-inline-block"
-                                                    style="
-                                                    width: 1.5rem;
-                                                    height: 1.5rem;
-                                                    background-color: {{ $color->hex }};
-                                                    border: 1px solid #ccc;
-                                                    box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
-                                                    cursor: pointer;
-                                                "
-                                                    title="{{ $color->name }}"
-                                                >
-                                                </label>
-                                            </li>
-                                        @endforeach
-                                    </ul>--}}
                                     {{-- STAR RATINGS --}}
                                     <livewire:product-rating-page :product="$product" :wire:key="'rating-'.$product->id" />
                                     <h3 class="product-card-title mt-1">

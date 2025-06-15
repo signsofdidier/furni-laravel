@@ -234,6 +234,17 @@
     <!-- Livewire Alert JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    {{-- ZORGT DAT LIVEWIRE GEEN CONFLICT GEEFT MET AOS --}}
+    <script>
+        document.addEventListener('livewire:load', () => {
+            Livewire.hook('message.processed', (message, component) => {
+                if (typeof AOS !== 'undefined') {
+                    AOS.refresh(); // of AOS.init(), afhankelijk van jouw setup
+                }
+            });
+        });
+    </script>
+
 
     <!-- Livewire Alert JS -->
     <script>
@@ -257,6 +268,19 @@
                 icon: params.icon || 'success',
                 title: params.title || 'Profile updated',
                 html: params.html || 'Your changes were saved successfully.',
+                position: params.position || 'bottom-end',
+                toast: params.toast !== undefined ? params.toast : true,
+                timer: params.timer || 1800,
+                showConfirmButton: params.showConfirmButton !== undefined ? params.showConfirmButton : false,
+                timerProgressBar: params.timerProgressBar !== undefined ? params.timerProgressBar : true,
+            });
+        });
+
+        // LIVEWIRE WISHLIST ALERT
+        Livewire.on('wishlist-alert', (params) => {
+            Swal.fire({
+                icon: params.icon || 'success',
+                html: params.html || 'Product added to your wishlist successfully.',
                 position: params.position || 'bottom-end',
                 toast: params.toast !== undefined ? params.toast : true,
                 timer: params.timer || 1800,

@@ -1,5 +1,5 @@
 <div>
-    <div wire:click="toggleWishlist" class="action-card action-wishlist" style="cursor: pointer;">
+    <div wire:click="toggleWishlist" style="cursor: pointer;">
         @if($isInWishlist)
             {{-- Filled heart --}}
             <svg class="icon icon-wishlist" width="26" height="22" fill="#F76B6A" viewBox="0 0 26 22" xmlns="http://www.w3.org/2000/svg">

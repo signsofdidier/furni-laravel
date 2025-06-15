@@ -32,6 +32,7 @@ class WishlistPage extends Component
     }
 
 
+
     public function render()
     {
         return view('livewire.wishlist-page', [

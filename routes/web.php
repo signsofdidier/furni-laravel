@@ -13,6 +13,8 @@ use App\Livewire\MyOrderDetailPage;
 use App\Livewire\MyOrdersPage;
 use App\Livewire\Pages\Blog\Index;
 use App\Livewire\Pages\Blog\Show;
+use App\Livewire\Pages\PrivacyPolicyPage;
+use App\Livewire\Pages\TermsConditionsPage;
 use App\Livewire\ProductDetailPage;
 use App\Livewire\ProductsPage;
 use App\Livewire\ProfileForm;
@@ -28,6 +30,9 @@ Route::get('/cart', CartPage::class)->name('cart');
 Route::get('/products/{slug}', ProductDetailPage::class);
 Route::get('/blog', Index::class)->name('blog.index');
 Route::get('/blog/{slug}', Show::class)->name('blog.show');
+Route::get('/privacy-policy', PrivacyPolicyPage::class)->name('privacy-policy');
+Route::get('/terms-conditions', TermsConditionsPage::class)->name('terms-conditions');
+
 
 // openbare routes voor niet ingelogde users
 Route::middleware('guest')->group(function() {

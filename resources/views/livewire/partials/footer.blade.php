@@ -8,7 +8,7 @@
                         <div class="col-xl-2 col-lg-2 col-md-6 col-12 footer-widget">
                             <div class="footer-widget-inner">
                                 <h4 class="footer-heading d-flex align-items-center justify-content-between">
-                                    <span>About</span>
+                                    <span>Brands</span>
                                     <span class="d-md-none">
                                             <svg class="icon icon-dropdown" xmlns="http://www.w3.org/2000/svg"
                                                  width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00234D"
@@ -18,18 +18,16 @@
                                         </span>
                                 </h4>
                                 <ul class="footer-menu list-unstyled mb-0 d-md-block">
-                                    <li class="footer-menu-item"><a href="about-us.html">About us</a></li>
-                                    <li class="footer-menu-item"><a href="about-us.html">Press center</a></li>
-                                    <li class="footer-menu-item"><a href="blog.html">Our magazine</a></li>
-                                    <li class="footer-menu-item"><a href="about-us.html">Our group</a></li>
-                                    <li class="footer-menu-item"><a href="about-us.html">Work with us</a></li>
+                                    @foreach($brands as $brand)
+                                        <li class="footer-menu-item"><a href="{{ url('products') . '?selected_brands[]=' . $brand->id }}">{{ $brand->name }}</a></li>
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>
                         <div class="col-xl-2 col-lg-2 col-md-6 col-12 footer-widget">
                             <div class="footer-widget-inner">
                                 <h4 class="footer-heading d-flex align-items-center justify-content-between">
-                                    <span>Shopping</span>
+                                    <span>Categories</span>
                                     <span class="d-md-none">
                                             <svg class="icon icon-dropdown" xmlns="http://www.w3.org/2000/svg"
                                                  width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00234D"
@@ -39,18 +37,16 @@
                                         </span>
                                 </h4>
                                 <ul class="footer-menu list-unstyled mb-0 d-md-block">
-                                    <li class="footer-menu-item"><a href="about-us.html">Brand catalog</a></li>
-                                    <li class="footer-menu-item"><a href="about-us.html">Discount codes</a></li>
-                                    <li class="footer-menu-item"><a href="collection-left-sidebar.html">Furniture</a></li>
-                                    <li class="footer-menu-item"><a href="collection-left-sidebar.html">Sofa</a></li>
-                                    <li class="footer-menu-item"><a href="collection-left-sidebar.html">Chair</a></li>
+                                    @foreach($categories as $category )
+                                        <li class="footer-menu-item"><a href="{{ url('products') . '?selected_categories[]=' . $category->id }}">{{ $category->name }}</a></li>
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>
                         <div class="col-xl-2 col-lg-2 col-md-6 col-12 footer-widget">
                             <div class="footer-widget-inner">
                                 <h4 class="footer-heading d-flex align-items-center justify-content-between">
-                                    <span>Help</span>
+                                    <span>Menu</span>
                                     <span class="d-md-none">
                                             <svg class="icon icon-dropdown" xmlns="http://www.w3.org/2000/svg"
                                                  width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00234D"
@@ -60,10 +56,9 @@
                                         </span>
                                 </h4>
                                 <ul class="footer-menu list-unstyled mb-0 d-md-block">
-                                    <li class="footer-menu-item"><a href="faq.html">FAQ</a></li>
-                                    <li class="footer-menu-item"><a href="about-us.html">Privacy policy</a></li>
-                                    <li class="footer-menu-item"><a href="about-us.html">Support</a></li>
-                                    <li class="footer-menu-item"><a href="contact.html">Contact</a></li>
+                                    <li class="footer-menu-item"><a href="{{ url('/') }}">Home</a></li>
+                                    <li class="footer-menu-item"><a href="{{ url('products') }}">Products</a></li>
+                                    <li class="footer-menu-item"><a href="{{ url('blog') }}">Blog</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -146,8 +141,8 @@
                 <div
                     class="footer-bottom-inner d-flex flex-wrap justify-content-md-between justify-content-center align-items-center">
                     <ul class="footer-bottom-menu list-unstyled d-flex flex-wrap align-items-center mb-0">
-                        <li class="footer-menu-item"><a href="about-us.html">Privacy policy</a></li>
-                        <li class="footer-menu-item"><a href="about-us.html">Terms & Conditions</a></li>
+                        <li class="footer-menu-item"><a href="{{ route('privacy-policy') }}">Privacy policy</a></li>
+                        <li class="footer-menu-item"><a href="{{ route('terms-conditions') }}">Terms & Conditions</a></li>
                     </ul>
                     <p class="copyright footer-text">©<span class="current-year"></span> Didier Vanassche.</p>
                 </div>

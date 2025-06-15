@@ -118,7 +118,7 @@
 
     </main>
 
-    @livewireScripts
+
 
     <!-- scrollup start -->
     <button class="d-flex justify-content-center align-items-center" id="scrollup">
@@ -317,6 +317,9 @@
 
 </div>
 @livewire('partials.footer')
+
+@livewireScripts
 @fluxScripts
+
 </body>
 </html>

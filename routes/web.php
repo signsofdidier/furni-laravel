@@ -34,6 +34,7 @@ Route::get('/privacy-policy', PrivacyPolicyPage::class)->name('privacy-policy');
 Route::get('/terms-conditions', TermsConditionsPage::class)->name('terms-conditions');
 
 
+
 // openbare routes voor niet ingelogde users
 Route::middleware('guest')->group(function() {
     Route::get('/login', LoginPage::class)->name('login');

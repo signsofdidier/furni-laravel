@@ -124,6 +124,7 @@
                                             >
                                             <label
                                                 for="color-{{ $color->id }}"
+                                                wire:click="$set('selectedColorId', {{ $color->id }})"
                                                 class="variant-label rounded-circle d-inline-block position-relative"
                                                 style="
                                                     width: 1.5rem;
@@ -173,10 +174,17 @@
                             <div class="quantity d-flex align-items-center justify-content-between">
 
                                 {{-- DECREASE --}}
-                                <button wire:click="decreaseQuantity" class="qty-btn dec-qty" {{ $quantity <= 1 ? 'disabled' : '' }}><img src="{{ asset('assets/img/icon/minus.svg') }}" alt="minus"></button>
+                                <button
+                                    wire:click="decreaseQuantity"
+                                    class="qty-btn dec-qty"
+                                    {{ !$canDecrease ? 'disabled' : '' }}
+                                >
+                                    <img src="{{ asset('assets/img/icon/minus.svg') }}" alt="minus">
+                                </button>
 
                                 {{-- QUANTITY --}}
                                 <span class="qty-input">{{ max($quantity, 1) }}</span>
+
 
                                 {{-- INCREMENT --}}
                                 @php
@@ -186,8 +194,8 @@
                                 <button
                                     wire:click="increaseQuantity"
                                     class="qty-btn inc-qty"
-                                    title="{{ $maxStock !== null && $quantity >= $maxStock ? 'Max stock reached for selected color' : '' }}"
-                                    {{ $maxStock !== null && $quantity >= $maxStock ? 'disabled' : '' }}
+                                    title="{{ !$canIncrease ? 'Max stock reached or no color selected' : '' }}"
+                                    {{ !$canIncrease ? 'disabled' : '' }}
                                 >
                                     <img src="{{ asset('assets/img/icon/plus.svg') }}" alt="plus">
                                 </button>

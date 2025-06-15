@@ -88,7 +88,7 @@ class ProductDetailPage extends Component
 
     }
 
-    // JE MAG NIET BOVEN MAXIMALE STOCK AANVRAAGEN MET INCREASE QUANTITY
+    // JE MAG NIET BOVEN MAXIMALE STOCK AANVRAGEN MET INCREASE QUANTITY
     public function getMaxStockProperty()
     {
         // als er geen kleur geselecteerd is ..
@@ -101,8 +101,59 @@ class ProductDetailPage extends Component
 
 
 
+    /* INCREASE EN DECREASE KNOP BLOKKEREN */
+    // MAG VERHOGEN ?
+    public function getCanIncreaseProperty(): bool
+    {
+        // Als er nog geen kleur gekozen is, mag je niet verhogen
+        if (!$this->selectedColorId) {
+            return false;
+        }
+
+        // Als de maximale voorraad is bereikt voor de gekozen kleur, blokkeer verhogen
+        if ($this->maxStock !== null && $this->quantity >= $this->maxStock) {
+            return false;
+        }
+
+        // Anders is verhogen toegestaan
+        return true;
+    }
+
+    // Bepaalt of de gebruiker de quantity mag verlagen
+    public function getCanDecreaseProperty(): bool
+    {
+        // Als er geen kleur gekozen is, mag je niet verlagen
+        if (!$this->selectedColorId) {
+            return false;
+        }
+
+        // Quantity mag nooit onder 1 gaan
+        return $this->quantity > 1;
+    }
+
+    // RESET QUANTITY BIJ KLEUR WISSEL
+    // Wordt automatisch aangeroepen zodra de geselecteerde kleur wijzigt
+    public function updatedSelectedColorId($value)
+    {
+        // Reset de hoeveelheid naar 1 bij elke kleurwissel
+        $this->quantity = 1;
+
+        // Wis eventuele validatiefouten van vorige acties
+        $this->resetErrorBag('quantity');
+        $this->resetErrorBag('selectedColorId');
+    }
+
+
+
+
     public function render()
     {
+        logger()->info('Livewire debug', [
+            'selectedColorId' => $this->selectedColorId,
+            'quantity' => $this->quantity,
+            'maxStock' => $this->maxStock,
+        ]);
+
         // haal alleen de actieve, featured producten op (max. 8)
         $featuredProducts = Product::query()
             ->where('is_active', 1)
@@ -113,7 +164,9 @@ class ProductDetailPage extends Component
         return view('livewire.product-detail-page', [
             'product' => $this->product,
             //'product' => Product::where('slug', $this->slug)->firstOrFail(),
-            'featuredProducts' => $featuredProducts
+            'featuredProducts' => $featuredProducts,
+            'canIncrease' => $this->canIncrease,
+            'canDecrease' => $this->canDecrease,
         ]);
     }
 }

@@ -61,29 +61,33 @@ class CartPage extends Component
      */
     public function increaseQuantity(int $product_id, ?int $color_id = null): void
     {
-        // Huidige hoeveelheid in winkelmand
+        // 1. Check huidige hoeveelheid in cart
         $currentQuantity = CartManagement::getQuantityInCart($product_id, $color_id);
 
-        // Haal actuele voorraad op
+        // 2. Haal stock op voor dit product en deze kleur
         $product = Product::find($product_id);
         if (!$product) return;
 
         $availableStock = $product->stockForColorId($color_id);
 
+        // 3. Quantity mag niet boven stock gaan
         if ($currentQuantity >= $availableStock) {
             session()->flash('error', 'Not enough stock for this product.');
             return;
         }
 
-        // Voeg toe als er nog ruimte is
+        // 4. Verhoog quantity
         CartManagement::incrementQuantityToCartItem($product_id, $color_id);
 
-        // Herlaad ALLES
+        // 5. Refresh cart + update navbar
         $this->loadCart();
-
         $this->dispatch('update-cart-count',
             array_sum(array_column($this->cart_items, 'quantity'))
         )->to(Navbar::class);
+
+        // 6. Update cart in de drawer modal
+        $this->dispatch('cart-updated');
+
     }
 
     /**
@@ -92,14 +96,18 @@ class CartPage extends Component
      */
     public function decreaseQuantity(int $product_id, ?int $color_id = null): void
     {
+        // 1. Verlaag quantity via helper
         CartManagement::decrementQuantityToCartItem($product_id, $color_id);
 
-        // Herlaad ALLES
+        // 2. Refresh cart + update navbar
         $this->loadCart();
-
         $this->dispatch('update-cart-count',
             array_sum(array_column($this->cart_items, 'quantity'))
         )->to(Navbar::class);
+
+
+        // Update cart in de drawer modal
+        $this->dispatch('cart-updated');
     }
 
     // CART RESET KNOP
@@ -113,6 +121,9 @@ class CartPage extends Component
         $this->dispatch('update-cart-count',
             array_sum(array_column($this->cart_items, 'quantity'))
         )->to(Navbar::class);
+
+        // Update cart in de drawer modal
+        $this->dispatch('cart-updated');
     }
 
     public function render()

@@ -44,16 +44,24 @@
 
                             <div class="flex justify-between items-center mt-2">
                                 <div class="flex items-center gap-1">
-                                    <button wire:click="decreaseQuantity({{ $item['product_id'] }}, {{ $item['color_id'] ?? 'null' }})"
-                                            class="w-9 h-9 rounded border border-gray-300 text-lg leading-none flex items-center justify-center hover:bg-gray-100">−</button>
 
+                                    {{--DECREASE--}}
+                                    <button wire:click="decreaseQuantity({{ $item['product_id'] }}, {{ $item['color_id'] ?? 'null' }})"
+                                            class="w-9 h-9 rounded border border-gray-300 text-lg leading-none flex items-center justify-center hover:bg-gray-100">
+                                        −
+                                    </button>
+
+                                    {{--QUANTITY--}}
                                     <span class="text-sm w-6 text-center">{{ $item['quantity'] }}</span>
 
+                                    {{--INCREASE--}}
                                     <button
                                         wire:click="increaseQuantity({{ $item['product_id'] }}, {{ $item['color_id'] ?? 'null' }})"
                                         class="w-9 h-9 rounded border border-gray-300 text-lg leading-none flex items-center justify-center hover:bg-gray-100"
-                                        {{ $item['quantity'] >= $item['max_stock'] ? 'disabled' : '' }}
-                                        title="{{ $item['quantity'] >= $item['max_stock'] ? 'Max stock reached' : '' }}"
+
+                                        {{-- DISABLED ALS MAX STOCK IS BEHAALD --}}
+                                        {{ (isset($item['max_stock']) && $item['quantity'] >= $item['max_stock']) ? 'disabled' : '' }}
+                                        title="{{ (isset($item['max_stock']) && $item['quantity'] >= $item['max_stock']) ? 'Max stock reached' : '' }}"
                                     >
                                         +
                                     </button>

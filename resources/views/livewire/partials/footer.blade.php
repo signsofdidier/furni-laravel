@@ -73,15 +73,6 @@
                                     <a href="/"><img src="{{ asset('assets/img/logo.png') }}" alt="bisum"></a>
                                 </h4>
                                 <div class="footer-newsletter">
-                                   {{-- <p class="footer-text mb-3">Stay up to date with all the news.</p>
-                                    <div class="newsletter-wrapper">
-                                        <form action="#" class="footer-newsletter-form d-flex align-items-center">
-                                            <input class="footer-newsletter-input bg-transparent" type="email"
-                                                   placeholder="Your e-mail" autocomplete="off">
-                                            <button class="footer-newsletter-btn" type="submit">SIGN
-                                                UP</button>
-                                        </form>
-                                    </div>--}}
                                     <div class="footer-social-wrapper">
                                         <ul
                                             class="footer-social list-unstyled d-flex align-items-center flex-wrap mb-0">

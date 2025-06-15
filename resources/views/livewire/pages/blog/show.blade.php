@@ -5,7 +5,7 @@
                 <div class="col-lg-9 col-md-12 col-12">
                     <div class="article-rte">
                         <div class="article-img">
-                            <img src="{{ url('storage', $blog->image) }}" alt="img">
+                            <img src="{{ url('storage', $blog->image) }}" alt="{{ $blog->title }}">
                         </div>
                         <div class="article-meta">
                             <h2 class="article-title">{{  $blog->title }}</h2>
@@ -84,8 +84,6 @@
                                 </figure>
                             @endif
 
-                            {{--<h6 class="heading_24 mb-3 mt-5">A Perfect product for you</h6>
-                            <p>It is a long established fact that a reader will be distracted by the readable content of a page looking at its layout.The point of using Lorem Ipsum is that it has a more-or-less normal distribu letters, as opposed to using ‘Content here, content here’, making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their.</p>--}}
                         </div>
 
                         <div class="next-prev-article mt-5 d-flex align-items-center justify-content-between">
@@ -134,9 +132,7 @@
                             </div>
                         </div>
                         <div class="filter-widget">
-                            <a href="collection-left-sidebar.html">
-                                <img class="rounded" src="{{ asset('assets/img/products/furniture/1.jpg') }}" alt="img">
-                            </a>
+                            <img class="rounded" src="{{ asset('assets/img/products/furniture/1.jpg') }}" alt="Furniture">
                         </div>
                     </div>
                 </div>

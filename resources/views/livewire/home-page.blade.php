@@ -38,8 +38,8 @@
                 </div>
             </div>
             <div class="slide-item slide-item-bag position-relative">
-                <img class="slide-img d-none d-md-block" src="assets/img/slideshow/f2.jpg" alt="slide-2">
-                <img class="slide-img d-md-none" src="assets/img/slideshow/f2-m.jpg" alt="slide-2">
+                <img class="slide-img d-none d-md-block" src="{{ asset('assets/img/slideshow/f2.jpg') }}" alt="slide-2">
+                <img class="slide-img d-md-none" src="{{ asset('assets/img/slideshow/f2-m.jpg') }}" alt="slide-2">
                 <div class="content-absolute content-slide">
                     <div class="container height-inherit d-flex align-items-center justify-content-end">
                         <div class="content-box slide-content slide-content-1 py-4 text-center">
@@ -60,8 +60,8 @@
                 </div>
             </div>
             <div class="slide-item slide-item-bag position-relative">
-                <img class="slide-img d-none d-md-block" src="assets/img/slideshow/f3.jpg" alt="slide-3">
-                <img class="slide-img d-md-none" src="assets/img/slideshow/f3-m.jpg" alt="slide-3">
+                <img class="slide-img d-none d-md-block" src="{{ asset('assets/img/slideshow/f3.jpg') }}" alt="slide-3">
+                <img class="slide-img d-md-none" src="{{ asset('assets/img/slideshow/f3-m.jpg') }}" alt="slide-3">
                 <div class="content-absolute content-slide">
                     <div class="container height-inherit d-flex align-items-center justify-content-center">
                         <div class="content-box slide-content slide-content-1 py-4 text-center">

@@ -38,7 +38,7 @@
                                 @foreach($product->images as $image)
                                     <div>
                                         <div class="img-thumb-wrapper">
-                                            <img src="{{ url('storage', $image) }}" alt="img">
+                                            <img src="{{ url('storage', $image) }}" alt="{{ $product->name }}">
                                         </div>
                                     </div>
                                 @endforeach
@@ -302,7 +302,7 @@
                                     <div class="product-card-img text-center">
                                         <a class="product-hover-zoom" href="{{ url('/products') }}/{{ $featured->slug }}">
                                             <img class="primary-img" src="{{ url('storage', $featured->images[0]) }}"
-                                                 alt="product-img">
+                                                 alt="{{ $featured->name }}">
                                         </a>
 
                                         <div class="product-card-action product-card-action-2">

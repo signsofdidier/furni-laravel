@@ -75,7 +75,7 @@
                         <div class="card-body d-flex align-items-center">
                             <i class="fas fa-credit-card fa-2x text-secondary me-3"></i>
                             <div>
-                                <p class="text-uppercase text-muted mb-1">Payment <span class="text-small text-lowercase">({{ $order->payment_method == 'stripe' ? 'Bancontact' : 'Cash On Delivery' }} )</span></p>
+                                <p class="text-uppercase text-muted mb-1">Payment <span class="text-small text-lowercase">({{ $order->payment_method == 'bancontact' ? 'Bancontact' : 'Cash On Delivery' }} )</span></p>
                                 <span class="badge bg-{{ str_replace('bg-','',$paymentStatusColor) }} text-white">{{ ucfirst($order->payment_status) }}</span>
                             </div>
                         </div>

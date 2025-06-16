@@ -6,6 +6,7 @@ use App\Filament\Resources\AddressResource\Pages;
 use App\Filament\Resources\AddressResource\RelationManagers;
 use App\Models\Address;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -32,26 +33,42 @@ class AddressResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('user_id')
-                    ->numeric(),
+                Select::make('user_id')
+                    ->label('User')
+                    ->relationship('user', 'name') // toon gebruikersnaam
+                    ->searchable()
+                    ->required(),
                 TextInput::make('first_name')
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->required(),
                 TextInput::make('last_name')
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->required(),
                 TextInput::make('phone')
+                    ->label('Phone Number')
                     ->tel()
-                    ->maxLength(255),
-                TextInput::make('email')
+                    ->maxLength(255)
+                    ->required(),
+                /*TextInput::make('email')
                     ->email()
-                    ->maxLength(255),
-                Textarea::make('street_address')
-                    ->columnSpanFull(),
+                    ->maxLength(255)
+                    ->required(),*/
+                TextInput::make('street_address')
+                    ->label('Street Address')
+                    ->maxLength(255)
+                    ->required(),
                 TextInput::make('city')
-                    ->maxLength(255),
+                    ->label('City/Town')
+                    ->maxLength(255)
+                    ->required(),
                 TextInput::make('state')
-                    ->maxLength(255),
+                    ->label('State/Province')
+                    ->maxLength(255)
+                    ->required(),
                 TextInput::make('zip_code')
-                    ->maxLength(255),
+                    ->label('Postal Code')
+                    ->maxLength(255)
+                    ->required(),
             ]);
     }
 
@@ -59,45 +76,17 @@ class AddressResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('user_id')
-                    ->numeric()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('first_name')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('last_name')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('phone')
-                    ->searchable(),
-                TextColumn::make('email')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('city')
-                    ->searchable()
-                    ->sortable()
-                    ->limit(10),
-                TextColumn::make('state')
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('zip_code')
-                    ->label('Postal Code')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('deleted_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('user.name')->label('User')->sortable()->searchable(),
+                TextColumn::make('first_name')->label('First Name')->sortable()->searchable(),
+                TextColumn::make('last_name')->label('Last Name')->sortable()->searchable(),
+                TextColumn::make('phone')->label('Phone')->searchable(),
+                //TextColumn::make('email')->label('Email')->sortable()->searchable(),
+                TextColumn::make('city')->label('City')->sortable()->searchable()->limit(10),
+                TextColumn::make('state')->label('State / Province')->sortable()->searchable()->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('zip_code')->label('Postal Code')->sortable()->searchable(),
+                TextColumn::make('deleted_at')->label('Deleted')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->defaultSort('created_at', 'desc')
             ->modifyQueryUsing(fn (Builder $query) => $query->withoutGlobalScopes([

@@ -81,15 +81,15 @@ class SuccessPage extends Component
 
         $order = new Order();
         $order->user_id = auth()->user()->id;
-        $order->address_id = $address_id; // HIER KOPPEL JE HET JUISTE ADRES
+        $order->address_id = $address_id; // HIER KOPPEL IK HET JUISTE ADRES
         $order->sub_total = $pending_order_data['sub_total'];
         $order->grand_total = $pending_order_data['sub_total'] + $pending_order_data['shipping_amount'];
-        $order->payment_method = 'stripe';
+        $order->payment_method = 'bancontact';
         $order->payment_status = 'paid';
         $order->status = 'new';
         $order->currency = 'EUR';
         $order->shipping_amount = $pending_order_data['shipping_amount'];
-        $order->shipping_method = 'Flat Rate';
+        $order->shipping_method = 'Truck Delivery';
         $order->notes = 'Order placed by ' . auth()->user()->name;
         $order->transaction_id = $session_info->payment_intent;
         $order->save();

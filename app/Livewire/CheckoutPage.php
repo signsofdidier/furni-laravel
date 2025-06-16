@@ -189,7 +189,7 @@ class CheckoutPage extends Component
         $order->status = 'new';
         $order->currency = 'EUR';
         $order->shipping_amount = $this->shipping_amount;
-        $order->shipping_method = 'Flat Rate';
+        $order->shipping_method = 'Truck Delivery';
         $order->notes = 'Order placed by ' . ($user ? $user->name : 'guest');
         $order->save();
 

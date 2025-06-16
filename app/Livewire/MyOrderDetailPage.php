@@ -21,16 +21,16 @@ class MyOrderDetailPage extends Component
     public function render()
     {
         // dit zal je order items ophalen
+        $order = Order::with('address')->find($this->order_id);
         $order_items = OrderItem::with(['product', 'color'])->where('order_id', $this->order_id)->get();
-        $address = Address::where('order_id', $this->order_id)->first();
-        $order = Order::where('id', $this->order_id)->first();
+
 
 
         // toon de order items, address en de order in de view
         return view('livewire.my-order-detail-page', [
             'order_items' => $order_items,
-            'address' => $address,
-            'order' => $order
+            'order' => $order,
+            'address' => $order?->address,
         ]);
     }
 }

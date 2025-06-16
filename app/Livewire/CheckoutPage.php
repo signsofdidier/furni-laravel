@@ -3,7 +3,6 @@
 namespace App\Livewire;
 
 use App\Helpers\CartManagement;
-use App\Mail\InvoicePaidMail;
 use App\Mail\OrderPlacedMail;
 use App\Models\Address;
 use App\Models\Order;
@@ -18,6 +17,8 @@ use Stripe\Stripe;
 #[Title('Checkout')]
 class CheckoutPage extends Component
 {
+    public $addresses;               // Alle adressen van de user
+    public $selected_address_id;     // Gekozen adres-id (of 'new' voor nieuw adres)
     public $first_name;
     public $last_name;
     public $phone;
@@ -25,14 +26,15 @@ class CheckoutPage extends Component
     public $city;
     public $state;
     public $zip_code;
+
     public $payment_method;
-    public $discount_code;
 
     public float $sub_total = 0;
     public float $shipping_amount = 0;
     public float $free_shipping_threshold = 0;
 
-    public function mount(){
+    public function mount()
+    {
         $cart_items = CartManagement::getCartItemsFromSession();
         if(count($cart_items) == 0){
             return redirect('/products');
@@ -44,66 +46,95 @@ class CheckoutPage extends Component
         $this->sub_total = CartManagement::calculateGrandTotal($cart_items);
         $this->calculateShippingAmount($cart_items);
 
-        // AUTO-FILL adresgegevens indien beschikbaar
         $user = auth()->user();
-        if ($user && $user->address) {
-            $this->first_name = $user->address->first_name;
-            $this->last_name = $user->address->last_name;
-            $this->phone = $user->address->phone;
-            $this->street_address = $user->address->street_address;
-            $this->city = $user->address->city;
-            $this->state = $user->address->state;
-            $this->zip_code = $user->address->zip_code;
+        if ($user) {
+            $this->addresses = $user->addresses; // Haal alle adressen van de user op
+            // Optioneel: auto-selecteer het laatst gebruikte adres
+            if ($this->addresses->count()) {
+                $this->selected_address_id = $this->addresses->first()->id;
+            } else {
+                $this->selected_address_id = 'new';
+            }
         }
     }
 
-    public function placeOrder(){
-        $this->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'phone' => 'required',
-            'street_address' => 'required',
-            'city' => 'required',
-            'state' => 'required',
-            'zip_code' => 'required',
+    public function updatedSelectedAddressId($value)
+    {
+        // Clear de nieuwe adresvelden als een bestaand adres gekozen wordt
+        if ($value !== 'new') {
+            $this->first_name = null;
+            $this->last_name = null;
+            $this->phone = null;
+            $this->street_address = null;
+            $this->city = null;
+            $this->state = null;
+            $this->zip_code = null;
+        }
+    }
+
+    public function placeOrder()
+    {
+        $user = auth()->user();
+
+        // 1. Valideer invoer afhankelijk van adreskeuze
+        $rules = [
             'payment_method' => 'required',
-        ]);
+        ];
+        if ($this->selected_address_id == 'new' || !$this->addresses || !$this->addresses->count()) {
+            $rules = array_merge($rules, [
+                'first_name'      => 'required',
+                'last_name'       => 'required',
+                'phone'           => 'required',
+                'street_address'  => 'required',
+                'city'            => 'required',
+                'state'           => 'required',
+                'zip_code'        => 'required',
+            ]);
+        }
+        $this->validate($rules);
+
+        // 2. Bepaal het adres-id
+        if ($this->selected_address_id && $this->selected_address_id !== 'new') {
+            // Bestaand adres gekozen
+            $address_id = $this->selected_address_id;
+        } else {
+            // Nieuw adres aanmaken
+            $address = Address::create([
+                'user_id'        => $user ? $user->id : null,
+                'first_name'     => $this->first_name,
+                'last_name'      => $this->last_name,
+                'phone'          => $this->phone,
+                'street_address' => $this->street_address,
+                'city'           => $this->city,
+                'state'          => $this->state,
+                'zip_code'       => $this->zip_code,
+            ]);
+            $address_id = $address->id;
+        }
 
         $cart_items = CartManagement::getCartItemsFromSession();
-
         $this->sub_total = CartManagement::calculateGrandTotal($cart_items);
         $this->calculateShippingAmount($cart_items);
 
-        // Voor Cash on Delivery: maak direct het order aan
+        // 3. Order aanmaken afhankelijk van betaalmethode
         if($this->payment_method == 'cod'){
-            return $this->createOrder($cart_items);
+            return $this->createOrder($cart_items, $address_id);
         }
 
-        // Voor Stripe: maak geen order aan, maar sla orderdata op in session
-        // en stuur door naar Stripe
         if($this->payment_method == 'stripe'){
+            // Zet alle orderdata en gekozen adres in sessie
+            session()->put('pending_order_data', [
+                'cart_items'    => $cart_items,
+                'address_id'    => $address_id,
+                'sub_total'     => $this->sub_total,
+                'shipping_amount' => $this->shipping_amount,
+            ]);
             return $this->createStripeCheckout($cart_items);
         }
     }
 
     private function createStripeCheckout($cart_items)
     {
-        // Sla orderdata op in sessie (zodat we het later kunnen gebruiken)
-        session()->put('pending_order_data', [
-            'cart_items' => $cart_items,
-            'address_data' => [
-                'first_name' => $this->first_name,
-                'last_name' => $this->last_name,
-                'phone' => $this->phone,
-                'street_address' => $this->street_address,
-                'city' => $this->city,
-                'state' => $this->state,
-                'zip_code' => $this->zip_code,
-            ],
-            'sub_total' => $this->sub_total,
-            'shipping_amount' => $this->shipping_amount,
-        ]);
-
         $line_items = [];
 
         foreach ($cart_items as $item) {
@@ -145,10 +176,12 @@ class CheckoutPage extends Component
         return redirect($sessionCheckout->url);
     }
 
-    private function createOrder($cart_items)
+    private function createOrder($cart_items, $address_id)
     {
+        $user = auth()->user();
         $order = new Order();
-        $order->user_id = auth()->user()->id;
+        $order->user_id = $user ? $user->id : null;
+        $order->address_id = $address_id;
         $order->sub_total = $this->sub_total;
         $order->grand_total = $this->sub_total + $this->shipping_amount;
         $order->payment_method = $this->payment_method;
@@ -157,28 +190,8 @@ class CheckoutPage extends Component
         $order->currency = 'EUR';
         $order->shipping_amount = $this->shipping_amount;
         $order->shipping_method = 'Flat Rate';
-        $order->notes = 'Order placed by ' . auth()->user()->name;
+        $order->notes = 'Order placed by ' . ($user ? $user->name : 'guest');
         $order->save();
-
-        // Maak het adres aan
-        $address = new Address();
-        $address->order_id = $order->id;
-        $address->user_id = auth()->user()->id;
-        $address->first_name = $this->first_name;
-        $address->last_name = $this->last_name;
-        $address->phone = $this->phone;
-        $address->street_address = $this->street_address;
-        $address->city = $this->city;
-        $address->state = $this->state;
-        $address->zip_code = $this->zip_code;
-        $address->save();
-
-        // Sla als profieladres op
-        $user = auth()->user();
-        if (!$user->address) {
-            $user->address()->associate($address);
-            $user->save();
-        }
 
         // Sla order items op
         $order->items()->createMany($cart_items);
@@ -198,7 +211,7 @@ class CheckoutPage extends Component
         CartManagement::clearCartItems();
 
         // Stuur mail voor COD
-        if ($this->payment_method === 'cod') {
+        if ($this->payment_method === 'cod' && $user) {
             Mail::to($order->user->email)->send(new OrderPlacedMail($order));
         }
 
@@ -212,11 +225,13 @@ class CheckoutPage extends Component
         $this->calculateShippingAmount($cart_items);
 
         return view('livewire.checkout-page', [
-            'cart_items' => $cart_items,
-            'sub_total' => $this->sub_total,
-            'shipping_amount' => $this->shipping_amount,
+            'cart_items'           => $cart_items,
+            'sub_total'            => $this->sub_total,
+            'shipping_amount'      => $this->shipping_amount,
             'free_shipping_threshold' => $this->free_shipping_threshold,
-            'grand_total' => $this->sub_total + $this->shipping_amount,
+            'grand_total'          => $this->sub_total + $this->shipping_amount,
+            'addresses'            => $this->addresses,
+            'selected_address_id'  => $this->selected_address_id,
         ]);
     }
 

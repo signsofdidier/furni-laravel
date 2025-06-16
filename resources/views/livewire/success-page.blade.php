@@ -45,7 +45,7 @@
                             <div class="card border bg-light mb-4">
                                 <div class="card-body">
                                     <h5 class="card-title fw-semibold mb-3">Shipping Address</h5>
-                                    <p class="mb-1">{{ $order->address->full_name }}</p>
+                                    <p class="mb-1">{{ $order->address->first_name }} {{ $order->address->last_name }}</p>
                                     <p class="mb-1">{{ $order->address->street_address }}</p>
                                     <p class="mb-1">{{ $order->address->city }}, {{ $order->address->state }} {{ $order->address->zip_code }}</p>
                                     <p class="mb-0">Phone: {{ $order->address->phone }}</p>

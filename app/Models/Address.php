@@ -23,10 +23,12 @@ class Address extends Model
         'zip_code'
     ];
 
-    public function order(){
-        return $this->belongsTo(Order::class);
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 
+    // Een adres hoort bij een user (optioneel/gastbestelling kan user_id null zijn)
     public function user()
     {
         return $this->belongsTo(User::class);

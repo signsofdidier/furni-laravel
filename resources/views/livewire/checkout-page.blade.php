@@ -26,96 +26,92 @@
                             <div class="shipping-address-form-wrapper">
                                 <form wire:submit.prevent="placeOrder" class="shipping-address-form common-form">
                                     <div class="row">
-                                        {{-- First Name --}}
-                                        <div class="col-lg-6 col-md-12 col-12">
-                                            <fieldset>
-                                                <label for="first_name" class="label">First name</label>
-                                                <input wire:model="first_name" id="first_name" type="text" class="form-control" />
-                                            </fieldset>
-                                            @error('first_name')
-                                            <div class="text-danger small">
-                                                {{ $message }}
+                                        {{-- Adressen keuze blok --}}
+                                        @if($addresses && $addresses->count())
+                                            <div class="col-12 mb-4">
+                                                <label class="form-label fw-semibold">Kies een opgeslagen adres:</label>
+                                                <div class="address-selection-wrapper">
+                                                    @foreach($addresses as $address)
+                                                        <div class="address-option mb-2">
+                                                            <input class="form-check-input"
+                                                                   type="radio"
+                                                                   wire:model.live="selected_address_id"
+                                                                   value="{{ $address->id }}"
+                                                                   id="address-{{ $address->id }}">
+                                                            <label for="address-{{ $address->id }}" class="address-label">
+                                                                <div class="address-info">
+                                                                    <strong>{{ $address->first_name }} {{ $address->last_name }}</strong><br>
+                                                                    <span class="text-muted">{{ $address->street_address }}, {{ $address->city }} {{ $address->zip_code }}</span>
+                                                                </div>
+                                                            </label>
+                                                        </div>
+                                                    @endforeach
+                                                    <div class="address-option">
+                                                        <input class="form-check-input"
+                                                               type="radio"
+                                                               wire:model.live="selected_address_id"
+                                                               value="new"
+                                                               id="address-new">
+                                                        <label for="address-new" class="address-label">
+                                                            <div class="address-info">
+                                                                <strong>Nieuw adres toevoegen</strong><br>
+                                                                <span class="text-muted">Voer een nieuw verzendadres in</span>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            @enderror
-                                        </div>
+                                        @endif
 
-                                        {{-- Last Name --}}
-                                        <div class="col-lg-6 col-md-12 col-12">
-                                            <fieldset>
-                                                <label for="last_name" class="label">Last name</label>
-                                                <input wire:model="last_name" id="last_name" type="text" class="form-control" />
-                                            </fieldset>
-                                            @error('last_name')
-                                            <div class="text-danger small">
-                                                {{ $message }}
+                                        {{-- Alleen adresvelden tonen als nieuw adres gekozen is (of geen adressen) --}}
+                                        @if($selected_address_id == 'new' || !$addresses || !$addresses->count())
+                                            <div class="new-address-fields">
+                                                <div class="row">
+                                                    {{-- First Name --}}
+                                                    <div class="col-lg-6 col-md-12 col-12 mb-3">
+                                                        <label for="first_name" class="form-label">First name</label>
+                                                        <input wire:model="first_name" id="first_name" type="text" class="form-control" />
+                                                        @error('first_name') <div class="text-danger small">{{ $message }}</div> @enderror
+                                                    </div>
+                                                    {{-- Last Name --}}
+                                                    <div class="col-lg-6 col-md-12 col-12 mb-3">
+                                                        <label for="last_name" class="form-label">Last name</label>
+                                                        <input wire:model="last_name" id="last_name" type="text" class="form-control" />
+                                                        @error('last_name') <div class="text-danger small">{{ $message }}</div> @enderror
+                                                    </div>
+                                                    {{-- Phone --}}
+                                                    <div class="col-lg-6 col-md-12 col-12 mb-3">
+                                                        <label for="phone" class="form-label">Phone</label>
+                                                        <input wire:model="phone" id="phone" type="text" class="form-control" />
+                                                        @error('phone') <div class="text-danger small">{{ $message }}</div> @enderror
+                                                    </div>
+                                                    {{-- Street Address --}}
+                                                    <div class="col-lg-6 col-md-12 col-12 mb-3">
+                                                        <label for="street_address" class="form-label">Address</label>
+                                                        <input wire:model="street_address" id="street_address" type="text" class="form-control" />
+                                                        @error('street_address') <div class="text-danger small">{{ $message }}</div> @enderror
+                                                    </div>
+                                                    {{-- City --}}
+                                                    <div class="col-lg-6 col-md-12 col-12 mb-3">
+                                                        <label for="city" class="form-label">City</label>
+                                                        <input wire:model="city" id="city" type="text" class="form-control" />
+                                                        @error('city') <div class="text-danger small">{{ $message }}</div> @enderror
+                                                    </div>
+                                                    {{-- Zip Code --}}
+                                                    <div class="col-lg-6 col-md-12 col-12 mb-3">
+                                                        <label for="zip_code" class="form-label">Zip code</label>
+                                                        <input wire:model="zip_code" id="zip_code" type="text" class="form-control" />
+                                                        @error('zip_code') <div class="text-danger small">{{ $message }}</div> @enderror
+                                                    </div>
+                                                    {{-- State --}}
+                                                    <div class="col-lg-6 col-md-12 col-12 mb-3">
+                                                        <label for="state" class="form-label">State</label>
+                                                        <input wire:model="state" id="state" type="text" class="form-control" />
+                                                        @error('state') <div class="text-danger small">{{ $message }}</div> @enderror
+                                                    </div>
+                                                </div>
                                             </div>
-                                            @enderror
-                                        </div>
-
-                                        {{-- Phone --}}
-                                        <div class="col-lg-6 col-md-12 col-12">
-                                            <fieldset>
-                                                <label for="phone" class="label">Phone</label>
-                                                <input wire:model="phone" id="phone" type="text" class="form-control" />
-                                            </fieldset>
-                                            @error('phone')
-                                            <div class="text-danger small">
-                                                {{ $message }}
-                                            </div>
-                                            @enderror
-                                        </div>
-
-                                        {{-- Street Address --}}
-                                        <div class="col-lg-6 col-md-12 col-12">
-                                            <fieldset>
-                                                <label for="street_address" class="label">Address</label>
-                                                <input wire:model="street_address" id="street_address" type="text" class="form-control" />
-                                            </fieldset>
-                                            @error('street_address')
-                                            <div class="text-danger small">
-                                                {{ $message }}
-                                            </div>
-                                            @enderror
-                                        </div>
-
-                                        {{-- City --}}
-                                        <div class="col-lg-6 col-md-12 col-12">
-                                            <fieldset>
-                                                <label for="city" class="label">City</label>
-                                                <input wire:model="city" id="city" type="text" class="form-control" />
-                                            </fieldset>
-                                            @error('city')
-                                            <div class="text-danger small">
-                                                {{ $message }}
-                                            </div>
-                                            @enderror
-                                        </div>
-
-                                        {{-- Zip Code --}}
-                                        <div class="col-lg-6 col-md-12 col-12">
-                                            <fieldset>
-                                                <label for="zip_code" class="label">Zip code</label>
-                                                <input wire:model="zip_code" id="zip_code" type="text" class="form-control" />
-                                            </fieldset>
-                                            @error('zip_code')
-                                            <div class="text-danger small">
-                                                {{ $message }}
-                                            </div>
-                                            @enderror
-                                        </div>
-
-                                        {{-- State --}}
-                                        <div class="col-lg-6 col-md-12 col-12">
-                                            <fieldset>
-                                                <label for="state" class="label">State</label>
-                                                <input wire:model="state" id="state" type="text" class="form-control" />
-                                            </fieldset>
-                                            @error('state')
-                                            <div class="text-danger small">
-                                                {{ $message }}
-                                            </div>
-                                            @enderror
-                                        </div>
+                                        @endif
 
                                         {{-- Country --}}
                                         <div class="col-lg-6 col-md-12 col-12">
@@ -267,6 +263,141 @@
             background-color: #00234D;
             color: #fff;
             border-color: #00234D;
+        }
+
+        /* form */
+        /* Address Selection Styling */
+        .address-selection-wrapper {
+            border: 1px solid #e3e3e3;
+            border-radius: 8px;
+            padding: 0;
+            background: #fff;
+        }
+
+        .address-option {
+            position: relative;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .address-option:last-child {
+            border-bottom: none;
+        }
+
+        .address-option input[type="radio"] {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            margin: 0;
+            accent-color: #00234D;
+        }
+
+        .address-label {
+            display: block;
+            padding: 15px 15px 15px 45px;
+            margin: 0;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            width: 100%;
+        }
+
+        .address-label:hover {
+            background-color: #f8f9fa;
+        }
+
+        .address-option input[type="radio"]:checked + .address-label {
+            background-color: #e6f2ff;
+            border-left: 4px solid #00234D;
+        }
+
+        .address-info strong {
+            color: #00234D;
+            font-size: 1rem;
+        }
+
+        .address-info .text-muted {
+            font-size: 0.9rem;
+        }
+
+        /* New Address Fields Animation */
+        .new-address-fields {
+            animation: slideDown 0.3s ease-out;
+            border: 1px solid #e3e3e3;
+            border-radius: 8px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            margin-bottom: 20px;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+                padding-top: 0;
+                padding-bottom: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 1000px;
+                padding-top: 20px;
+                padding-bottom: 20px;
+            }
+        }
+
+
+        .form-check-input:checked + .payment-option {
+            background-color: #00234D;
+            border-color: #00234D;
+            color: #fff;
+        }
+
+        /* Form Controls */
+        .form-control {
+            border: 1px solid #e3e3e3;
+            border-radius: 6px;
+            padding: 12px 15px;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-control:focus {
+            border-color: #00234D;
+            box-shadow: 0 0 0 0.2rem rgba(0, 35, 77, 0.25);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .payment-methods {
+                flex-direction: column;
+            }
+
+            .form-check-inline {
+                min-width: auto;
+            }
+
+            .minicart-btn-area {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .checkout-page-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        input[type="radio"], input[type="checkbox"] {
+            width: 1.1em !important;
+            height: 1.1em !important;
+            appearance: auto !important;
+            accent-color: #00234D !important; /* Mag je aanpassen naar je eigen stijl */
+            border-radius: 50% !important;   /* Voor radio's */
+            background: initial !important;
         }
     </style>
 

@@ -28,16 +28,19 @@ class Order extends Model
 
     protected $dates = ['deleted_at'];
 
+    // Elke order hoort bij één adres
+    public function address()
+    {
+        return $this->belongsTo(Address::class);
+    }
 
-    public function user(){
+    // Elke order hoort bij één user
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
     public function items(){
         return $this->hasMany(OrderItem::class);
-    }
-
-    public function address(){
-        return $this->hasOne(Address::class);
     }
 }

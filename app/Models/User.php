@@ -66,16 +66,15 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(Review::class);
     }
 
-    // user heeft een adres
-    public function address(){
-        return $this->hasOne(Address::class);
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
     }
 
     // user heeft meerdere wishlists
     public function wishlist(){
         return $this->hasMany(Wishlist::class);
     }
-
 
     public function hasInWishlist($productId)
     {

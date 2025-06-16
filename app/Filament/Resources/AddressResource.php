@@ -32,8 +32,6 @@ class AddressResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('order_id')
-                    ->numeric(),
                 TextInput::make('user_id')
                     ->numeric(),
                 TextInput::make('first_name')
@@ -61,19 +59,6 @@ class AddressResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('order_id')
-                    ->label('Order')
-                    ->numeric()
-                    ->sortable(),
-                BadgeColumn::make('type')
-                    ->label('Type')
-                    ->sortable()
-                    ->getStateUsing(fn (Address $record) => $record->order_id ? 'Order' : 'Profile')
-                    ->colors([
-                        'success' => 'Profile',
-                        'warning' => 'Order',
-                    ]),
-
                 TextColumn::make('user_id')
                     ->numeric()
                     ->sortable()

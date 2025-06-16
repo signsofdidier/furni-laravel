@@ -77,11 +77,11 @@ class SuccessPage extends Component
     private function createOrderFromPendingData($pending_order_data, $session_info)
     {
         $cart_items = $pending_order_data['cart_items'];
-        $address_data = $pending_order_data['address_data'];
+        $address_id = $pending_order_data['address_id']; // ADRES ID UIT DE SESSIE!
 
-        // Maak het order aan
         $order = new Order();
         $order->user_id = auth()->user()->id;
+        $order->address_id = $address_id; // HIER KOPPEL JE HET JUISTE ADRES
         $order->sub_total = $pending_order_data['sub_total'];
         $order->grand_total = $pending_order_data['sub_total'] + $pending_order_data['shipping_amount'];
         $order->payment_method = 'stripe';
@@ -93,26 +93,6 @@ class SuccessPage extends Component
         $order->notes = 'Order placed by ' . auth()->user()->name;
         $order->transaction_id = $session_info->payment_intent;
         $order->save();
-
-        // Maak het adres aan
-        $address = new Address();
-        $address->order_id = $order->id;
-        $address->user_id = auth()->user()->id;
-        $address->first_name = $address_data['first_name'];
-        $address->last_name = $address_data['last_name'];
-        $address->phone = $address_data['phone'];
-        $address->street_address = $address_data['street_address'];
-        $address->city = $address_data['city'];
-        $address->state = $address_data['state'];
-        $address->zip_code = $address_data['zip_code'];
-        $address->save();
-
-        // Sla als profieladres op
-        $user = auth()->user();
-        if (!$user->address) {
-            $user->address()->associate($address);
-            $user->save();
-        }
 
         // Sla order items op
         $order->items()->createMany($cart_items);
@@ -128,7 +108,7 @@ class SuccessPage extends Component
             }
         }
 
-        // Leeg cart pas nu
+        // Leeg cart nu
         CartManagement::clearCartItems();
 
         // Verstuur factuur mail
@@ -137,4 +117,5 @@ class SuccessPage extends Component
         // Herlaad order met relaties voor de view
         return Order::with('address', 'user')->find($order->id);
     }
+
 }

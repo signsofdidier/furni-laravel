@@ -248,48 +248,63 @@
 
     <!-- Livewire Alert JS -->
     <script>
-        // LIVEWIRE PRODUCT ALERT
-        Livewire.on('alert', (params) => {
-            Swal.fire({
-                icon: params.icon || 'success',
-                title: params.title || 'Product Added!',
-                html: params.html || 'Product added to cart 🎉',
-                position: params.position || 'bottom-end',
-                toast: params.toast !== undefined ? params.toast : true,
-                timer: params.timer || 1800,
-                showConfirmButton: params.showConfirmButton !== undefined ? params.showConfirmButton : false,
-                timerProgressBar: params.timerProgressBar !== undefined ? params.timerProgressBar : true,
+        document.addEventListener('DOMContentLoaded', () => {
+            // Universele alert handler
+            const showAlert = (params, defaults) => {
+                Swal.fire({
+                    icon: params.icon || defaults.icon,
+                    title: params.title || defaults.title,
+                    html: params.html || defaults.html,
+                    position: params.position || defaults.position,
+                    toast: params.toast !== undefined ? params.toast : defaults.toast,
+                    timer: params.timer || defaults.timer,
+                    showConfirmButton: params.showConfirmButton !== undefined ? params.showConfirmButton : defaults.showConfirmButton,
+                    timerProgressBar: params.timerProgressBar !== undefined ? params.timerProgressBar : defaults.timerProgressBar,
+                });
+            };
+
+            // Product added alert
+            Livewire.on('alert', (params) => {
+                showAlert(params, {
+                    icon: 'success',
+                    title: 'Product Added!',
+                    html: 'Product added to cart 🎉',
+                    position: 'bottom-end',
+                    toast: true,
+                    timer: 1800,
+                    showConfirmButton: false,
+                    timerProgressBar: true
+                });
+            });
+
+            // Profile alert
+            Livewire.on('profile-alert', (params) => {
+                showAlert(params, {
+                    icon: 'success',
+                    title: 'Profile updated',
+                    html: 'Your changes were saved successfully.',
+                    position: 'bottom-end',
+                    toast: true,
+                    timer: 1800,
+                    showConfirmButton: false,
+                    timerProgressBar: true
+                });
+            });
+
+            // Wishlist alert
+            Livewire.on('wishlist-alert', (params) => {
+                showAlert(params, {
+                    icon: 'success',
+                    title: '',
+                    html: 'Product added to your wishlist successfully.',
+                    position: 'bottom-end',
+                    toast: true,
+                    timer: 1800,
+                    showConfirmButton: false,
+                    timerProgressBar: true
+                });
             });
         });
-
-        // LIVEWIRE PROFILE ALERT
-        Livewire.on('profile-alert', (params) => {
-            Swal.fire({
-                icon: params.icon || 'success',
-                title: params.title || 'Profile updated',
-                html: params.html || 'Your changes were saved successfully.',
-                position: params.position || 'bottom-end',
-                toast: params.toast !== undefined ? params.toast : true,
-                timer: params.timer || 1800,
-                showConfirmButton: params.showConfirmButton !== undefined ? params.showConfirmButton : false,
-                timerProgressBar: params.timerProgressBar !== undefined ? params.timerProgressBar : true,
-            });
-        });
-
-        // LIVEWIRE WISHLIST ALERT
-        Livewire.on('wishlist-alert', (params) => {
-            Swal.fire({
-                icon: params.icon || 'success',
-                html: params.html || 'Product added to your wishlist successfully.',
-                position: params.position || 'bottom-end',
-                toast: params.toast !== undefined ? params.toast : true,
-                timer: params.timer || 1800,
-                showConfirmButton: params.showConfirmButton !== undefined ? params.showConfirmButton : false,
-                timerProgressBar: params.timerProgressBar !== undefined ? params.timerProgressBar : true,
-            });
-        });
-
-
     </script>
 
     {{-- Zorgt dat de bootstrap dropdowns werken met Livewire --}}

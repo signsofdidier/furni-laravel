@@ -32,7 +32,7 @@
         <div class="card shadow-sm p-4 mb-4">
 
 
-            <h5 class="mb-3">Write a review</h5>
+            <h5 class="mb-3 text-start">Write a review</h5>
 
             {{-- Rating --}}
             <div class="mb-3">

@@ -30,25 +30,19 @@ class CheckoutPage extends Component
 
     public float $sub_total = 0;
     public float $shipping_amount = 0;
-    // Threshold voor gratis verzending uit de Settings
-    public float $free_shipping_threshold  = 0;
+    public float $free_shipping_threshold = 0;
 
-    // als de cart leeg is mag je niet je geen toegang hebben tot de checkout page en keer je terug naar products.
     public function mount(){
         $cart_items = CartManagement::getCartItemsFromSession();
         if(count($cart_items) == 0){
             return redirect('/products');
         }
 
-        // Haal de threshold op en bewaar in een property
         $setting = Setting::first();
         $this->free_shipping_threshold = $setting->free_shipping_threshold ?? 0;
 
-        // Bereken op mount meteen de sub_total en shipping_amount
         $this->sub_total = CartManagement::calculateGrandTotal($cart_items);
         $this->calculateShippingAmount($cart_items);
-
-
 
         // AUTO-FILL adresgegevens indien beschikbaar
         $user = auth()->user();
@@ -64,7 +58,6 @@ class CheckoutPage extends Component
     }
 
     public function placeOrder(){
-
         $this->validate([
             'first_name' => 'required',
             'last_name' => 'required',
@@ -78,14 +71,41 @@ class CheckoutPage extends Component
 
         $cart_items = CartManagement::getCartItemsFromSession();
 
-        // Herbereken sub_total en shipping_amount voor het geval de cart ondertussen is aangepast
         $this->sub_total = CartManagement::calculateGrandTotal($cart_items);
         $this->calculateShippingAmount($cart_items);
 
-        // Maak de line_items voor Stripe
+        // Voor Cash on Delivery: maak direct het order aan
+        if($this->payment_method == 'cod'){
+            return $this->createOrder($cart_items);
+        }
+
+        // Voor Stripe: maak geen order aan, maar sla orderdata op in session
+        // en stuur door naar Stripe
+        if($this->payment_method == 'stripe'){
+            return $this->createStripeCheckout($cart_items);
+        }
+    }
+
+    private function createStripeCheckout($cart_items)
+    {
+        // Sla orderdata op in sessie (zodat we het later kunnen gebruiken)
+        session()->put('pending_order_data', [
+            'cart_items' => $cart_items,
+            'address_data' => [
+                'first_name' => $this->first_name,
+                'last_name' => $this->last_name,
+                'phone' => $this->phone,
+                'street_address' => $this->street_address,
+                'city' => $this->city,
+                'state' => $this->state,
+                'zip_code' => $this->zip_code,
+            ],
+            'sub_total' => $this->sub_total,
+            'shipping_amount' => $this->shipping_amount,
+        ]);
+
         $line_items = [];
 
-        // PRIJS VOOR STRIPE
         foreach ($cart_items as $item) {
             $line_items[] = [
                 'price_data' => [
@@ -99,7 +119,6 @@ class CheckoutPage extends Component
             ];
         }
 
-        // SHIPPINGCOST VOOR STRIPE
         if ($this->shipping_amount > 0) {
             $line_items[] = [
                 'price_data' => [
@@ -113,25 +132,35 @@ class CheckoutPage extends Component
             ];
         }
 
-        // Maak het Order-object aan
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+        $sessionCheckout = Session::create([
+            'payment_method_types' => ['card'],
+            'customer_email' => auth()->user()->email,
+            'line_items' => $line_items,
+            'mode' => 'payment',
+            'success_url' => route('success') . '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => route('cancel'),
+        ]);
+
+        return redirect($sessionCheckout->url);
+    }
+
+    private function createOrder($cart_items)
+    {
         $order = new Order();
         $order->user_id = auth()->user()->id;
         $order->sub_total = $this->sub_total;
         $order->grand_total = $this->sub_total + $this->shipping_amount;
         $order->payment_method = $this->payment_method;
-        $order->payment_status = 'pending';
+        $order->payment_status = $this->payment_method == 'cod' ? 'pending' : 'paid';
         $order->status = 'new';
         $order->currency = 'EUR';
-
-        // Sla verzendkosten op in het order (wordt later in database bewaard)
         $order->shipping_amount = $this->shipping_amount;
         $order->shipping_method = 'Flat Rate';
         $order->notes = 'Order placed by ' . auth()->user()->name;
-
-        // Sla eerst het order op, zodat er een ID is
         $order->save();
 
-        // Maak het adres aan en koppel het aan order & user
+        // Maak het adres aan
         $address = new Address();
         $address->order_id = $order->id;
         $address->user_id = auth()->user()->id;
@@ -144,42 +173,17 @@ class CheckoutPage extends Component
         $address->zip_code = $this->zip_code;
         $address->save();
 
-        // Sla als profieladres op als de user er nog geen heeft
+        // Sla als profieladres op
         $user = auth()->user();
         if (!$user->address) {
             $user->address()->associate($address);
             $user->save();
         }
 
-        $redirect_url = '';
-
-
-        // Kies tussen Cash on Delivery of Stripe
-        if($this->payment_method == 'stripe'){
-            Stripe::setApiKey(env('STRIPE_SECRET'));
-            $sessionCheckout = Session::create([
-                'payment_method_types' => ['card'],
-                'customer_email' => auth()->user()->email,
-                'line_items' => $line_items,
-                'mode' => 'payment',
-                'success_url' => route('success') . '?session_id={CHECKOUT_SESSION_ID}',
-                'cancel_url' => route('cancel'),
-            ]);
-
-            // Sla de Stripe Transaction ID op in het order
-            $order->transaction_id = $sessionCheckout->id;
-            $redirect_url = $sessionCheckout->url;
-
-        }else {
-            $redirect_url = route('success');
-        }
-
-        $order->save();
-
-        // Sla alle item‐regels op in de “order_items”‐relatie (reflecteert wat in sessie zat)
+        // Sla order items op
         $order->items()->createMany($cart_items);
 
-        // VERLAAG STOCK VAN DE PRODUCTEN NA BESTELLING
+        // Verlaag stock
         foreach ($cart_items as $item) {
             $stockEntry = ProductColorStock::where('product_id', $item['product_id'])
                 ->where('color_id', $item['color_id'])
@@ -190,23 +194,20 @@ class CheckoutPage extends Component
             }
         }
 
-        // Na het plaatsen van de order wordt de cart geleegd
+        // Leeg cart alleen na succesvol order
         CartManagement::clearCartItems();
 
-        // Bij COD handmatig mail verzenden
+        // Stuur mail voor COD
         if ($this->payment_method === 'cod') {
             Mail::to($order->user->email)->send(new OrderPlacedMail($order));
         }
 
-        return redirect($redirect_url);
+        return redirect()->route('success');
     }
-
 
     public function render()
     {
         $cart_items = CartManagement::getCartItemsFromSession();
-
-        // Herbereken sub_total en shipping_amount in render (voor de weergave)
         $this->sub_total = CartManagement::calculateGrandTotal($cart_items);
         $this->calculateShippingAmount($cart_items);
 
@@ -215,15 +216,12 @@ class CheckoutPage extends Component
             'sub_total' => $this->sub_total,
             'shipping_amount' => $this->shipping_amount,
             'free_shipping_threshold' => $this->free_shipping_threshold,
-            // $grand_total is sub_total + shipping (maar ik kan da ook in de view zelf optellen)
             'grand_total' => $this->sub_total + $this->shipping_amount,
         ]);
     }
 
-    // Hulpmethode om verzendkosten te berekenen en in $shipping_amount te zetten
     private function calculateShippingAmount(array $cart_items): void
     {
-        // Gebruik de helper waarin we al de “max‐verzendkost” logica hebben geïmplementeerd
         $this->shipping_amount = CartManagement::calculateShippingAmount($cart_items);
     }
 }

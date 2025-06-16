@@ -53,7 +53,7 @@
                                                     $stock = $stockPerProduct[$product->id] ?? null;
                                                 @endphp
 
-                                                {{-- PRODUCT BADGE, ON SALE, SOLD OUT, LAST ITEMS --}}
+                                                {{-- PRODUCT BADGE, ON SALE, AVAILABLE AGAIN SOON, LAST ITEMS --}}
                                                 <div class="product-badge d-flex gap-1 position-absolute top-0 start-0 p-2">
                                                     @php
                                                         $stockCount = $product->productColorStocks->sum('stock');
@@ -66,16 +66,14 @@
                                                         @endif
                                                     </div>
 
-                                                    {{-- SOLD OUT EN LAST ITEMS --}}
+                                                    {{-- AVAILABLE AGAIN SOON EN LAST ITEMS --}}
                                                     <div>
                                                         @if($stockCount == 0)
-                                                            <span class="badge-label bg-danger text-white rounded">Sold Out</span>
+                                                            <span class="badge-label bg-secondary text-white rounded">Available again soon</span>
                                                         @elseif($stockCount < 11)
                                                             <span class="badge-label bg-warning text-white rounded">Last Items</span>
                                                         @endif
                                                     </div>
-
-
                                                 </div>
 
 
@@ -150,7 +148,7 @@
                                                                     );
                                                                 @endif
                                                             "
-                                                                title="{{ $color->name }}{{ $isOutOfStock ? ' (Out of stock)' : '' }}"
+                                                                title="{{ $color->name }}{{ $isOutOfStock ? ' (Available again soon)' : '' }}"
                                                             >
                                                             </label>
                                                         </li>

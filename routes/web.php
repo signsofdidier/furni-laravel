@@ -50,7 +50,7 @@ Route::middleware('auth')->group(function() {
        auth()->logout();
        return redirect('/');
     });
-    Route::get('/checkout', CheckoutPage::class);
+    Route::get('/checkout', CheckoutPage::class)->name('checkout');
     Route::get('/profile', ProfileForm::class)->name('profile');
     Route::get('/my-orders', MyOrdersPage::class);
     Route::get('/my-orders/{order_id}', MyOrderDetailPage::class)->name('my-orders.show');

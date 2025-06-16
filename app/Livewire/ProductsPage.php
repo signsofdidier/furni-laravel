@@ -107,7 +107,17 @@ class ProductsPage extends Component
         $this->dispatch('cart-updated');
 
         // LIVEWIRE SWEETALERT
-        $this->dispatch('alert');
+        $this->dispatch('alert', [
+            'title' => 'Added to cart!',
+            'html' => 'Product has been added to your cart 🎉',
+            'icon' => 'success',
+            'timer' => 2000,
+            'toast' => true,
+            'position' => 'bottom-end',
+            'showConfirmButton' => false,
+            'timerProgressBar' => true,
+        ]);
+
 
         // Reset gekozen kleur indien gewenst
         unset($this->selectedColorPerProduct[$product_id]);

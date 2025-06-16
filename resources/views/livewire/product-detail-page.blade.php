@@ -53,12 +53,12 @@
 
                         {{-- PRODUCT AVAILABILITY --}}
                         <div class="mb-3">
-                            {{-- Als product in stock is dan in stock anders sold out --}}
+                            {{-- Als product in stock is dan in stock anders Available again soon --}}
                             <span class="product-availability">
                             @if($product->in_stock == 1)
                                     In Stock
                                 @else
-                                    Sold Out
+                                    Available again soon
                                 @endif
                         </span>
                         </div>
@@ -98,7 +98,7 @@
 
                         @if(!$product->in_stock)
                             {{-- alles is uitverkocht --}}
-                            <p class="text-danger">This product is out of stock</p>
+                            <p class="text-danger">This product will be available again soon</p>
                         @endif
 
                         {{-- COLORS --}}
@@ -144,7 +144,7 @@
                                                         );
                                                     @endif
                                                 "
-                                                title="{{ $color->name }}{{ $isOutOfStock ? ' (Out of stock)' : '' }}"
+                                                title="{{ $color->name }}{{ $isOutOfStock ? ' (Available again soon)' : '' }}"
                                             >
                                             </label>
                                         </li>

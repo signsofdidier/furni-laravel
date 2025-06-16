@@ -24,6 +24,7 @@ class RegisterPage extends Component
             'password' => 'required|min:6|max:255|confirmed',
             'password_confirmation' => 'required|min:6|max:255'
         ]);
+
         //save to database
         $user = User::create([
             'password' => Hash::make($this->password),

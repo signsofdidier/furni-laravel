@@ -13,7 +13,7 @@
 
                     <form wire:submit.prevent="save">
                         <div class="row">
-                            <!-- Name Field -->
+                            <!-- Name veld -->
                             <div class="col-md-12 mb-4">
                                 <label for="name" class="form-label text-dark fw-semibold">Name</label>
                                 <div class="position-relative">
@@ -32,7 +32,7 @@
                                 @enderror
                             </div>
 
-                            <!-- Email Field -->
+                            <!-- Email veld -->
                             <div class="col-md-12 mb-4">
                                 <label for="email" class="form-label text-dark fw-semibold">Email address</label>
                                 <div class="position-relative">
@@ -51,7 +51,7 @@
                                 @enderror
                             </div>
 
-                            <!-- Password Field -->
+                            <!-- Password veld -->
                             <div class="col-md-6 mb-4">
                                 <label for="password" class="form-label text-dark fw-semibold">Password</label>
                                 <div class="position-relative">
@@ -70,7 +70,7 @@
                                 @enderror
                             </div>
 
-                            <!-- Password Confirmation Field -->
+                            <!-- Password confirmation veld -->
                             <div class="col-md-6 mb-4">
                                 <label for="password_confirmation" class="form-label text-dark fw-semibold">Password Confirmation</label>
                                 <div class="position-relative">
@@ -90,7 +90,7 @@
                             </div>
                         </div>
 
-                        <!-- Submit Button -->
+                        <!-- Submit button -->
                         <button type="submit"
                                 class="btn btn-primary w-100 py-3 fw-semibold"
                                 style="background: #00234D; border: none; border-radius: 8px; font-size: 1.1rem; transition: all 0.3s ease;"

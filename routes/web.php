@@ -20,6 +20,7 @@ use App\Livewire\ProductsPage;
 use App\Livewire\ProfileForm;
 use App\Livewire\SuccessPage;
 use App\Livewire\WishlistPage;
+use App\Models\Order;
 use Illuminate\Support\Facades\Route;
 
 // openbare routes voor alle users
@@ -32,7 +33,6 @@ Route::get('/blog', Index::class)->name('blog.index');
 Route::get('/blog/{slug}', Show::class)->name('blog.show');
 Route::get('/privacy-policy', PrivacyPolicyPage::class)->name('privacy-policy');
 Route::get('/terms-conditions', TermsConditionsPage::class)->name('terms-conditions');
-
 
 
 // openbare routes voor niet ingelogde users
@@ -59,16 +59,19 @@ Route::middleware('auth')->group(function() {
     Route::get('/wishlist', WishlistPage::class)->name('wishlist');
 
     Route::get('/my-orders/{order_id}/invoice', function ($order_id) {
-        $order = \App\Models\Order::with('items.product', 'user', 'address')->findOrFail($order_id);
+        $order = Order::with('items.product', 'user', 'address')->findOrFail($order_id);
 
+        // Je mag alleen je eigen orders zien
         if ($order->user_id !== auth()->id()) {
-            abort(403); // Je mag alleen je eigen orders zien
+            abort(403);
         }
 
+        // Barry VDB DOM PDF
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.invoice', [
             'order' => $order
         ]);
 
+        // Download factuur van dit order
         return $pdf->download('factuur-order-' . $order->id . '.pdf');
     })->name('my-orders.invoice')->middleware('auth');
 

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg103766"
+   viewBox="0 0 1024 480"
+   height="480px"
+   width="1024px"
+   version="1.1">
+  <metadata
+     id="metadata103772">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs103770" />
+  <style
+     id="style103763">
+    #title &gt; path {
+        fill: #9aafd4;
+    }
+    .c1{
+    fill: #9aafd4;
+    }
+    .c2{
+    fill: #a4bdd8;
+    }
+    .c3{
+    fill: #bdd2e5;
+    }
+    </style>
+  <g
+     id="title"
+     style="font-style:normal;font-weight:800;font-size:188px;line-height:1;font-family:'Montserrat ExtraBold Alt1';font-variant-ligatures:none;text-align:left;dominant-baseline:middle;text-anchor:middle"
+     aria-label="Furni">
+    <path
+       id="path103774"
+       style="font-style:normal;font-weight:800;font-size:188px;line-height:1;font-family:'Montserrat ExtraBold Alt1';font-variant-ligatures:none;text-align:left;dominant-baseline:middle;text-anchor:middle"
+       d="m 264.64047,290.948 h 37.224 v -45.12 h 62.228 v -28.764 h -99.452 z m 0,-131.6 v 28.764 h 99.452 v -28.764 z" />
+    <path
+       id="path103776"
+       style="font-style:normal;font-weight:800;font-size:188px;line-height:1;font-family:'Montserrat ExtraBold Alt1';font-variant-ligatures:none;text-align:left;dominant-baseline:middle;text-anchor:middle"
+       d="m 488.71003,189.052 h -35.72 v 49.068 c 0,8.272 -1.88,14.288 -5.452,18.236 -3.572,3.948 -8.084,5.828 -13.724,5.828 -5.64,0 -9.776,-1.692 -12.596,-5.264 -3.008,-3.384 -4.324,-9.024 -4.324,-16.732 v -51.136 h -35.72 v 56.964 c 0,15.604 3.76,27.26 11.656,34.968 7.896,7.896 18.424,11.656 31.584,11.656 5.828,0 11.468,-0.94 16.732,-3.196 5.264,-2.068 9.776,-5.264 13.536,-9.4 v 10.904 h 34.028 z" />
+    <path
+       id="path103778"
+       style="font-style:normal;font-weight:800;font-size:188px;line-height:1;font-family:'Montserrat ExtraBold Alt1';font-variant-ligatures:none;text-align:left;dominant-baseline:middle;text-anchor:middle"
+       d="m 559.66241,190.932 c -5.828,2.256 -10.528,5.828 -14.1,10.34 v -12.22 h -34.028 v 101.896 h 35.72 v -46.812 c 0,-8.46 2.068,-14.852 6.392,-18.988 4.324,-4.136 10.34,-6.204 18.048,-6.204 2.068,0 4.7,0.188 8.084,0.564 V 187.36 c -7.52,0 -14.288,1.316 -20.116,3.572 z" />
+    <path
+       id="path103780"
+       style="font-style:normal;font-weight:800;font-size:188px;line-height:1;font-family:'Montserrat ExtraBold Alt1';font-variant-ligatures:none;text-align:left;dominant-baseline:middle;text-anchor:middle"
+       d="m 691.33878,198.64 c -7.708,-7.52 -17.86,-11.28 -30.456,-11.28 -6.58,0 -12.596,1.128 -18.048,3.384 -5.64,2.256 -10.34,5.264 -14.288,9.4 v -11.092 h -34.028 v 101.896 h 35.72 v -49.256 c 0,-7.896 1.692,-13.912 5.452,-18.048 3.76,-3.948 8.648,-6.016 14.852,-6.016 11.092,0 16.732,6.956 16.732,20.868 v 52.452 h 35.72 v -58.28 c 0,-15.04 -3.948,-26.508 -11.656,-34.028 z" />
+    <path
+       id="path103782"
+       style="font-style:normal;font-weight:800;font-size:188px;line-height:1;font-family:'Montserrat ExtraBold Alt1';font-variant-ligatures:none;text-align:left;dominant-baseline:middle;text-anchor:middle"
+       d="m 725.23753,189.052 v 101.896 h 35.72 V 189.052 Z m 2.068,-16.732 c 3.948,3.76 9.212,5.452 15.792,5.452 6.392,0 11.656,-1.692 15.792,-5.452 3.948,-3.76 6.016,-8.46 6.016,-14.1 0,-5.264 -2.068,-9.776 -6.016,-13.16 -4.136,-3.384 -9.4,-5.264 -15.792,-5.264 -6.58,0 -11.844,1.88 -15.792,5.452 -4.136,3.76 -6.016,8.272 -6.016,13.536 0,5.452 1.88,9.964 6.016,13.536 z" />
+  </g>
+</svg>

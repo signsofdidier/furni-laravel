@@ -4,12 +4,14 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource\RelationManagers;
+use App\Models\Color;
 use App\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\MultiSelect;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -67,12 +69,12 @@ class ProductResource extends Resource
                             // Zorg dat de slug uniek is in de 'products' tabel, maar negeer het huidige record bij het bewerken
                             ->unique(Product::class, 'slug', ignoreRecord: true),
 
-                        Select::make('colors')
+                        /*Select::make('colors')
                             ->multiple()
                             ->relationship('colors', 'name')
                             ->label('Available Colors')
                             ->preload() // laadt alle kleuren in één keer
-                            ->searchable(), // doorzoekbaar indien veel kleuren
+                            ->searchable(), // doorzoekbaar indien veel kleuren*/
 
                         MarkdownEditor::make('description')
                             ->columnSpanFull()
@@ -92,7 +94,28 @@ class ProductResource extends Resource
                             ->imageResizeTargetHeight(1288)
                             ->optimize('webp')
                             ->required(),
+                    ]),
+
+                    Section::make('Color & Stock')->schema([
+                        Repeater::make('productColorStocks')
+                            ->relationship('productColorStocks')
+                            ->label('Color & Stock')
+                            ->schema([
+                                Select::make('color_id')
+                                    ->label('Color')
+                                    ->options(Color::all()->pluck('name', 'id'))
+                                    ->required(),
+
+                                TextInput::make('stock')
+                                    ->label('Stock')
+                                    ->numeric()
+                                    ->required(),
+                            ])
+                            ->columns(1) // ELK ITEM 2 COLUMNS
+                            ->grid(3), // ELKE REPEATER NAAST ELKAAR
+
                     ])
+
 
                 ])->columnSpan(2),
 

@@ -450,33 +450,30 @@ class DatabaseSeeder extends Seeder
 
             // STOCK per kleur op basis van index
             if ($index === 9) {
-                // 4e product: volledig uitverkocht
+                // 10e product: volledig uitverkocht
                 foreach ($productData['colors'] as $colorId) {
-                    ProductColorStock::create([
-                        'product_id' => $product->id,
-                        'color_id' => $colorId,
-                        'stock' => 0,
-                    ]);
+                    ProductColorStock::updateOrCreate(
+                        ['product_id' => $product->id, 'color_id' => $colorId],
+                        ['stock' => 0]
+                    );
                 }
             } elseif ($index === 8) {
-                // 8e product: enkel eerste kleur beschikbaar
+                // 9e product: enkel eerste kleur beschikbaar
                 $first = true;
                 foreach ($productData['colors'] as $colorId) {
-                    ProductColorStock::create([
-                        'product_id' => $product->id,
-                        'color_id' => $colorId,
-                        'stock' => $first ? 25 : 0,
-                    ]);
+                    ProductColorStock::updateOrCreate(
+                        ['product_id' => $product->id, 'color_id' => $colorId],
+                        ['stock' => $first ? 25 : 0]
+                    );
                     $first = false;
                 }
             } else {
                 // Alle andere: normale voorraad
                 foreach ($productData['colors'] as $colorId) {
-                    ProductColorStock::create([
-                        'product_id' => $product->id,
-                        'color_id' => $colorId,
-                        'stock' => rand(40, 60),
-                    ]);
+                    ProductColorStock::updateOrCreate(
+                        ['product_id' => $product->id, 'color_id' => $colorId],
+                        ['stock' => rand(40, 60)]
+                    );
                 }
             }
 

@@ -44,8 +44,8 @@ class Product extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    public function colors(){
-        return $this->belongsToMany(Color::class);
+    public function colors() {
+        return $this->belongsToMany(Color::class, 'product_color_stocks')->withPivot('stock');
     }
 
     /* PREVIEW EN RATING RELATIONS */

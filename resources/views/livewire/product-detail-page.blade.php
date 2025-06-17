@@ -227,38 +227,12 @@
     <!-- product tab start -->
     <div class="product-tab-section mt-100" data-aos="fade-up" data-aos-duration="700">
         <div class="container">
-            <div class="tab-list product-tab-list">
-                <nav class="nav product-tab-nav">
-                    <a class="product-tab-link tab-link active" href="#preview" data-bs-toggle="tab">Reviews</a>
-                    <a class="product-tab-link tab-link" href="#pshipping" data-bs-toggle="tab">Shipping & Returns</a>
-                    <a class="product-tab-link tab-link" href="#pstyle" data-bs-toggle="tab">Style with</a>
-
-                </nav>
-            </div>
             <div class="tab-content product-tab-content">
-                <div id="pshipping" class="tab-pane fade">
-                    <div class="desc-content">
-                        <h4 class="heading_18 mb-3">Returns within the European Union</h4>
-                        <p class="text_16 mb-4">The European law states that when an order is being returned, it is mandatory for the company to refund the product price and shipping costs charged for the original shipment. Meaning: one shipping fee is paid by us.</p>
-                        <p class="text_16 mb-4">Standard Shipping: If you placed an order using "standard shipping" and you want to return it, you will be refunded the product price and initial shipping costs. However, the return shipping costs will be paid by you.</p>
-                        <p class="text_16">Free Shipping: If you placed an order using "free shipping" and you want to return it, you will be refunded the product price, but since we paid for the initial shipping, you will pay for the return.</p>
-                    </div>
-                </div>
-                <div id="pstyle" class="tab-pane fade">
-                    <div class="desc-content">
-                        <h4 class="heading_18 mb-3">Style with</h4>
-                        <p class="text_16 mb-4">Please also bear in mind that shipping goods back and forth generates greenhouse gases that are accelerating climate change. We encourage you to choose your items carefully to avoid unnecessary return shipments.</p>
-                        <p class="text_16 mb-4">You have to pay for return shipping if you want to exchange your product for another size or the package is returned because it has not been picked up at the post office.</p>
-                    </div>
-                </div>
-
                 {{-- REVIEWS --}}
-                <div id="preview" class="tab-pane fade show active">
+                <div>
                     <div class="review-area accordion-parent">
                         <livewire:product-review-form :product="$product" />
                         <livewire:product-review-list :product="$product" />
-
-
                     </div>
                 </div>
             </div>

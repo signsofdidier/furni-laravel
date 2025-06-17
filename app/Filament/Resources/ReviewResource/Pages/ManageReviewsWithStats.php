@@ -77,14 +77,16 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
                 TextColumn::make('product.name')->label('Product'),
 
                 TextColumn::make('rating')
+                    ->formatStateUsing(fn ($state) => number_format($state) . ' ★')
                     ->sortable(),
 
                 TextColumn::make('title')
                     ->label('Title')
-                    ->limit(20),// max 20 tekens
+                    ->limit(10),// max 20 tekens
 
                 TextColumn::make('created_at')->label('Date')->dateTime()->sortable(),
 
+                // APPROVE KNOP
                 ToggleColumn::make('approved')
                     ->label('Approved')
                     ->sortable()
@@ -92,8 +94,7 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
                     ->afterStateUpdated(function () {
                         $this->refreshPendingCount(); // refresh na aanpassing toggle
                     }),
-            ]
-            : [
+            ] : [
                 ImageColumn::make('images.0')->label('Image')->disk('public')
                     ->sortable(),
 
@@ -145,7 +146,19 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
         // Alleen soft delete acties voor reviews tab
         if ($this->activeTab === 'reviews') {
             return [
-                //Tables\Actions\EditAction::make(),
+                // MODAL VOOR REVIEW TE LEZEN
+                Tables\Actions\Action::make('view')
+                    ->label('View')
+                    ->icon('heroicon-o-eye')
+                    ->modalHeading('Review details')
+                    ->modalSubheading(fn ($record) => 'By ' . $record->user->name)
+                    ->modalContent(fn ($record) => view('filament.resources.review-resource.partials.review-modal', [
+                        'review' => $record,
+                    ]))
+                    ->modalSubmitAction(false) // Verwijder standaard 'Submit'
+                    ->modalCancelAction(false),// Verwijder standaard 'Cancel'
+
+
                 Tables\Actions\DeleteAction::make(),       // Soft delete
                 Tables\Actions\ForceDeleteAction::make(),  // Permanent delete
                 Tables\Actions\RestoreAction::make(),      // Herstellen

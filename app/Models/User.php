@@ -76,11 +76,25 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(Wishlist::class);
     }
 
+    // USER HEEFT DIT PRODUCT IN DE WISHLIST
     public function hasInWishlist($productId)
     {
         // user heeft dit product in de wishlist
         return $this->wishlist()->where('product_id', $productId)->exists();
     }
+
+
+    // REVIEW: USER HEEFT DIT PRODUCT GEKOCHT
+    public function hasPurchasedProduct($productId)
+    {
+        return $this->orders()
+            ->whereHas('items', function ($query) use ($productId) {
+                $query->where('product_id', $productId);
+            })
+            ->whereIn('payment_status', ['pending', 'paid'])
+            ->exists();
+    }
+
 
     // Alleen user met deze email (admin) kan in de admin panel (backend) inloggen
     public function canAccessPanel(Panel $panel): bool

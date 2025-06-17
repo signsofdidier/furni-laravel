@@ -144,8 +144,6 @@ class ProductDetailPage extends Component
     }
 
 
-
-
     public function render()
     {
         logger()->info('Livewire debug', [

@@ -61,6 +61,7 @@ class ProductReviewForm extends Component
         $this->dispatch('reviewAdded');
     }
 
+    // HEEFT DE USER AL EEN REVIEW OP DIT PRODUCT?
     public function hasUserReviewed(): bool
     {
         return $this->product
@@ -69,8 +70,16 @@ class ProductReviewForm extends Component
             ->exists();
     }
 
+    // REVIEW: USER HEEFT PRODUCT GEKOCHT
+    public function getCanReviewProperty()
+    {
+        return auth()->check() && auth()->user()->hasPurchasedProduct($this->product->id);
+    }
+
     public function render()
     {
-        return view('livewire.product-review-form');
+        return view('livewire.product-review-form', [
+            'canReview' => $this->canReview,
+        ]);
     }
 }

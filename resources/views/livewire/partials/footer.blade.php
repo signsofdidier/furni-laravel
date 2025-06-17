@@ -5,44 +5,7 @@
             <div class="container">
                 <div class="footer-widget-wrapper">
                     <div class="row justify-content-between">
-                        <div class="col-xl-2 col-lg-2 col-md-6 col-12 footer-widget">
-                            <div class="footer-widget-inner">
-                                <h4 class="footer-heading d-flex align-items-center justify-content-between">
-                                    <span>Brands</span>
-                                    <span class="d-md-none">
-                                            <svg class="icon icon-dropdown" xmlns="http://www.w3.org/2000/svg"
-                                                 width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00234D"
-                                                 stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                                                <polyline points="6 9 12 15 18 9"></polyline>
-                                            </svg>
-                                        </span>
-                                </h4>
-                                <ul class="footer-menu list-unstyled mb-0 d-md-block">
-                                    @foreach($brands as $brand)
-                                        <li class="footer-menu-item"><a href="{{ url('products') . '?selected_brands[]=' . $brand->id }}">{{ $brand->name }}</a></li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-xl-2 col-lg-2 col-md-6 col-12 footer-widget">
-                            <div class="footer-widget-inner">
-                                <h4 class="footer-heading d-flex align-items-center justify-content-between">
-                                    <span>Categories</span>
-                                    <span class="d-md-none">
-                                            <svg class="icon icon-dropdown" xmlns="http://www.w3.org/2000/svg"
-                                                 width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00234D"
-                                                 stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                                                <polyline points="6 9 12 15 18 9"></polyline>
-                                            </svg>
-                                        </span>
-                                </h4>
-                                <ul class="footer-menu list-unstyled mb-0 d-md-block">
-                                    @foreach($categories as $category )
-                                        <li class="footer-menu-item"><a href="{{ url('products') . '?selected_categories[]=' . $category->id }}">{{ $category->name }}</a></li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
+                        {{--MENU--}}
                         <div class="col-xl-2 col-lg-2 col-md-6 col-12 footer-widget">
                             <div class="footer-widget-inner">
                                 <h4 class="footer-heading d-flex align-items-center justify-content-between">
@@ -62,6 +25,50 @@
                                 </ul>
                             </div>
                         </div>
+
+                        {{--CATEGORIES--}}
+                        <div class="col-xl-2 col-lg-2 col-md-6 col-12 footer-widget">
+                            <div class="footer-widget-inner">
+                                <h4 class="footer-heading d-flex align-items-center justify-content-between">
+                                    <span>Categories</span>
+                                    <span class="d-md-none">
+                                            <svg class="icon icon-dropdown" xmlns="http://www.w3.org/2000/svg"
+                                                 width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00234D"
+                                                 stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="6 9 12 15 18 9"></polyline>
+                                            </svg>
+                                        </span>
+                                </h4>
+                                <ul class="footer-menu list-unstyled mb-0 d-md-block">
+                                    @foreach($categories as $category )
+                                        <li class="footer-menu-item"><a href="{{ url('products') . '?selected_categories[]=' . $category->id }}">{{ $category->name }}</a></li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+
+                        {{--BRANDS--}}
+                        <div class="col-xl-2 col-lg-2 col-md-6 col-12 footer-widget">
+                            <div class="footer-widget-inner">
+                                <h4 class="footer-heading d-flex align-items-center justify-content-between">
+                                    <span>Brands</span>
+                                    <span class="d-md-none">
+                                            <svg class="icon icon-dropdown" xmlns="http://www.w3.org/2000/svg"
+                                                 width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00234D"
+                                                 stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="6 9 12 15 18 9"></polyline>
+                                            </svg>
+                                        </span>
+                                </h4>
+                                <ul class="footer-menu list-unstyled mb-0 d-md-block">
+                                    @foreach($brands as $brand)
+                                        <li class="footer-menu-item"><a href="{{ url('products') . '?selected_brands[]=' . $brand->id }}">{{ $brand->name }}</a></li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+
+                        {{--LOGO EN SOCIAL ICONS--}}
                         <div class="col-xl-4 col-lg-5 col-md-6 col-12 footer-widget">
                             <div class="footer-widget-inner">
                                 <h4 class="footer-logo">

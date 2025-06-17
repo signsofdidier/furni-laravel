@@ -32,11 +32,16 @@ class RegisterPage extends Component
             'name' => $this->name,
         ]);
 
+        // zend verification email
+        $user->sendEmailVerificationNotification();
+
         // login user
+        // uitzetten als ze eerst moeten verificeren voor inloggen
         auth()->login($user);
 
         // intended redirect naar de pagina waar je vandaan komt
-        return redirect()->intended(route('profile'));
+        //return redirect()->intended(route('profile'));
+        return redirect()->route('verification.notice');
     }
 
     public function render()

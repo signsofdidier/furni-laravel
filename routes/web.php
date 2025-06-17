@@ -22,6 +22,9 @@ use App\Livewire\SuccessPage;
 use App\Livewire\WishlistPage;
 use App\Models\Order;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Livewire\Auth\VerifyEmailPage;
+
 
 // openbare routes voor alle users
 Route::get('/', HomePage::class);
@@ -47,10 +50,10 @@ Route::middleware('guest')->group(function() {
 Route::middleware('auth')->group(function() {
     // navbar logout knop voor ingelogde user
     Route::get('/logout', function() {
-       auth()->logout();
-       return redirect('/');
+        auth()->logout();
+        return redirect('/');
     });
-    Route::get('/checkout', CheckoutPage::class)->name('checkout')->middleware('auth');
+    Route::get('/checkout', CheckoutPage::class)->name('checkout');
     Route::get('/profile', ProfileForm::class)->name('profile');
     Route::get('/my-orders', MyOrdersPage::class);
     Route::get('/my-orders/{order_id}', MyOrderDetailPage::class)->name('my-orders.show');
@@ -72,9 +75,26 @@ Route::middleware('auth')->group(function() {
         ]);
 
         // Download factuur van dit order
-        return $pdf->download('factuur-order-' . $order->id . '.pdf');
-    })->name('my-orders.invoice')->middleware('auth');
-
-
+        return $pdf->download('invoice-order-' . $order->id . '.pdf');
+    })->name('my-orders.invoice');
 });
+
+
+
+// VERIFICATIE E-MAIL
+Route::get('/email/verify', VerifyEmailPage::class)->middleware('auth')->name('verification.notice');
+
+// dit route wordt gebruikt om de gebruiker te verifiëren
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+    return redirect('/profile');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+// verzend de verification mail opnieuw
+Route::post('/email/verification-notification', function () {
+    auth()->user()->sendEmailVerificationNotification();
+    return back()->with('message', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+
 

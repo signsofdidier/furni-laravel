@@ -18,7 +18,7 @@
 <div class="container">
     <h2 class="header">Thank you for your order!</h2>
 
-    <p>Hello {{ $order->user->name }},</p>
+    <p>Hello {{ Str::title($order->user->name) }},</p>
 
     <p>
         @if($order->payment_method === 'cod')
@@ -144,7 +144,7 @@
         <a href="{{ url('/my-orders') }}" class="btn">View My Orders</a>
     </p>
 
-    <p style="margin-top: 40px;">Kind regards,<br><strong>The E-commerce Team</strong></p>
+    <p style="margin-top: 40px;">Kind regards,<br><strong>The Furni Team</strong></p>
 </div>
 
 <div class="footer">

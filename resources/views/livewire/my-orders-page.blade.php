@@ -26,7 +26,11 @@
                                     <div class="row align-items-center">
                                         <!-- Order Info -->
                                         <div class="col-md-4 mb-3 mb-md-0">
-                                            <h5 class="mb-1">Order #{{ $order->id }} <small class="text-muted">({{ $order->created_at->format('d-m-Y') }})</small></h5>
+                                            <h5 class="mb-1">
+                                                Order No.
+                                                {{ str_pad($order->id, 5, '0', STR_PAD_LEFT) }}
+                                                <small class="text-muted">({{ $order->created_at->format('d-m-Y') }})</small>
+                                            </h5>
                                             <p class="mb-0"><span class="fw-semibold">Amount:</span> <span class="text-primary">{{ Number::currency($order->grand_total, 'EUR') }}</span></p>
                                         </div>
                                         <!-- Status -->

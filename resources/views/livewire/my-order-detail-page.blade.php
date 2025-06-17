@@ -23,7 +23,8 @@
 
     <div class="w-100 mt-4">
         <div class="container py-5">
-            <h1 class="fw-bold mb-4" style="color: #00234D;">Order Details</h1>
+            <h1 class="fw-bold" style="color: #00234D;">Order Details</h1>
+            <h5 class="mb-4">Order No. {{ str_pad($order->id, 5, '0', STR_PAD_LEFT) }}</h5>
 
             <!-- Top Cards -->
             <div class="row g-4 mb-5">

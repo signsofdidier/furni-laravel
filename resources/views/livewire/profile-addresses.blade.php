@@ -5,21 +5,6 @@
         </button>
     </div>
 
-    {{-- Adressenlijst --}}
-    @foreach($addresses as $adr)
-        <div class="border rounded p-3 mb-3 d-flex justify-content-between align-items-center">
-            <div>
-                <strong>{{ $adr->first_name }} {{ $adr->last_name }}</strong>
-                <br>{{ $adr->street_address }}, {{ $adr->zip_code }} {{ $adr->city }}<br>
-                {{ $adr->state }} | {{ $adr->phone }}
-            </div>
-            <div>
-                <button class="btn btn-sm btn-outline-secondary me-2" wire:click="edit({{ $adr->id }})">Edit</button>
-                <button class="btn btn-sm btn-outline-danger" wire:click="delete({{ $adr->id }})">Delete</button>
-            </div>
-        </div>
-    @endforeach
-
     {{-- Formulier voor toevoegen/bewerken adres --}}
     @if($showForm)
         <div class="card my-4">
@@ -63,4 +48,20 @@
             </div>
         </div>
     @endif
+
+    {{-- Adressenlijst --}}
+    @foreach($addresses as $adr)
+        <div class="border rounded p-3 mb-3 d-flex justify-content-between align-items-center">
+            <div>
+                <strong>{{ $adr->first_name }} {{ $adr->last_name }}</strong>
+                <br>{{ $adr->street_address }}, {{ $adr->zip_code }} {{ $adr->city }}<br>
+                {{ $adr->state }} | {{ $adr->phone }}
+            </div>
+            <div>
+                <button class="btn btn-sm btn-outline-secondary me-2" wire:click="edit({{ $adr->id }})">Edit</button>
+                <button class="btn btn-sm btn-outline-danger" wire:click="delete({{ $adr->id }})">Delete</button>
+            </div>
+        </div>
+    @endforeach
+
 </div>

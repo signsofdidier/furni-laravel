@@ -15,7 +15,7 @@ use Stripe\Stripe;
 // PDF-generatie en mail
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\InvoicePaidMail;
+use App\Mail\InvoiceMail;
 
 #[Title('Success - E-Commerce')]
 class SuccessPage extends Component
@@ -112,7 +112,7 @@ class SuccessPage extends Component
         CartManagement::clearCartItems();
 
         // Verstuur factuur mail
-        Mail::to($order->user->email)->send(new InvoicePaidMail($order));
+        Mail::to($order->user->email)->send(new InvoiceMail($order));
 
         // Herlaad order met relaties voor de view
         return Order::with('address', 'user')->find($order->id);

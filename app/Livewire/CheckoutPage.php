@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use App\Helpers\CartManagement;
-use App\Mail\OrderPlacedMail;
+use App\Mail\InvoiceMail;
 use App\Models\Address;
 use App\Models\Order;
 use App\Models\ProductColorStock;
@@ -212,7 +212,7 @@ class CheckoutPage extends Component
 
         // Stuur mail voor COD
         if ($this->payment_method === 'cod' && $user) {
-            Mail::to($order->user->email)->send(new OrderPlacedMail($order));
+            Mail::to($order->user->email)->send(new InvoiceMail($order));
         }
 
         return redirect()->route('success');

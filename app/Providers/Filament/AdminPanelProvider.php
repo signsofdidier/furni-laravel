@@ -3,6 +3,11 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Resources\OrderResource\Widgets\OrderStats;
+use App\Filament\Widgets\LatestOrders;
+use App\Filament\Widgets\OrdersPerDayChart;
+use App\Filament\Widgets\StatsOverview;
+use App\Filament\Widgets\TestWidget;
+use App\Filament\Widgets\TotalRevenueStats;
 use App\Http\Middleware\EnsureUserHasRole;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use App\Filament\Widgets\DashboardStats;
@@ -44,13 +49,14 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Pages\Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            // zoekt automatisch naar widgets in andere mappen
+            //->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-//                 Widgets\AccountWidget::class,
-//                 Widgets\FilamentInfoWidget::class,
-
-                OrderStats::class,
+                TotalRevenueStats::class,
                 DashboardStats::class,
+                LatestOrders::class,
+                OrdersPerDayChart::class,
+
             ])
             ->middleware([
                 EncryptCookies::class,

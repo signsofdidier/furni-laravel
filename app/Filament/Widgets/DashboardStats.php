@@ -30,22 +30,25 @@ class DashboardStats extends BaseWidget
 
         return [
             // Stat 1: aantal reviews die nog goedgekeurd moeten worden
-            Stat::make('Pending Reviews', $pendingReviews)
+            Stat::make('🕓 Pending Reviews', $pendingReviews)
                 ->description('Reviews waiting for approval')
-                ->descriptionIcon('heroicon-o-clock')
-                ->color('danger'),
+                ->descriptionIcon('heroicon-m-clock')
+                ->color('warning')
+                ->extraAttributes(['class' => 'bg-yellow-50']),
 
             // Stat 2: aantal producten volledig uit stock
-            Stat::make('Out of Stock', $outOfStock)
-                ->description('Products with 0 stock')
-                ->descriptionIcon('heroicon-o-x-circle')
-                ->color('danger'),
+            Stat::make('❌ Out of Stock', $outOfStock)
+                ->description('Product colors with 0 stock')
+                ->descriptionIcon('heroicon-m-x-circle')
+                ->color('danger')
+                ->extraAttributes(['class' => 'bg-red-50']),
 
             // Stat 3: producten met minder dan 10 stuks op voorraad
-            Stat::make('Low Stock (<10)', $lowStock)
-                ->description('Products with low stock levels')
-                ->descriptionIcon('heroicon-o-exclamation-circle')
-                ->color('warning'),
+            Stat::make('⚠️ Low Stock (<10)', $lowStock)
+                ->description('Colors with low stock')
+                ->descriptionIcon('heroicon-m-exclamation-triangle')
+                ->color('gray')
+                ->extraAttributes(['class' => 'bg-orange-50']),
         ];
     }
 }

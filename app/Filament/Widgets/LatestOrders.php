@@ -16,27 +16,27 @@ class LatestOrders extends BaseWidget
 
     use HasWidgetShield;
 
-    // full width
-    protected int | string | array $columnSpan = 'full';
+    protected int | string | array $columnSpan = '2/2';
 
-    // zet deze widget op de 2de plaats op dashboard
+    // sort de widget
     protected static ?int $sort = 2;
+
 
     public function table(Table $table): Table
     {
         return $table
             // dit toont de laatste 5 orders
             ->query(OrderResource::getEloquentQuery())
-            ->defaultPaginationPageOption(5)
             ->defaultSort('created_at', 'desc')
+            ->defaultPaginationPageOption(3)
 
             ->columns([
-                TextColumn::make('id')
+                /*TextColumn::make('id')
                     ->label('Order ID')
-                    ->searchable(),
+                    ->searchable(),*/
 
                 TextColumn::make('user.name')
-                    ->searchable()
+                    //->searchable()
                     ->sortable(),
 
                 Textcolumn::make('grand_total')
@@ -62,22 +62,23 @@ class LatestOrders extends BaseWidget
                     })
                     ->sortable(),
 
-                TextColumn::make('payment_method')
+                /*TextColumn::make('payment_method')
                     ->sortable()
-                    ->searchable(),
+                    ->searchable(),*/
 
-                TextColumn::make('payment_status')
+                /*TextColumn::make('payment_status')
                     ->sortable()
-                    ->searchable()
-                    ->badge(),
+                    //->searchable()
+                    ->badge(),*/
 
                 TextColumn::make('created_at')
                     ->label('Order Date')
-                    ->dateTime()
+                    ->since()
             ])
             ->actions([
                 // custom View Order action: view de order
                 Action::make('View Order')
+                    ->label('')
                     ->url(fn (Order $record): string => OrderResource::getUrl('view', ['record' => $record]))
                     ->icon('heroicon-m-eye')
             ]);

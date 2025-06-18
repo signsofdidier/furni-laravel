@@ -13,17 +13,18 @@ class ProductStats extends BaseWidget
 {
     protected function getStats(): array
     {
-        // Top 3 best-selling products
+        // 1. Best verkochte product
         $topProduct = OrderItem::selectRaw('product_id, SUM(quantity) as total')
             ->groupBy('product_id')
             ->orderByDesc('total')
             ->with('product')
             ->first();
 
+        // Neemt de naam van de producten uit de database
         $topProductName = $topProduct?->product?->name ?? 'N/A';
         $topProductQty = $topProduct?->total ?? 0;
 
-        // Most sold brand
+        // 2. Meest verkochte merk
         $topBrand = OrderItem::selectRaw('products.brand_id, SUM(order_items.quantity) as total')
             ->join('products', 'products.id', '=', 'order_items.product_id')
             ->groupBy('products.brand_id')
@@ -36,7 +37,7 @@ class ProductStats extends BaseWidget
             $brandName = $brand?->name ?? 'N/A';
         }
 
-        // Most sold category
+        // 3. Meest verkochte categorie
         $topCategory = OrderItem::selectRaw('products.category_id, SUM(order_items.quantity) as total')
             ->join('products', 'products.id', '=', 'order_items.product_id')
             ->groupBy('products.category_id')
@@ -50,16 +51,19 @@ class ProductStats extends BaseWidget
         }
 
         return [
+            // Stat 1: Top product
             Stat::make('Top Product', $topProductName)
                 ->description('Most sold product' . ' (' . $topProductQty . ')')
                 ->descriptionIcon('heroicon-o-fire')
                 ->color('success'),
 
+            // Stat 2: Top brand
             Stat::make('Top Brand', $brandName)
                 ->description('Most sold brand')
                 ->descriptionIcon('heroicon-o-tag')
                 ->color('info'),
 
+            // Stat 3: Top category
             Stat::make('Top Category', $categoryName)
                 ->description('Most sold category')
                 ->descriptionIcon('heroicon-o-archive-box')

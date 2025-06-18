@@ -228,7 +228,7 @@ class DatabaseSeeder extends Seeder
 
         User::firstOrCreate(
             ['email' => 'jan@gmail.com'],
-            ['name' => 'Jan Dorie', 'password' => Hash::make('password'), 'email_verified_at' => now(),]
+            ['name' => 'Dirk Sken', 'password' => Hash::make('password'), 'email_verified_at' => now(),]
         );
 
         User::firstOrCreate(

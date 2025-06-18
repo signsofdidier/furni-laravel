@@ -190,7 +190,7 @@ class CheckoutPage extends Component
         $order->currency = 'EUR';
         $order->shipping_amount = $this->shipping_amount;
         $order->shipping_method = 'Truck Delivery';
-        $order->notes = 'Order placed by ' . ($user ? $user->name : 'guest');
+        $order->notes = 'Order placed by ' . $user->name;
         $order->save();
 
         // Sla order items op

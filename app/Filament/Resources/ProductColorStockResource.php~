@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 
-use App\Filament\Exports\ProductColorStockExporter;
+use App\Filament\Exports\StockExporter;
 use App\Filament\Resources\ProductColorStockResource\Pages;
 use App\Models\Color;
 use App\Models\Product;
@@ -60,7 +60,7 @@ class ProductColorStockResource extends Resource
         return $table
             ->headerActions([
                 ExportAction::make()
-                    ->exporter(ProductColorStockExporter::class)
+                    ->exporter(StockExporter::class)
             ])
             ->columns([
                 Tables\Columns\TextColumn::make('product.name')
@@ -102,7 +102,7 @@ class ProductColorStockResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
                 ExportBulkAction::make()
-                    ->exporter(ProductColorStockExporter::class)
+                    ->exporter(StockExporter::class)
             ]);
     }
 

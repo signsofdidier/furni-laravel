@@ -15,15 +15,32 @@ class OrderStats extends BaseWidget
     protected function getStats(): array
     {
         return [
-            // toon alle orders met status 'new'
-            Stat::make('New Orders', Order::query()->where('status', 'new')->count()),
-            Stat::make('Order Processing', Order::query()->where('status', 'processing')->count()),
-            Stat::make('Order Shipped', Order::query()->where('status', 'shipped')->count()),
+            // NEW
+            Stat::make('New Orders', Order::query()->where('status', 'new')->count())
+                ->description('Orders waiting to be handled')
+                ->descriptionIcon('heroicon-o-clock')
+                ->color('warning'),
 
-            // dit toont de gemiddelde prijs van alle orders
+            // PROCESSING
+            Stat::make('Order Processing', Order::query()->where('status', 'processing')->count())
+                ->description('Orders in processing')
+                ->descriptionIcon('heroicon-o-arrow-path')
+                ->color('info'),
+
+            // SHIPPED
+            Stat::make('Order Shipped', Order::query()->where('status', 'shipped')->count())
+                ->description('Orders sent to customers')
+                ->descriptionIcon('heroicon-o-truck')
+                ->color('success'),
+
+
+            // GEMIDDELDE PRIJS
             Stat::make('Average Price',
                 Number::currency(
-                    Order::query()->avg('grand_total') ?? 0, 'EUR')),
+                    Order::query()->avg('grand_total') ?? 0, 'EUR'))
+                ->description('Average value per order')
+                ->descriptionIcon('heroicon-o-currency-euro')
+                ->color('gray'),
         ];
     }
 }

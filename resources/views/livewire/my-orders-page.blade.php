@@ -2,6 +2,22 @@
     <div class="w-100 mt-4">
         <div class="container py-5">
             <h1 class="fw-bold mb-4" style="color: #00234D;">My Orders</h1>
+
+            {{--WIDGETS --}}
+            <div class="row g-4 mb-5">
+                <div class="col-md-4">
+                    <livewire:widgets.total-products-widget />
+                </div>
+                <div class="col-md-4">
+                    <livewire:widgets.last30days />
+                </div>
+                <div class="col-md-4">
+                    <livewire:widgets.top-three-products />
+                </div>
+            </div>
+
+
+
             <div class="row g-4">
                 @if($orders->count() > 0)
                     @foreach($orders as $order)
@@ -64,6 +80,7 @@
             </div>
         </div>
     </div>
+
 
     <style>
         .badge {

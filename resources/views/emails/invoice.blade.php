@@ -16,7 +16,11 @@
 </head>
 <body>
 <div class="container">
-    <h2 class="header">Thank you for your order!</h2>
+    <div class="header" style="text-align:center;">
+        <img src="{{ $message->embed(public_path('assets/img/furni-white-3.png')) }}" alt="Furni Logo" style="max-height: 50px; margin-bottom: 10px;">
+
+        <h2 style="margin: 0; color: #fff;">Thank you for your order!</h2>
+    </div>
 
     <p>Hello {{ Str::title($order->user->name) }},</p>
 

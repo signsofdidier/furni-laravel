@@ -103,13 +103,13 @@
 @endphp
 
 <div class="header">
-    <img src="{{ public_path('assets/img/logo-white.png') }}" alt="Shop Logo">
+    <img src="{{ public_path('assets/img/furni-white-3.png') }}" alt="Furni Logo">
     <h1>Order Confirmation – Order No. {{ str_pad($order->id, 5, '0', STR_PAD_LEFT) }}</h1>
     <p>Payment Method: <strong>{{ $paymentLabel }}</strong></p>
 </div>
 
 <div class="customer-info">
-    <p><strong>Customer:</strong> {{ $order->user->name }}</p>
+    <p><strong>Customer:</strong> {{ Str::title($order->user->name) }}</p>
     <p><strong>Email:</strong> {{ $order->user->email }}</p>
     <p><strong>Order Date:</strong> {{ $order->created_at->format('d/m/Y') }}</p>
 </div>

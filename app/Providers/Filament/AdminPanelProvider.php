@@ -32,7 +32,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->brandLogo(asset('assets/img/logo.png'))
+            ->brandLogo(asset('assets/img/furni-black-3.png'))
             ->favicon(asset('assets/img/favicon.png'))
             ->login()
             ->colors([

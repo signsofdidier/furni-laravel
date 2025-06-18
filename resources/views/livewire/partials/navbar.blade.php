@@ -149,7 +149,7 @@
                     <div class="col-lg-3 col-md-4 col-4">
                         <div class="header-logo">
                             <a href="/" class="logo-main">
-                                <img src="{{ asset('assets/img/logo.png') }}" loading="lazy" alt="bisum">
+                                <img src="{{ asset('assets/img/furni-black-3.png') }}" loading="lazy" alt="Furni logo">
                                 {{--<h2 class="text-bold">K(L)ASSE</h2>--}}
                             </a>
                         </div>

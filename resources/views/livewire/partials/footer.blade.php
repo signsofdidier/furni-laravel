@@ -72,7 +72,7 @@
                         <div class="col-xl-4 col-lg-5 col-md-6 col-12 footer-widget">
                             <div class="footer-widget-inner">
                                 <h4 class="footer-logo">
-                                    <a href="/"><img src="{{ asset('assets/img/logo.png') }}" alt="bisum"></a>
+                                    <a href="/"><img src="{{ asset('assets/img/furni-black-3.png') }}" alt="Furni logo"></a>
                                 </h4>
                                 <div class="footer-newsletter">
                                     <div class="footer-social-wrapper">

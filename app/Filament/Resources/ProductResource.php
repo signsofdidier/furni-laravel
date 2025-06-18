@@ -7,6 +7,7 @@ use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Color;
 use App\Models\Product;
 use Filament\Forms;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\MarkdownEditor;
@@ -14,6 +15,7 @@ use Filament\Forms\Components\MultiSelect;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
@@ -29,6 +31,7 @@ use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
 class ProductResource extends Resource
@@ -37,9 +40,7 @@ class ProductResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
 
-    // Dit bepaald de volgorde in de sidebar
     protected static ?int $navigationSort = 5;
-
 
     public static function form(Form $form): Form
     {
@@ -50,13 +51,10 @@ class ProductResource extends Resource
                         TextInput::make('name')
                             ->required()
                             ->live(onBlur: true)
-                            // Maak automatisch de slug aan bij het createn maar verander niet bij bewerken
                             ->afterStateUpdated(function (string $operation, $state, Set $set) {
-                                // Stop als we een bestaand record aan het bewerken zijn — alleen doorgaan bij 'create'
                                 if ($operation !== 'create') {
                                     return;
                                 }
-                                // Zet de slug op een gesluggede versie van de ingevoerde naam
                                 $set('slug', Str::slug($state));
                             })
                             ->maxLength(255),
@@ -66,21 +64,82 @@ class ProductResource extends Resource
                             ->maxLength(255)
                             ->disabled()
                             ->dehydrated()
-                            // Zorg dat de slug uniek is in de 'products' tabel, maar negeer het huidige record bij het bewerken
                             ->unique(Product::class, 'slug', ignoreRecord: true),
-
-                        /*Select::make('colors')
-                            ->multiple()
-                            ->relationship('colors', 'name')
-                            ->label('Available Colors')
-                            ->preload() // laadt alle kleuren in één keer
-                            ->searchable(), // doorzoekbaar indien veel kleuren*/
-
-                        MarkdownEditor::make('description')
-                            ->columnSpanFull()
-                            ->fileAttachmentsDirectory('products')
-
                     ])->columns(2),
+
+                    Section::make('Description')->schema([
+                        MarkdownEditor::make('description')
+                            ->toolbarButtons([
+                                'bold',          // Maakt tekst vetgedrukt
+                                'italic',        // Maakt tekst cursief
+                                'link',         // Voegt hyperlinks toe
+                                'orderedList',   // Maakt genummerde lijsten
+                                'bulletList',   // Maakt opsommingen met bullets
+                                'blockquote',   // Formatteert als citaat
+                                'codeBlock',    // Maakt codeblokken
+                                'undo',         // Ongedaan maken functie
+                                'redo',         // Opnieuw uitvoeren functie
+                            ])
+                            ->columnSpanFull(), // Neemt volledige breedte in
+
+                        /* MARKDOWN MET AI INTEGRATIE */
+                        Forms\Components\Actions::make([
+                            Action::make('generateDescription')
+                                ->label('Generate Description')
+                                ->action(function (Forms\Set $set, Forms\Get $get) {
+                                    $productName = $get('name');
+                                    if (!$productName) {
+                                        $set('description', 'Please enter a product name first');
+                                        return;
+                                    }
+
+                                    try {
+                                        // API call naar Groq voor AI beschrijving
+                                        $response = Http::withoutVerifying()
+                                            ->withToken(env('GROQ_API_KEY'))
+                                            ->timeout(15)
+                                            ->post('https://api.groq.com/openai/v1/chat/completions', [
+                                                'model' => 'llama3-8b-8192',
+                                                'messages' => [
+                                                    [
+                                                        'role' => 'system',
+                                                        'content' => 'Generate product descriptions with: 1) 1-2 short descriptive sentences, ' .
+                                                            '2) 2-3 bullet points with small key features (no more than 3 words). Use **bold** only for important ' .
+                                                            'terms in the description. For bullets use *. Do not repeat the product name.'
+                                                    ],
+                                                    [
+                                                        'role' => 'user',
+                                                        'content' => "Create product description for: {$productName}"
+                                                    ],
+                                                ],
+                                                'max_tokens' => 150,  // Iets meer tokens voor betere beschrijving
+                                                'temperature' => 0.5  // Balans tussen creativiteit en consistentie
+                                            ]);
+
+                                        if ($response->successful()) {
+                                            $content = $response->json();
+                                            $description = $content['choices'][0]['message']['content'] ?? '';
+
+                                            // Zuivert de gegenereerde tekst
+                                            $cleanDescription = Str::of($description)
+                                                ->replace(['```markdown', '```', '# ', 'Product description:', 'Description:'], '')
+                                                ->replaceMatches('/(- |•|\*) /', '* ')
+                                                ->trim();
+
+                                            // Zorgt voor juiste opmaak
+                                            $cleanDescription = (string) Str::of($cleanDescription)
+                                                ->replaceMatches('/\n+/', "\n")  // Verwijdert dubbele newlines
+                                                ->prepend("\n");                 // Voegt newline toe voor consistentie
+
+                                            $set('description', trim($cleanDescription));
+                                        }
+                                    } catch (\Exception $e) {
+                                        // Foutafhandeling
+                                        $set('description', 'Error generating description. Please try again.');
+                                    }
+                                }),
+                        ]),
+                    ])->collapsible(),
 
                     Section::make('Images')->schema([
                         FileUpload::make('images')
@@ -111,48 +170,40 @@ class ProductResource extends Resource
                                     ->numeric()
                                     ->required(),
                             ])
-                            ->columns(1) // ELK ITEM 2 COLUMNS
-                            ->grid(3), // ELKE REPEATER NAAST ELKAAR
-
+                            ->columns(1)
+                            ->grid(3),
                     ])
-
-
                 ])->columnSpan(2),
 
                 Group::make()->schema([
                     Section::make('Price')->schema([
                         TextInput::make('price')
-                        ->numeric()
-                        ->required()
-                        ->prefix('EUR'),
+                            ->numeric()
+                            ->required()
+                            ->prefix('EUR'),
 
                         TextInput::make('shipping_cost')
                             ->label('Shipping cost / unit')
                             ->numeric()
                             ->required()
                             ->prefix('EUR'),
-
                     ]),
 
                     Section::make('Associations')->schema([
                         Select::make('category_id')
-                        ->required()
-                        ->searchable()
-                        ->preload() // preload alle categoriën voor sneller laden
-                        ->relationship('category', 'name'), // relatie met de gelinkte category model
+                            ->required()
+                            ->searchable()
+                            ->preload()
+                            ->relationship('category', 'name'),
 
                         Select::make('brand_id')
                             ->required()
                             ->searchable()
-                            ->preload() // preload alle categoriën voor sneller laden
-                            ->relationship('brand', 'name'), // relatie met de gelinkte category model
+                            ->preload()
+                            ->relationship('brand', 'name'),
                     ]),
 
                     Section::make('status')->schema([
-                        /*Toggle::make('in_stock')
-                            ->required()
-                            ->default(true),*/
-
                         Toggle::make('is_active')
                             ->required()
                             ->default(true),
@@ -160,13 +211,10 @@ class ProductResource extends Resource
                         Toggle::make('is_featured')
                             ->required(),
 
-
                         Toggle::make('on_sale')
                             ->required(),
                     ])
-
                 ])->columnSpan(1)
-
             ])->columns(3);
     }
 
@@ -178,7 +226,6 @@ class ProductResource extends Resource
                     ->searchable(),
                 ImageColumn::make('images')
                     ->alignCenter()
-                    // Zet de eerste afbeelding als preview
                     ->getStateUsing(fn ($record) => $record->images[0] ?? null),
                 TextColumn::make('category.name')
                     ->sortable(),
@@ -201,19 +248,17 @@ class ProductResource extends Resource
                     ->label('In Stock')
                     ->boolean()
                     ->sortable()
-                    // kijkt naar product model getInStockAttribute()
                     ->getStateUsing(fn ($record) => $record->in_stock),
                 IconColumn::make('is_active')
-                     ->boolean(),
+                    ->boolean(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true), // Verberg standaard en toon met toggle
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true), // Verberg standaard en toon met toggle
-
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->modifyQueryUsing(fn (Builder $query) => $query->withoutGlobalScopes([
                 SoftDeletingScope::class,
@@ -245,12 +290,9 @@ class ProductResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
-    // GLOBAL SEARCH Multiple columns
     public static function getGloballySearchableAttributes(): array
     {
         return ['name', 'description'];

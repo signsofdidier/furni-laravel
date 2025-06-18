@@ -7,6 +7,7 @@ use App\Filament\Resources\BlogResource\RelationManagers;
 use App\Models\Blog;
 use App\Models\Product;
 use Filament\Forms;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
@@ -28,6 +29,7 @@ use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
 class BlogResource extends Resource
@@ -76,8 +78,119 @@ class BlogResource extends Resource
                             ->maxLength(255)
                             ->required(),
 
+                        /*MarkdownEditor::make('content')
+                            ->required(),*/
+
                         MarkdownEditor::make('content')
-                            ->required(),
+                            ->required()
+                            ->toolbarButtons([
+                                'bold',
+                                'italic',
+                                'link',
+                                'orderedList',
+                                'bulletList',
+                                'blockquote',
+                                'codeBlock',
+                                'undo',
+                                'redo',
+                            ])
+                            ->columnSpanFull(),
+
+                        /* AI INTEGRATIE KNOP VOOR DE CONTENT,
+                        EXCERPT EN BLOCKQUOTE OP BASIS VAN TITEL EN GEKOZEN CATEGORIES */
+                        Forms\Components\Actions::make([
+                            // Maakt een actie-knop aan voor het genereren van blog content
+                            Action::make('generateBlogContent')
+                                ->label('Generate Blog Content')  // Label dat op de knop verschijnt
+                                ->action(function (Forms\Set $set, Forms\Get $get) {
+                                    // Haal de ingevoerde titel en categorieën op uit het formulier
+                                    $title = $get('title');
+                                    $categories = $get('categories');
+
+                                    // Controleer of er een titel is ingevuld
+                                    if (!$title) {
+                                        $set('content', 'Please enter a blog title first'); // Toon foutmelding
+                                        return; // Stop de functie als er geen titel is
+                                    }
+
+                                    try {
+                                        $categoryInstruction = '';
+                                        // Als er categorieën geselecteerd zijn, voeg deze toe aan de instructies
+                                        if (!empty($categories)) {
+                                            // Haal de namen van de geselecteerde categorieën op
+                                            $categoryNames = \App\Models\Category::whereIn('id', $categories)
+                                                ->pluck('name')
+                                                ->implode(', ');
+                                            $categoryInstruction = " Focus specifically on: {$categoryNames}.";
+                                        }
+
+                                        // Verstuur een API-aanvraag naar Groq voor AI-contentgeneratie
+                                        $response = Http::withoutVerifying()
+                                            ->withToken(env('GROQ_API_KEY')) // Gebruik API key uit .env
+                                            ->timeout(60) // Timeout na 60 seconden
+                                            ->post('https://api.groq.com/openai/v1/chat/completions', [
+                                                'model' => 'llama3-8b-8192', // AI model dat gebruikt wordt
+                                                'messages' => [
+                                                    [
+                                                        'role' => 'system', // Systeeminstructies voor de AI
+                                                        'content' => 'You are an interior design expert. Generate:'.
+                                                            '1. Blog content (2-3 paragraphs) about the given topic.'.
+                                                            '2. A UNIQUE, specific quote (max 12 words) that directly relates to the content.'.
+                                                            '3. An appropriate designer/author who would say this quote.'.
+                                                            'RULES:'.
+                                                            '- NEVER use these overused quotes: "Less is more", "Form follows function", "God is in the details"'.
+                                                            '- ALWAYS create a fresh, context-specific quote'.
+                                                            '- Choose DIFFERENT designers each time (e.g., Philippe Starck, Kelly Wearstler, Patricia Urquiola)'.
+                                                            '- The quote must contain a SPECIFIC insight about the topic'.
+                                                            '- Format as JSON: {"content":"text","quote":"quote","author":"name"}'.
+                                                            $categoryInstruction // Categorie-specifieke instructies
+                                                    ],
+                                                    [
+                                                        'role' => 'user', // Gebruikersvraag aan de AI
+                                                        'content' => "Topic: {$title}. ".
+                                                            "Generate content with 2-3 clear paragraphs. ". // 2-3 alinea's
+                                                            "Include a fresh quote (not overused) and matching designer. ". // Unieke quote
+                                                            "Style context: ".
+                                                            (!empty($categories) ? $categoryNames : "general interior design") // Stijlcontext
+                                                    ]
+                                                ],
+                                                'response_format' => ['type' => 'json_object'], // Verwacht JSON antwoord
+                                                'max_tokens' => 600, // Maximale lengte van het antwoord
+                                                'temperature' => 0.65 // Creativiteitsniveau (0-1)
+                                            ]);
+
+                                        // Als het API-verzoek succesvol was
+                                        if ($response->successful()) {
+                                            $content = $response->json(); // Zet JSON om naar array
+                                            $responseData = json_decode($content['choices'][0]['message']['content'] ?? '{}', true);
+
+                                            // Verwerk de gegenereerde content
+                                            $blogContent = $responseData['content'] ?? '';
+                                            // Verwijder eventuele markdown headers en trim whitespace
+                                            $cleanContent = Str::of($blogContent)
+                                                ->replaceMatches('/^#+.+/m', '') // Verwijder headers zoals # Titel
+                                                ->trim();
+
+                                            // Verwerk de quote - verwijder overbodige aanhalingstekens
+                                            $quote = Str::of($responseData['quote'] ?? '')
+                                                ->trim('"\'')
+                                                ->toString();
+
+                                            // Gebruik de meegeleverde auteur of een standaardwaarde
+                                            $author = $responseData['author'] ?? 'Design Expert';
+
+                                            // Vul de formuliervelden in met de gegenereerde content
+                                            $set('content', (string) $cleanContent); // Hoofdcontent
+                                            $set('excerpt', Str::of($blogContent)->limit(150)); // Korte samenvatting
+                                            $set('blockquote', $quote); // Inspiratiequote
+                                            $set('blockquote_author', $author); // Auteur van de quote
+                                        }
+                                    } catch (\Exception $e) {
+                                        // Vang errors op en toon een foutmelding
+                                        $set('content', 'Error generating content: ' . $e->getMessage());
+                                    }
+                                }),
+                        ]),
 
                         Hidden::make('user_id')
                             ->default(auth()->id()),

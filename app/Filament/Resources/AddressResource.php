@@ -93,15 +93,6 @@ class AddressResource extends Resource
                 SoftDeletingScope::class,
             ]))
             ->filters([
-                Tables\Filters\TernaryFilter::make('is_profile')
-                    ->label('Profile Address')
-                    ->placeholder('All')
-                    ->trueLabel('Only Profile')
-                    ->falseLabel('Only Order')
-                    ->queries(
-                        true: fn (Builder $query) => $query->whereNull('order_id'),
-                        false: fn (Builder $query) => $query->whereNotNull('order_id'),
-                    ),
                 TrashedFilter::make(),
             ])
             ->actions([

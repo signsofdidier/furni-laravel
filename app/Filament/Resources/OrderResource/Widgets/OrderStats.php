@@ -15,7 +15,7 @@ class OrderStats extends BaseWidget
     protected function getStats(): array
     {
         return [
-            // NEW
+            // NEW ORDERS
             Stat::make('New Orders', Order::query()->where('status', 'new')->count())
                 ->description('Orders waiting to be handled')
                 ->descriptionIcon('heroicon-o-clock')

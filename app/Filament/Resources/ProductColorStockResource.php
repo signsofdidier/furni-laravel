@@ -98,9 +98,9 @@ class ProductColorStockResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
+                /*Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                ]),*/
                 ExportBulkAction::make()
                     ->exporter(ProductColorStockExporter::class)
             ]);

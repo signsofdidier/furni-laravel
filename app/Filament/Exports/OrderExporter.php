@@ -29,7 +29,6 @@ class OrderExporter extends Exporter
             ExportColumn::make('notes'),
             ExportColumn::make('sub_total'),
             ExportColumn::make('tax_amount'),
-            ExportColumn::make('discount_amount'),
             ExportColumn::make('deleted_at'),
             ExportColumn::make('created_at'),
             ExportColumn::make('updated_at'),

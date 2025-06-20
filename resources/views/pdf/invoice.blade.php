@@ -99,7 +99,7 @@
 
 @php
     $threshold = \App\Models\Setting::first()->free_shipping_threshold ?? 0;
-    $paymentLabel = $order->payment_method == 'stripe' ? 'Bancontact' : 'Cash on Delivery';
+    $paymentLabel = $order->payment_method == 'bancontact' ? 'Bancontact' : 'Cash on Delivery';
 @endphp
 
 <div class="header">

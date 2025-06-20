@@ -71,6 +71,7 @@ class ProductResource extends Resource
 
                     Section::make('Description')->schema([
                         MarkdownEditor::make('description')
+                            ->label('')
                             ->toolbarButtons([
                                 'bold',          // Maakt tekst vetgedrukt
                                 'italic',        // Maakt tekst cursief
@@ -254,7 +255,7 @@ class ProductResource extends Resource
                     ->label('In Stock')
                     ->boolean()
                     ->sortable()
-                    ->getStateUsing(fn ($record) => $record->in_stock),
+                    ->getStateUsing(fn ($record) => $record->in_stock), // Kijkt als er stock is
                 IconColumn::make('is_active')
                     ->boolean(),
                 TextColumn::make('created_at')

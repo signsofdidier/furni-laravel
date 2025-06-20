@@ -47,7 +47,7 @@
             </div>
             <div class="col-12">
                 <h2 class="h4" style="color: #00234D;">8. Contact Us</h2>
-                <p>If you have any questions about this policy, please contact us at <a href="mailto:info@bisum.com">info@bisum.com</a>.</p>
+                <p>If you have any questions about this policy, please contact us at <a href="mailto:info@furni.com">info@furni.com</a>.</p>
             </div>
         </div>
     </section>

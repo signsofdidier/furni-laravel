@@ -1,2 +1,10 @@
+# Ignore everything in this folder
 *
-!.gitignore
+
+# But allow Git to *see* these subfolders first
+!*/
+!blogs/**
+!brands/**
+!categories/**
+!products/**
+!profile-photos/**

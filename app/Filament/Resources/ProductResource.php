@@ -144,9 +144,11 @@ class ProductResource extends Resource
                         ]),
                     ])->collapsible(),
 
-                    Section::make('Images')->schema([
+                    Section::make('Product Images')->schema([
                         FileUpload::make('images')
+                            ->label('')
                             ->multiple()
+                            ->reorderable()
                             ->required()
                             ->directory('products')
                             ->image()
@@ -155,6 +157,7 @@ class ProductResource extends Resource
                             ->imageResizeTargetWidth(1000)
                             ->imageResizeTargetHeight(1288)
                             ->optimize('webp')
+                            ->maxSize(6048)
                             ->required(),
                     ]),
 

@@ -2,18 +2,20 @@
 
 namespace App\Filament\Resources;
 
-
 use App\Filament\Exports\ProductColorStockExporter;
 use App\Filament\Resources\ProductColorStockResource\Pages;
 use App\Models\Color;
 use App\Models\Product;
 use App\Models\ProductColorStock;
-use Filament\Forms;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Actions\ExportBulkAction;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 
@@ -23,7 +25,7 @@ class ProductColorStockResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-cube';
 
-    protected static ?string $navigationLabel = 'Product Stock';
+    protected static ?string $navigationLabel = 'Product Stock'; // Dit bepaald de label in de sidebar
     protected static ?string $modelLabel = 'Product Stock';
     protected static ?string $pluralModelLabel = 'Product Stocks';
 
@@ -35,19 +37,19 @@ class ProductColorStockResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('product_id')
+                Select::make('product_id')
                     ->label('Product')
                     ->options(Product::all()->pluck('name', 'id'))
                     ->searchable()
                     ->required(),
 
-                Forms\Components\Select::make('color_id')
+                Select::make('color_id')
                     ->label('Color')
                     ->options(Color::all()->pluck('name', 'id'))
                     ->searchable()
                     ->required(),
 
-                Forms\Components\TextInput::make('stock')
+                TextInput::make('stock')
                     ->label('Stock Quantity')
                     ->numeric()
                     ->minValue(0)
@@ -63,23 +65,23 @@ class ProductColorStockResource extends Resource
                     ->exporter(ProductColorStockExporter::class)
             ])
             ->columns([
-                Tables\Columns\TextColumn::make('product.name')
+                TextColumn::make('product.name')
                     ->label('Product')
                     ->sortable()
                     ->searchable(),
 
-                Tables\Columns\ImageColumn::make('product.images')
+                ImageColumn::make('product.images')
                     ->label('Image')
                     ->alignCenter()
                     ->getStateUsing(fn ($record) => $record->product->images[0] ?? null)
                     ->size(40),
 
-                Tables\Columns\TextColumn::make('color.name')
+                TextColumn::make('color.name')
                     ->label('Kleur')
                     ->sortable()
                     ->searchable(),
 
-                Tables\Columns\TextColumn::make('stock')
+                TextColumn::make('stock')
                     ->label('Stock')
                     ->sortable()
                     ->searchable()
@@ -128,9 +130,7 @@ class ProductColorStockResource extends Resource
         $outOfStock = ProductColorStock::where('stock', 0)->count();
         $lowStock = ProductColorStock::whereBetween('stock', [1, 9])->count();
 
-        return ($outOfStock > 0 || $lowStock > 0)
-            ? "{$outOfStock} out / {$lowStock} low"
-            : null;
+        return ($outOfStock > 0 || $lowStock > 0) ? "{$outOfStock} out / {$lowStock} low" : null;
     }
     // PRODUCT STOCK BADGE KLEUR
     public static function getNavigationBadgeColor(): string | array | null

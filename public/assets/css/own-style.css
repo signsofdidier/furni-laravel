@@ -1,3 +1,10 @@
+/* Kleur formatting */
+.text-salmon{
+    color: #F76B6A !important;
+}
+
+
+/*Products*/
 .product-hover-zoom {
     display: block;  /* of ‘block’, afhankelijk van je layout */
     overflow: hidden;

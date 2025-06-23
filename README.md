@@ -107,12 +107,6 @@ php artisan migrate:fresh --seed
 ### 7. Server starten
 
 ```bash
-php artisan serve
-```
-
-Of start dev script:
-
-```bash
 composer run dev
 ```
 

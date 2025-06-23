@@ -267,8 +267,9 @@ class ProductResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('created_at', 'desc')
             ->modifyQueryUsing(fn (Builder $query) => $query->withoutGlobalScopes([
-                SoftDeletingScope::class,
+                SoftDeletingScope::class, // Zorgt ervoor dat de trashed records worden weergegeven
             ]))
             ->filters([
                 SelectFilter::make('categories')

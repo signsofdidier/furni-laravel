@@ -7,6 +7,7 @@ use App\Filament\Resources\ProductResource\Pages;
 use App\Models\Color;
 use App\Models\Product;
 use Filament\Forms;
+use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Group;
@@ -69,6 +70,7 @@ class ProductResource extends Resource
                             ->unique(Product::class, 'slug', ignoreRecord: true),
                     ])->columns(2),
 
+                    /* DESCRIPTION */
                     Section::make('Description')->schema([
                         MarkdownEditor::make('description')
                             ->label('')
@@ -86,10 +88,12 @@ class ProductResource extends Resource
                             ->columnSpanFull(), // Neemt volledige breedte in
 
                         /* MARKDOWN MET AI INTEGRATIE */
-                        Forms\Components\Actions::make([
+                        Actions::make([
                             Action::make('generateDescription')
                                 ->label('Generate Description')
+                                // De action wordt uitgevoerd wanneer de gebruiker op de knop klikt
                                 ->action(function (Forms\Set $set, Forms\Get $get) {
+                                    // Haal de naam van het product op en als er geen is, krijg je de message.
                                     $productName = $get('name');
                                     if (!$productName) {
                                         $set('description', 'Please enter a product name first');
@@ -119,6 +123,7 @@ class ProductResource extends Resource
                                                 'temperature' => 0.5  // Balans tussen creativiteit en consistentie
                                             ]);
 
+                                        // Haal de gegenereerde beschrijving op
                                         if ($response->successful()) {
                                             $content = $response->json();
                                             $description = $content['choices'][0]['message']['content'] ?? '';
@@ -131,10 +136,10 @@ class ProductResource extends Resource
 
                                             // Zorgt voor juiste opmaak
                                             $cleanDescription = (string) Str::of($cleanDescription)
-                                                ->replaceMatches('/\n+/', "\n")  // Verwijdert dubbele newlines
-                                                ->prepend("\n");                 // Voegt newline toe voor consistentie
+                                                ->replaceMatches('/\n+/', "\n")  // Verwijdert dubbele nieuwe lijnen
+                                                ->prepend("\n"); // Voegt nieuwe lijn toe voor consistentie
 
-                                            $set('description', trim($cleanDescription));
+                                            $set('description', trim($cleanDescription)); // Sla de gegenereerde beschrijving op
                                         }
                                     } catch (\Exception $e) {
                                         // Foutafhandeling
@@ -144,6 +149,7 @@ class ProductResource extends Resource
                         ]),
                     ])->collapsible(),
 
+                    /* IMAGES UPLOAD */
                     Section::make('Product Images')->schema([
                         FileUpload::make('images')
                             ->label('')
@@ -157,7 +163,7 @@ class ProductResource extends Resource
                             ->imageResizeTargetWidth(1000)
                             ->imageResizeTargetHeight(1288)
                             ->optimize('webp')
-                            ->maxSize(6048)
+                            ->maxSize(3024)
                             ->required(),
                     ]),
 

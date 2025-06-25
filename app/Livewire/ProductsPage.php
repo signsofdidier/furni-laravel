@@ -172,7 +172,7 @@ class ProductsPage extends Component
             });
         }
 
-        // PRICE RANGE filter
+        // PRICE RANGE filter SLIDER
         if($this->price_range) {
             // Filter op prijs tussen 0 en de geselecteerde prijs
             $productQuery->whereBetween('price', [0, $this->price_range]);

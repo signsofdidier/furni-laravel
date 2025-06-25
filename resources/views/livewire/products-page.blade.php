@@ -261,7 +261,7 @@
                             </div>
                         </div>
 
-                        {{-- Price filter --}}
+                        {{-- Price filter SLIDER --}}
                         <div x-data="{ open:true }" class="filter-widget">
                             <div @click="open = !open" class="filter-header faq-heading heading_18 d-flex align-items-center justify-content-between border-bottom">
                                 Price
@@ -276,13 +276,13 @@
                                     wire:model.live="price_range"
                                     class="form-range"
                                     min="0"
-                                    max="5000"
+                                    max="1000"
                                     step="1"
                                 >
 
                                 <div class="d-flex justify-content-between mt-2">
                                     <span class="text-primary fw-bold">€0</span>
-                                    <span class="text-primary fw-bold">€5.000</span>
+                                    <span class="text-primary fw-bold">€1.000</span>
                                 </div>
                             </div>
                         </div>

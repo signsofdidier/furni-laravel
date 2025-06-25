@@ -28,6 +28,7 @@ use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -280,6 +281,11 @@ class OrderResource extends Resource
                 SoftDeletingScope::class,
             ]))
             ->filters([
+                // FILTER OP NEW ORDER
+                Filter::make('new_orders')
+                    ->label('New Orders')
+                    ->query(fn (Builder $query) => $query->where('status', 'new')),
+
                 TrashedFilter::make(), // Verberg standaard en toon met toggle
             ])
             ->actions([
@@ -313,13 +319,13 @@ class OrderResource extends Resource
     // geef een badge met het aantal orders in de sidebar
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+        return static::getModel()::where('status', 'new')->count();
     }
 
     // geef de badge in de sidebar rode kleur bij meer dan 10 orders en naders groen
     public static function getNavigationBadgeColor(): string|array|null
     {
-        return static::getModel()::count() > 10 ? 'danger' : 'success';
+        return static::getModel()::where('status', 'new')->count() > 10 ? 'danger' : 'success';
     }
 
     public static function getPages(): array

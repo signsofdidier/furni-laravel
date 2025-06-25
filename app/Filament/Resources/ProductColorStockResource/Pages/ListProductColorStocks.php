@@ -17,6 +17,7 @@ class ListProductColorStocks extends ListRecords
         ];
     }
 
+    // alleen lezen
     public static function canCreate(): bool
     {
         return false;

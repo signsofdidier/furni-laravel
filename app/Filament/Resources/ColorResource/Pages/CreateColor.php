@@ -11,6 +11,6 @@ class CreateColor extends CreateRecord
     protected static string $resource = ColorResource::class;
 
     protected function getRedirectUrl(): string{
-        return ColorResource::getUrl('index');
+        return ColorResource::getUrl('index'); // redirect naar lijst
     }
 }

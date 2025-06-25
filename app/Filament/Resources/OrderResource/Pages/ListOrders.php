@@ -12,6 +12,7 @@ class ListOrders extends ListRecords
 {
     protected static string $resource = OrderResource::class;
 
+    // button om nieuw order te maken
     protected function getHeaderActions(): array
     {
         return [
@@ -27,7 +28,7 @@ class ListOrders extends ListRecords
         ];
     }
 
-    // tabs voor status queries
+    // TABS VOOR DE STATUS QUERY FILTERS
     public function getTabs(): array
     {
         return [

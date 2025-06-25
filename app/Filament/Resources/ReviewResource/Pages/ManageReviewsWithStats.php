@@ -8,20 +8,23 @@ use App\Models\Review;
 use Filament\Resources\Pages\Page;
 use Filament\Tables;
 use Filament\Tables\Columns\ToggleColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Filament\Forms\Form;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Contracts\View\View;
 
+// Pagina om reviews te managen, maar met statistieken erbij (2 tabs)
 class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
 {
     use Tables\Concerns\InteractsWithTable;
 
+    // resource + view
     protected static string $resource = ReviewResource::class;
     protected static string $view = 'filament.resources.review-resource.pages.manage-reviews-with-stats';
 
-    /*GEEN TITEL */
+    /* Geen titel nodig, laat ik leeg */
     public function getTitle(): string
     {
         return '';
@@ -30,20 +33,22 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
     /* GEEN BREADCRUMB */
     protected static bool $shouldRegisterBreadcrumbs = false;
 
+    // Actieve tab: 'reviews' of 'ratings'
     public string $activeTab = 'reviews';
 
     // COUNT VOOR NIET APPROVED REVIEWS
     public int $pendingReviewCount = 0;
 
-    // refresh pending count na goedkeuring
+    // Event listeners: refresh als een review approved is
     protected $listeners = ['refreshPendingCount' => '$refresh'];
 
+    // Bij laden: records per page en meteen tellen hoeveel pending
     public function mount(): void{
         $this->tableRecordsPerPage = 5; // aantal records per pagina
         $this->pendingReviewCount = Review::where('approved', false)->count();
     }
 
-    // refresh pending count na aanpassing toggle
+    // Welke query gebruiken voor de tabel? Afhankelijk van de tab
     public function refreshPendingCount(): void
     {
         $this->pendingReviewCount = Review::where('approved', false)->count();
@@ -52,16 +57,17 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
     protected function getTableQuery()
     {
         if ($this->activeTab === 'reviews') {
-            // Voor reviews: gebruik Review model met SoftDeletes
+            // Reviews tab: alles van reviews, ook soft deleted
             return Review::withTrashed()->with(['user', 'product'])/*->latest('created_at')*/;
 
         } else {
-            // Voor ratings: gebruik Product model (geen SoftDeletes)
+            // Ratings tab: producten ophalen, met rating stats
             return Product::query()->withCount('reviews')
                 ->withAvg('reviews', 'rating');
         }
     }
 
+    // Welke kolommen tonen in de TABLE? Verschillend per tab
     protected function getTableColumns(): array
     {
         return $this->activeTab === 'reviews'
@@ -82,7 +88,7 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
 
                 TextColumn::make('title')
                     ->label('Title')
-                    ->limit(10),// max 20 tekens
+                    ->limit(10),// max 10 tekens
 
                 TextColumn::make('created_at')->label('Date')->dateTime()->sortable(),
 
@@ -111,36 +117,38 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
 
     }
 
+    // Wisselen tussen tabs
     public function switchTab(string $tab): void
     {
         $this->activeTab = $tab;
         $this->resetTable();
     }
 
+    // Filters voor reviews tab (approved / pending / deleted)
     protected function getTableFilters(): array
     {
         if ($this->activeTab === 'reviews') {
             return [
-                Tables\Filters\Filter::make('approved')
+                Filter::make('approved')
                     ->label('Approved')
                     ->query(fn ($query) => $query->where('approved', true)),
 
-                Tables\Filters\Filter::make('pending')
+                Filter::make('pending')
                     ->label('Not Approved')
                     ->query(fn ($query) => $query->where('approved', false)),
 
                 Tables\Filters\TrashedFilter::make()
                     ->label('Deleted Reviews')
-                    ->trueLabel('All reviews')      // NIET VERWIJDERDE REVIEWS
-                    ->falseLabel('Only deleted')    // VERWIJDERDE REVIEWS
-                    ->default(true),                // ALLE REVIEWS
+                    ->trueLabel('All reviews') // NIET VERWIJDERDE REVIEWS
+                    ->falseLabel('Only deleted') // VERWIJDERDE REVIEWS
+                    ->default(true), // ALLE REVIEWS
             ];
         }
 
         return [];
     }
 
-
+    // Acties per rij in de tabel (alleen voor reviews tab)
     protected function getTableActions(): array
     {
         // Alleen soft delete acties voor reviews tab
@@ -151,7 +159,7 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
                     ->label('View')
                     ->icon('heroicon-o-eye')
                     ->modalHeading('Review details')
-                    ->modalSubheading(fn ($record) => 'By ' . $record->user->name)
+                    ->modalSubheading(fn ($record) => 'By ' . $record->user->name) // naam gebruiker
                     ->modalContent(fn ($record) => view('filament.resources.review-resource.partials.review-modal', [
                         'review' => $record,
                     ]))
@@ -159,9 +167,9 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
                     ->modalCancelAction(false),// Verwijder standaard 'Cancel'
 
 
-                Tables\Actions\DeleteAction::make(),       // Soft delete
-                Tables\Actions\ForceDeleteAction::make(),  // Permanent delete
-                Tables\Actions\RestoreAction::make(),      // Herstellen
+                Tables\Actions\DeleteAction::make(), // Soft delete
+                Tables\Actions\ForceDeleteAction::make(), // Permanent delete
+                Tables\Actions\RestoreAction::make(), // Herstellen
             ];
         }
 
@@ -175,7 +183,7 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
         return [5, 10, 25, 50];
     }
 
-    /* SORTERING BIJ START VAN PAGINA */
+    /* Welke kolom sorteren bij het openen */
     protected function getDefaultTableSortColumn(): ?string
     {
         return $this->activeTab === 'reviews' ? 'approved' : 'reviews_avg_rating';
@@ -184,6 +192,4 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
     {
         return $this->activeTab === 'reviews' ? 'asc' : 'desc';
     }
-
-
 }

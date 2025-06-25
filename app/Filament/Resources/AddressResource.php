@@ -21,6 +21,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
+// Resource voor alle adressen (admin)
 class AddressResource extends Resource
 {
     protected static ?string $model = Address::class;
@@ -89,11 +90,12 @@ class AddressResource extends Resource
                 TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->defaultSort('created_at', 'desc')
+            // Zorg dat soft deletes niet verborgen worden
             ->modifyQueryUsing(fn (Builder $query) => $query->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]))
             ->filters([
-                TrashedFilter::make(),
+                TrashedFilter::make(), // Toon ook verwijderde adressen (indien nodig)
             ])
             ->actions([
                 ActionGroup::make([

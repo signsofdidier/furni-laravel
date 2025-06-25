@@ -18,6 +18,7 @@ class ListUsers extends ListRecords
         ];
     }
 
+    // USER WIDGETS
     protected function getHeaderWidgets(): array
     {
         return [

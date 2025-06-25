@@ -13,10 +13,13 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
+// RelationManager om de orders van een user te tonen
 class OrdersRelationManager extends RelationManager
 {
+    // Dit zegt aan Filament: dit gaat over de 'orders' relatie op User
     protected static string $relationship = 'Orders';
 
+    // Geen formulier nodig (orders maken via user is niet de bedoeling)
     public function form(Form $form): Form
     {
         return $form
@@ -25,6 +28,7 @@ class OrdersRelationManager extends RelationManager
             ]);
     }
 
+    // dit zorgt ervoor dat de orders worden weergegeven
     public function table(Table $table): Table
     {
         return $table

@@ -40,10 +40,10 @@ class BlogResource extends Resource
 
     protected static ?int $navigationSort = 9;
 
-
+    // Resource voor blogs in admin
     public static function form(Form $form): Form
     {
-        ini_set('memory_limit', '512M');
+        ini_set('memory_limit', '512M'); // instelling voor de image editor en compressie die meer geheugen nodig heeft
 
         return $form
             ->schema([
@@ -53,13 +53,13 @@ class BlogResource extends Resource
                             TextInput::make('title')
                                 ->required()
                                 ->live(onBlur: true)
-                                // Maak automatisch de slug aan bij het createn maar verander niet bij bewerken
+                                // Automatisch slug maken bij create (maar niet bij edit)
                                 ->afterStateUpdated(function (string $operation, $state, Set $set) {
                                     // Stop als we een bestaand record aan het bewerken zijn — alleen doorgaan bij 'create'
                                     if ($operation !== 'create') {
                                         return;
                                     }
-                                    // Zet de slug op een gesluggede versie van de ingevoerde naam
+                                    // slug genereren
                                     $set('slug', Str::slug($state));
                                 })
                                 ->maxLength(255),
@@ -67,9 +67,9 @@ class BlogResource extends Resource
                             TextInput::make('slug')
                                 ->required()
                                 ->maxLength(255)
-                                ->disabled()
+                                ->disabled() // niet manueel aanpasbaar
                                 ->dehydrated()
-                                // Zorg dat de slug uniek is in de 'products' tabel, maar negeer het huidige record bij het bewerken
+                                // Slug moet uniek zijn (ook bij edit)
                                 ->unique('blogs', 'slug', ignoreRecord: true),
                         ]),
 
@@ -192,6 +192,8 @@ class BlogResource extends Resource
                                 }),
                         ]),
 
+                        // Zet de user automatisch op ingelogde user
+                        // Als je een nieuwe blog aanmaakt, wordt automatisch het user_id veld (dus: wie is de auteur?) gevuld met de huidige user (degene die nu is ingelogd).
                         Hidden::make('user_id')
                             ->default(auth()->id()),
 
@@ -236,14 +238,8 @@ class BlogResource extends Resource
                             ->maxLength(50)
                             ->nullable(),
                     ]),
-
-
                 ])->columnSpan(1)
-
             ])->columns(3);
-
-
-
     }
 
     public static function table(Table $table): Table
@@ -277,21 +273,17 @@ class BlogResource extends Resource
 
                 TextColumn::make('updated_at')
                     ->label('Updated at')
-                    ->since() // optioneel: bijv. "3 minuten geleden"
+                    ->since() // bijv. "3 minuten geleden"
                     ->toggleable()
                     ->sortable(),
-
-
             ])
             ->defaultSort('updated_at', 'desc')
             ->modifyQueryUsing(function (Builder $query) {
 
-                // SOFT DELETES
-                $query->withoutGlobalScopes([
-                    SoftDeletingScope::class,
-                ]);
+                // SOFT DELETES altijd tonen (ook verwijderde blogs zichtbaar)
+                $query->withoutGlobalScopes([SoftDeletingScope::class,]);
 
-                // Filter voor blog authors
+                // Als je een blog author bent: toon enkel je eigen blogs
                 if (auth()->user()->hasRole('blog_author')) {
                     $query->where('user_id', auth()->id());
                 }

@@ -45,7 +45,7 @@
                                         <div class="product-card">
                                             <div class="product-card-img">
                                                 <a class="product-hover-zoom" href="{{ url('/products') }}/{{ $product->slug }}">
-                                                    <img class="primary-img" src="{{ url('storage', $product->images[0]) }}"
+                                                    <img class="primary-img" src="{{ isset($product->images[0]) ? url('storage/' . $product->images[0]) : asset('img/product-placeholder.jpg') }}"
                                                          alt="{{  $product->name }}">
                                                 </a>
 

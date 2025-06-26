@@ -68,9 +68,10 @@ class BlogResource extends Resource
                                 ->required()
                                 ->maxLength(255)
                                 ->disabled() // niet manueel aanpasbaar
-                                ->dehydrated()
+                                ->dehydrated() // zorgt dat disabled velden ook worden opgeslagen in de database
                                 // Slug moet uniek zijn (ook bij edit)
                                 ->unique('blogs', 'slug', ignoreRecord: true),
+                            // ignoreRecord: true = controleer uniekheid, maar negeer het huidige record als je aan het bewerken bent”.
                         ]),
 
                         TextArea::make('excerpt')
@@ -261,7 +262,7 @@ class BlogResource extends Resource
 
                 TextColumn::make('categories.name')
                     ->label('Categories')
-                    ->getStateUsing(fn ($record) => $record->categories->pluck('name')->join(', '))
+                    ->getStateUsing(fn ($record) => $record->categories->pluck('name')->join(', ')) // Join de namen van de categories met komma's
                     ->sortable(),
 
                 TextColumn::make('created_at')
@@ -273,7 +274,7 @@ class BlogResource extends Resource
 
                 TextColumn::make('updated_at')
                     ->label('Updated at')
-                    ->since() // bijv. "3 minuten geleden"
+                    ->since() // bv "3 minuten geleden"
                     ->toggleable()
                     ->sortable(),
             ])

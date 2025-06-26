@@ -18,14 +18,17 @@ class OrderItem extends Model
         'color_id'
     ];
 
+    // Een OrderItem hoort bij één order
     public function order(){
         return $this->belongsTo(Order::class);
     }
 
+    // Een OrderItem hoort bij één product
     public function product(){
         return $this->belongsTo(Product::class);
     }
 
+    // Een orderitem hoort bij één kleur (optioneel).
     public function color(){
         return $this->belongsTo(Color::class);
     }

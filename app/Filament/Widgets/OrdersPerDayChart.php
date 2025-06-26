@@ -24,18 +24,21 @@ class OrdersPerDayChart extends ChartWidget
         $data = Trend::model(Order::class)
             ->between(
                 start: now()->subDays(60),
-                end: now(),
+                end: now(), // tot vandaag
             )
-            ->perDay()
-            ->count();
+            ->perDay() // groepeer per dag
+            ->count(); // tel het aantal orders per dag
 
+        // Retourneer datasets en labels voor de grafiek
         return [
             'datasets' => [
                 [
-                    'label' => 'Orders per day',
+                    'label' => 'Orders per day', // Tekst in de legenda
+                    // Alle waarden (orders per dag) in een array
                     'data' => $data->map(fn (TrendValue $value) => $value->aggregate),
                 ],
             ],
+            // X-as: alle datums in de juiste volgorde
             'labels' => $data->map(fn (TrendValue $value) => $value->date),
         ];
     }

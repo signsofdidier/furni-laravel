@@ -25,6 +25,7 @@ class Product extends Model
         'shipping_cost',
     ];
 
+    // Zorgt ervoor dat deleted_at als datum gezien wordt (soft deletes)
     protected $dates = ['deleted_at'];
 
     // hierdoor worden de images omgezet naar een array uit de JSON van images
@@ -32,18 +33,22 @@ class Product extends Model
         'images' => 'array',
     ];
 
+    // Een product hoort bij een categorie
     public function category(){
         return $this->belongsTo(Category::class);
     }
 
+    // Een product hoort bij een brand
     public function brand(){
         return $this->belongsTo(Brand::class);
     }
 
+    // Een product heeft meerdere orderitems
     public function orderItems(){
         return $this->hasMany(OrderItem::class);
     }
 
+    // Een product heeft meerdere kleuren
     public function colors() {
         return $this->belongsToMany(Color::class, 'product_color_stocks')->withPivot('stock');
     }
@@ -79,6 +84,7 @@ class Product extends Model
         return $this->productColorStocks->sum('stock') > 0;
     }
 
+    // Haal stock voorraad op voor deze kleur
     public function stockForColor($colorId): int
     {
         return $this->productColorStocks()
@@ -86,6 +92,7 @@ class Product extends Model
             ->value('stock') ?? 0;
     }
 
+    // Haal stock voorraad op voor deze kleur
     public function stockForColorId($colorId): int
     {
         return $this->productColorStocks()

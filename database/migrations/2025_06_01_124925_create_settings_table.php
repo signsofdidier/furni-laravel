@@ -17,7 +17,7 @@ return new class extends Migration
             // Vanaf dit bedrag is er gratis verzending
             $table->decimal('free_shipping_threshold', 10, 2)
                 ->default(1000.00)
-                ->comment('Bedrag vanaf waar de klant geen verzendkosten meer betaalt');
+                ->comment('Amount from which shipping is free');
 
             // Voeg een boolean-kolom toe, standaard op true (actief)
             $table->boolean('free_shipping_enabled')->default(true);

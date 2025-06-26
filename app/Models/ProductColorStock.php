@@ -9,13 +9,13 @@ class ProductColorStock extends Model
 {
     protected $fillable = ['product_id', 'color_id', 'stock'];
 
-    // products heeft meerdere stock items
+    // elke stock hoort bij één product
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 
-    // colors heeft meerdere stock items
+    // elke stock hoort bij één kleur
     public function color(): BelongsTo
     {
         return $this->belongsTo(Color::class);

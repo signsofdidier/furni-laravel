@@ -15,10 +15,12 @@ class ProductRating extends Model
         'rating',
     ];
 
+    // een review rating hoort bij een product
     public function product(){
         return $this->belongsTo(Product::class);
     }
 
+    // een review rating hoort bij een user
     public function user(){
         return $this->belongsTo(User::class);
     }

@@ -28,7 +28,7 @@ class LatestOrders extends BaseWidget
             // dit toont de laatste 5 orders
             ->query(OrderResource::getEloquentQuery())
             ->defaultSort('created_at', 'desc')
-            ->defaultPaginationPageOption(3)
+            ->defaultPaginationPageOption(3) // 3 orders per pagina
 
             ->columns([
                 /*TextColumn::make('id')

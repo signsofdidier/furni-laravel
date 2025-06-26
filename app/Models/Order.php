@@ -25,6 +25,7 @@ class Order extends Model
         'notes',
     ];
 
+    // Zorgt ervoor dat deleted_at als datum gezien wordt (soft deletes)
     protected $dates = ['deleted_at'];
 
     // Elke order hoort bij één adres
@@ -39,6 +40,7 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
+    // Elke order heeft meerdere items
     public function items(){
         return $this->hasMany(OrderItem::class);
     }

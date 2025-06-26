@@ -18,11 +18,13 @@ class Review extends Model
         'body',
     ];
 
+    // een review hoort bij een user
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
+    // een review hoort bij een product
     public function product()
     {
         return $this->belongsTo(Product::class);

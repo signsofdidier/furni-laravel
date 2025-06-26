@@ -55,6 +55,7 @@ class ProductResource extends Resource
                             ->required()
                             ->live(onBlur: true)
                             ->afterStateUpdated(function (string $operation, $state, Set $set) {
+                                // Alleen bij create de slug automatisch vullen
                                 if ($operation !== 'create') {
                                     return;
                                 }
@@ -66,8 +67,8 @@ class ProductResource extends Resource
                             ->required()
                             ->maxLength(255)
                             ->disabled()
-                            ->dehydrated()
-                            ->unique(Product::class, 'slug', ignoreRecord: true),
+                            ->dehydrated() // zorgt dat de waarde toch meegaat met het formulier
+                            ->unique(Product::class, 'slug', ignoreRecord: true), // uniek behalve bij huidige edit
                     ])->columns(2),
 
                     /* DESCRIPTION */
@@ -163,7 +164,7 @@ class ProductResource extends Resource
                             ->imageResizeTargetWidth(1000)
                             ->imageResizeTargetHeight(1288)
                             ->optimize('webp')
-                            ->maxSize(3024)
+                            ->maxSize(2024)
                             ->required(),
                     ]),
 
@@ -312,6 +313,7 @@ class ProductResource extends Resource
         return [];
     }
 
+    // Globaal doorzoekbare velden in Filament admin
     public static function getGloballySearchableAttributes(): array
     {
         return ['name', 'description'];

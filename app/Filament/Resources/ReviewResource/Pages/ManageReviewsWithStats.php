@@ -18,9 +18,10 @@ use Illuminate\Contracts\View\View;
 // Pagina om reviews te managen, maar met statistieken erbij (2 tabs)
 class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
 {
+    // Zorgt ervoor dat je tabel-functionaliteit kan gebruiken
     use Tables\Concerns\InteractsWithTable;
 
-    // resource + view
+    // Koppeling naar bijbehorende Filament Resource en custom blade view
     protected static string $resource = ReviewResource::class;
     protected static string $view = 'filament.resources.review-resource.pages.manage-reviews-with-stats';
 
@@ -36,7 +37,7 @@ class ManageReviewsWithStats extends Page implements Tables\Contracts\HasTable
     // Actieve tab: 'reviews' of 'ratings'
     public string $activeTab = 'reviews';
 
-    // COUNT VOOR NIET APPROVED REVIEWS
+    // COUNT VOOR PENDING REVIEWS
     public int $pendingReviewCount = 0;
 
     // Event listeners: refresh als een review approved is

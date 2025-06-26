@@ -11,11 +11,12 @@ class Wishlist extends Model
         'product_id',
     ];
 
-    // wishlist heeft een user
+    // elke wishlist hoort bij één gebruiker
     public function user(){
         return $this->belongsTo(User::class);
     }
 
+    // elke wishlist hoort bij één product
     public function product()
     {
         return $this->belongsTo(Product::class);

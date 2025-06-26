@@ -12,7 +12,6 @@ use Livewire\Component;
 use Stripe\Checkout\Session;
 use Stripe\Stripe;
 
-// PDF-generatie en mail
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\InvoiceMail;
@@ -20,6 +19,7 @@ use App\Mail\InvoiceMail;
 #[Title('Success - E-Commerce')]
 class SuccessPage extends Component
 {
+    // Stripe session_id uit de URL halen
     #[Url]
     public $session_id;
 
@@ -29,7 +29,7 @@ class SuccessPage extends Component
 
         // Als er een Stripe session_id in de URL is, maak dan het order aan
         if ($this->session_id) {
-            $order = $this->handleStripeSuccess();
+            $order = $this->handleStripeSuccess(); // Handle Stripe success
         } else {
             // Voor COD orders, haal de laatste order op
             $order = Order::with('address', 'user')
@@ -38,47 +38,52 @@ class SuccessPage extends Component
                 ->first();
         }
 
+        // Toon de success view met het order erbij
         return view('livewire.success-page', [
             'order' => $order,
         ]);
     }
 
+    // Deze functie wordt enkel gebruikt als de user via Stripe betaald heeft
     private function handleStripeSuccess()
     {
-        // Controleer of er pending order data in de sessie staat
+        // Haal pending order data uit de sessie (werd bewaard voor het doorsturen naar Stripe)
         $pending_order_data = session()->get('pending_order_data');
         if (!$pending_order_data) {
-            // Geen pending data, probeer laatste order op te halen
+            // Geen pending data? (bv. refresh of terugknop), geef gewoon laatste order terug
             return Order::with('address', 'user')
                 ->where('user_id', auth()->user()->id)
                 ->latest()
                 ->first();
         }
 
+        // Zet Stripe key en haal info op over deze sessie
         Stripe::setApiKey(env('STRIPE_SECRET'));
         $session_info = Session::retrieve($this->session_id);
 
-        // Controleer of de betaling mislukt is
+        // Check of betaling NIET geslaagd is
         if ($session_info->payment_status !== 'paid') {
-            // Verwijder pending order data en redirect naar cancel
+            // Alles wegsmijten en user naar cancel-pagina sturen
             session()->forget('pending_order_data');
             return redirect('/cancel');
         }
 
-        // Betaling geslaagd - maak nu het order aan
+        // Betaling OK: nu order echt aanmaken in de database
         $order = $this->createOrderFromPendingData($pending_order_data, $session_info);
 
-        // Verwijder pending order data uit sessie
+        // Pending order data mag nu uit de sessie
         session()->forget('pending_order_data');
 
         return $order;
     }
 
+    // Zet de tijdelijke (pending) order om naar een echte order in de database
     private function createOrderFromPendingData($pending_order_data, $session_info)
     {
         $cart_items = $pending_order_data['cart_items'];
         $address_id = $pending_order_data['address_id']; // ADRES ID UIT DE SESSIE!
 
+        // Maak een nieuwe Order aan
         $order = new Order();
         $order->user_id = auth()->user()->id;
         $order->address_id = $address_id; // HIER KOPPEL IK HET JUISTE ADRES
@@ -91,13 +96,13 @@ class SuccessPage extends Component
         $order->shipping_amount = $pending_order_data['shipping_amount'];
         $order->shipping_method = 'Truck Delivery';
         $order->notes = 'Order placed by ' . auth()->user()->name;
-        $order->transaction_id = $session_info->payment_intent;
+        $order->transaction_id = $session_info->payment_intent; // Stripe transactie-ID
         $order->save();
 
         // Sla order items op
         $order->items()->createMany($cart_items);
 
-        // Verlaag stock
+        // VERLAAG STOCK per product + kleur
         foreach ($cart_items as $item) {
             $stockEntry = ProductColorStock::where('product_id', $item['product_id'])
                 ->where('color_id', $item['color_id'])
@@ -114,7 +119,7 @@ class SuccessPage extends Component
         // Verstuur factuur mail
         Mail::to($order->user->email)->send(new InvoiceMail($order));
 
-        // Herlaad order met relaties voor de view
+        // Return het order met relaties (adres & user)
         return Order::with('address', 'user')->find($order->id);
     }
 

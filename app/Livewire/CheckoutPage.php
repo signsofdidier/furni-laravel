@@ -17,8 +17,11 @@ use Stripe\Stripe;
 #[Title('Checkout')]
 class CheckoutPage extends Component
 {
+    // Alle adressen van de user (voor keuze of nieuw adres invullen)
     public $addresses;               // Alle adressen van de user
     public $selected_address_id;     // Gekozen adres-id (of 'new' voor nieuw adres)
+
+    // Nieuw adres velden
     public $first_name;
     public $last_name;
     public $phone;
@@ -27,37 +30,46 @@ class CheckoutPage extends Component
     public $state;
     public $zip_code;
 
-    public $payment_method;
+    public $payment_method; // Stripe of cash on delivery (cod)
 
-    public float $sub_total = 0;
-    public float $shipping_amount = 0;
-    public float $free_shipping_threshold = 0;
+    public float $sub_total = 0; // Totale waarde van cart excl. shipping
+    public float $shipping_amount = 0; // Verzendkosten (wordt berekend)
+    public float $free_shipping_threshold = 0; // Treshold voor gratis verzending
 
     public function mount()
     {
+        // Haal cart items op uit sessie, als die leeg is: redirect naar products
         $cart_items = CartManagement::getCartItemsFromSession();
         if(count($cart_items) == 0){
             return redirect('/products');
         }
 
+        // Haal gratis shipping THRESHOLD op uit settings
         $setting = Setting::first();
         $this->free_shipping_threshold = $setting->free_shipping_threshold ?? 0;
 
+        // Bereken het sub-totaal van de cart
         $this->sub_total = CartManagement::calculateGrandTotal($cart_items);
+
+        // Bereken verzendkosten
         $this->calculateShippingAmount($cart_items);
 
+        // Haal user en zijn adressen op
         $user = auth()->user();
         if ($user) {
             $this->addresses = $user->addresses; // Haal alle adressen van de user op
-            // Optioneel: auto-selecteer het laatst gebruikte adres
+            // Als er adressen zijn, selecteer standaard het eerste
             if ($this->addresses->count()) {
                 $this->selected_address_id = $this->addresses->first()->id;
             } else {
+                // Geen adressen? Default op 'nieuw adres'
                 $this->selected_address_id = 'new';
             }
         }
     }
 
+    /* MAAK ADDRES VELDEN LEEG wanneer user van adres verandert */
+    // Wanneer user van adres verandert (select veld), maak de nieuwe adresvelden leeg
     public function updatedSelectedAddressId($value)
     {
         // Clear de nieuwe adresvelden als een bestaand adres gekozen wordt
@@ -72,15 +84,17 @@ class CheckoutPage extends Component
         }
     }
 
+    // Wordt aangeroepen als user op "Place Order" drukt
     public function placeOrder()
     {
         $user = auth()->user();
 
-        // 1. Valideer invoer afhankelijk van adreskeuze
+        // 1. Eerst validatie: hangt af van of je een bestaand of nieuw adres kiest
         $rules = [
             'payment_method' => 'required',
         ];
         if ($this->selected_address_id == 'new' || !$this->addresses || !$this->addresses->count()) {
+            // Nieuw adres vereist: extra velden invullen
             $rules = array_merge($rules, [
                 'first_name'      => 'required',
                 'last_name'       => 'required',
@@ -98,7 +112,7 @@ class CheckoutPage extends Component
             // Bestaand adres gekozen
             $address_id = $this->selected_address_id;
         } else {
-            // Nieuw adres aanmaken
+            // Nieuw adres aanmaken en opslaan
             $address = Address::create([
                 'user_id'        => $user ? $user->id : null,
                 'first_name'     => $this->first_name,
@@ -112,6 +126,7 @@ class CheckoutPage extends Component
             $address_id = $address->id;
         }
 
+        // Cart data opnieuw ophalen & bedragen updaten
         $cart_items = CartManagement::getCartItemsFromSession();
         $this->sub_total = CartManagement::calculateGrandTotal($cart_items);
         $this->calculateShippingAmount($cart_items);
@@ -122,7 +137,7 @@ class CheckoutPage extends Component
         }
 
         if($this->payment_method == 'stripe'){
-            // Zet alle orderdata en gekozen adres in sessie
+            // Stripe: orderdata opslaan in de sessie en user naar Stripe Checkout sturen
             session()->put('pending_order_data', [
                 'cart_items'    => $cart_items,
                 'address_id'    => $address_id,
@@ -133,23 +148,26 @@ class CheckoutPage extends Component
         }
     }
 
+    // Start Stripe Checkout sessie, geeft user door naar de betaalpagina van Stripe
     private function createStripeCheckout($cart_items)
     {
-        $line_items = [];
+        $line_items = []; // Lege lijst om items in te voegen
 
+        // Zet alle cart producten klaar in het juiste Stripe formaat
         foreach ($cart_items as $item) {
             $line_items[] = [
                 'price_data' => [
-                    'currency' => 'eur',
-                    'unit_amount' => $item['unit_amount'] * 100,
+                    'currency' => 'eur', // In EUR
+                    'unit_amount' => $item['unit_amount'] * 100, // In cents
                     'product_data' => [
-                        'name' => $item['name'],
+                        'name' => $item['name'], // Product naam
                     ],
                 ],
-                'quantity' => $item['quantity'],
+                'quantity' => $item['quantity'], // Hoeveelheid
             ];
         }
 
+        // Voeg SHIPPINGCOST als aparte regel toe (indien > 0)
         if ($this->shipping_amount > 0) {
             $line_items[] = [
                 'price_data' => [
@@ -163,19 +181,21 @@ class CheckoutPage extends Component
             ];
         }
 
+        // Stripe keys instellen en sessie aanmaken
         Stripe::setApiKey(env('STRIPE_SECRET'));
         $sessionCheckout = Session::create([
-            'payment_method_types' => ['card'],
-            'customer_email' => auth()->user()->email,
-            'line_items' => $line_items,
-            'mode' => 'payment',
-            'success_url' => route('success') . '?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url' => route('cancel'),
+            'payment_method_types' => ['card'], // Betaalmethode: Card
+            'customer_email' => auth()->user()->email, // Gebruikers email
+            'line_items' => $line_items, // Items toevoegen
+            'mode' => 'payment', // Betaalmethode: Payment
+            'success_url' => route('success') . '?session_id={CHECKOUT_SESSION_ID}', // Na betalen naar deze route
+            'cancel_url' => route('cancel'), // Redirect wanneer betaling geannuleerd
         ]);
 
-        return redirect($sessionCheckout->url);
+        return redirect($sessionCheckout->url); // Stuur user naar Stripe om te betalen
     }
 
+    /* MAAK NIEUW ORDER AAN VOOR CASH ON DELIVERY */
     private function createOrder($cart_items, $address_id)
     {
         $user = auth()->user();
@@ -193,33 +213,36 @@ class CheckoutPage extends Component
         $order->notes = 'Order placed by ' . $user->name;
         $order->save();
 
-        // Sla order items op
+        // Voeg alle producten van de cart toe aan de order (in de order_items tabel)
         $order->items()->createMany($cart_items);
 
-        // Verlaag stock
+        // VOORAAD VERLAGEN per product + kleur
         foreach ($cart_items as $item) {
+
             $stockEntry = ProductColorStock::where('product_id', $item['product_id'])
-                ->where('color_id', $item['color_id'])
-                ->first();
+                ->where('color_id', $item['color_id']) // Zoek de vooraad entry met de juiste kleur
+                ->first(); // Zoek de eerste vooraad entry
 
             if ($stockEntry) {
                 $stockEntry->decrement('stock', $item['quantity']);
             }
         }
 
-        // Leeg cart alleen na succesvol order
+        // Cart leegmaken na succesvolle bestelling
         CartManagement::clearCartItems();
 
-        // Stuur mail voor COD
+        // Factuur e-mail versturen naar de user (enkel bij cash on delivery)
         if ($this->payment_method === 'cod' && $user) {
             Mail::to($order->user->email)->send(new InvoiceMail($order));
         }
 
+        // User doorsturen naar success-pagina
         return redirect()->route('success');
     }
 
     public function render()
     {
+        // Haal cart opnieuw op, update subtotalen en verzendkost (bv voor als user terugkomt van betalen)
         $cart_items = CartManagement::getCartItemsFromSession();
         $this->sub_total = CartManagement::calculateGrandTotal($cart_items);
         $this->calculateShippingAmount($cart_items);
@@ -235,6 +258,7 @@ class CheckoutPage extends Component
         ]);
     }
 
+    // shipping_amount berekenen en updaten
     private function calculateShippingAmount(array $cart_items): void
     {
         $this->shipping_amount = CartManagement::calculateShippingAmount($cart_items);

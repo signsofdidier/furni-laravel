@@ -12,28 +12,33 @@ use Livewire\Component;
 #[Title('Cart - E-Commerce')]
 class CartPage extends Component
 {
+    // Alle producten in de winkelmand (wordt telkens opnieuw geladen)
     public array $cart_items = [];
+    // Subtotaal van alles samen in de cart (zonder verzendkosten)
     public float $sub_total = 0.0;
 
     public function mount(): void
     {
-        // deze helper-methode haalt de sessie opnieuw op en berekent de totalen, zodat je dat niet in elke functie hoeft te herhalen.
+        // deze helper-methode haalt de sessie opnieuw op en berekent de totalen,
+        // zodat je dat niet in elke functie hoeft te herhalen.
         $this->loadCart();
     }
 
-
+    /* HAALT DE LATESTE STAND VAN DE CART OP */
+    // en vult voor elk item de max_stock (voorraad) aan, plus berekent de sub_total
     protected function loadCart(): void
     {
-        // 1) Haal items op
+        // 1) Haal alle items uit de cart uit de sessie
         $this->cart_items  = CartManagement::getCartItemsFromSession();
 
-        // 2) Voeg max_stock toe aan elk item
+        // 2) Voeg bij elk item het maximum voorraad toe, afhankelijk van gekozen kleur
         foreach ($this->cart_items as &$item) {
-            $product = Product::find($item['product_id']); // haal product op
-            $item['max_stock'] = $product?->stockForColorId($item['color_id']) ?? 0; // 0 als er geen voorraad is
+            $product = Product::find($item['product_id']); // zoek product op via id
+            // max_stock is voorraad voor deze kleur, of 0 als product niet meer bestaat
+            $item['max_stock'] = $product?->stockForColorId($item['color_id']) ?? 0;
         }
 
-        // 3) Bereken “sub_total” = sum(total_amount) van alle items
+        // 3) Bereken het sub-totaal van de cart (zonder shipping)
         $this->sub_total = CartManagement::calculateGrandTotal($this->cart_items);
     }
 
@@ -43,7 +48,7 @@ class CartPage extends Component
      */
     public function removeItem(int $product_id, ?int $color_id = null): void
     {
-        // 1) Verwijder het item in de sessie
+        // 1) Verwijder het item in de cart sessie
         $this->cart_items = CartManagement::removeCartItem($product_id, $color_id);
 
         // 2) Herlaad ALLES (sub_total, shipping_amount, grand_total, enz.)
@@ -56,7 +61,7 @@ class CartPage extends Component
     }
 
     /**
-     * Verhoogt de hoeveelheid van een cart-item (product + kleur),
+     * INCREASE QUANTITY van een cart-item (product + kleur),
      * herlaadt de cart en update de navbar-count.
      */
     public function increaseQuantity(int $product_id, ?int $color_id = null): void
@@ -68,30 +73,32 @@ class CartPage extends Component
         $product = Product::find($product_id);
         if (!$product) return;
 
+        // 3. Haal stock voorraad op voor deze kleur
         $availableStock = $product->stockForColorId($color_id);
 
-        // 3. Quantity mag niet boven stock gaan
+        // 4. QUANTITY MAG NIET BOVEN DE STOCK GAAN
         if ($currentQuantity >= $availableStock) {
+            // Foutmelding tonen
             session()->flash('error', 'Not enough stock for this product.');
             return;
         }
 
-        // 4. Verhoog quantity
+        // 5. Verhoog quantity
         CartManagement::incrementQuantityToCartItem($product_id, $color_id);
 
-        // 5. Refresh cart + update navbar
+        // 6. Refresh cart + update navbar
         $this->loadCart();
         $this->dispatch('update-cart-count',
             array_sum(array_column($this->cart_items, 'quantity'))
         )->to(Navbar::class);
 
-        // 6. Update cart in de drawer modal
+        // 7. Update cart in de drawer modal
         $this->dispatch('cart-updated');
 
     }
 
     /**
-     * Verlaagt de hoeveelheid van een cart-item (mits >1),
+     * DECREASE QUANTITY van een cart-item (mits > 1),
      * herlaadt de cart en update de navbar-count.
      */
     public function decreaseQuantity(int $product_id, ?int $color_id = null): void

@@ -125,7 +125,9 @@ class CartManagement {
         return count($cart_items);
     }
 
+    // ========================
     // VERWIJDER ITEM OP BASIS VAN PRODUCT + KLEUR
+    // ========================
     static public function removeCartItem(int $product_id, ?int $color_id = null): array
     {
         // Haal de huidige cart items op uit de sessie
@@ -215,7 +217,12 @@ class CartManagement {
         self::saveCartItemsToSession($cart_items);
     }
 
+    /* CALCULATE GRAND TOTAL */
+    /* NOOIT EEN NEGATIEF BEDRAG */
+    // Tel gewoon alle totaalbedragen van elk item in de winkelmand op, excl shipping
     static public function calculateGrandTotal($items){
+        // Haal alle 'total_amount' waarden uit elk item in de array en tel ze bij elkaar op
+        // max( ... , 0) zorgt dat je NOOIT EEN NEGATIEF BEDRAG krijgt, zelfs als de array leeg is
         return max(array_sum(array_column($items, 'total_amount')), 0); // Minimaal 0
     }
 

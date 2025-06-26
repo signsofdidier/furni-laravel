@@ -9,17 +9,16 @@ use Livewire\Component;
 
 class Navbar extends Component
 {
-
     public $total_count = 0;
 
     // Threshold voor gratis verzending uit de Settings
     public float $free_shipping_threshold  = 0;
 
-    // Gratis verzending uitgeschakeld uit de Settings
+    // Is gratis verzending actief? (ook uit settings)
     public bool $free_shipping_enabled = false;
 
     public function mount(){
-        // telt alle items in de cart op maar ook de quantity van een item
+        // TELT ITEMS IN CART + QUANTITY
         $this->total_count = array_sum(array_column(CartManagement::getCartItemsFromSession(), 'quantity'));
 
         // Haal de free_shipping_threshold uit de database (één record in settings)
@@ -30,12 +29,13 @@ class Navbar extends Component
         $this->free_shipping_enabled = $setting->free_shipping_enabled ?? false;
     }
 
+    // Zorgt ervoor dat de count mee verandert als de cart geüpdatet wordt via events
     #[On('update-cart-count')]
     public function updateCartCount($total_count){
         $this->total_count = $total_count;
     }
 
-    // refresh cart na toevoegen van product of aanpassing in de cart
+    // REFRESH CART na toevoegen van product of aanpassing in de cart
     #[On('cart-updated')]
     public function refreshCount()
     {

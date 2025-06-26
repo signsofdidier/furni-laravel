@@ -26,19 +26,13 @@ class ResetPasswordPage extends Component
     public $password;
     public $password_confirmation;
 
-    /**
-     * De mount-methode wordt automatisch aangeroepen wanneer het component geladen wordt.
-     * Hier initialiseren we de token die via de route wordt doorgegeven.
-     */
+    // Hier initialiseren we de token die via de route wordt doorgegeven.
     public function mount($token)
     {
         $this->token = $token;
     }
 
-    /**
-     * Hier definieer je de validatieregels voor het formulier.
-     * Laravel zorgt automatisch voor de juiste foutmeldingen bij falende validatie.
-     */
+    // Validatie regels voor het formulier
     protected function rules()
     {
         return [
@@ -49,7 +43,6 @@ class ResetPasswordPage extends Component
     }
 
     /**
-     * Deze methode wordt aangeroepen wanneer de gebruiker het formulier indient.
      * We valideren de input, proberen het wachtwoord te resetten,
      * en tonen feedback of redirecten op basis van het resultaat.
      */
@@ -74,7 +67,7 @@ class ResetPasswordPage extends Component
 
                 $user->save();
 
-                // Stap 4: Trigger eventueel events (zoals audit logs, of e-mails)
+                // Stap 4: Event eventueel voor extra logs/mails
                 event(new PasswordReset($user));
             }
         );
@@ -90,9 +83,7 @@ class ResetPasswordPage extends Component
         }
     }
 
-    /**
-     * De render-methode bepaalt welke blade-view wordt weergegeven.
-     */
+
     public function render()
     {
         return view('livewire.auth.reset-password-page');

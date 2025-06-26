@@ -9,22 +9,22 @@ use Illuminate\Support\Facades\Auth;
 class InvoiceDownloadController extends Controller
 {
 
-    // Download de juiste invoice pdf bij orders, cash on delivery of stripe
+    // Wordt aangeroepen als iemand een factuur wil downloaden (1 order)
     public function __invoke(Order $order)
     {
-        // Enkel je eigen orders downloaden
+        // Enkel je eigen orders kunnen downloaden, anders 403 forbidden
         if ($order->user_id !== Auth::id()) {
             abort(403);
         }
 
-        // Check betaalmethode
-        $view = $order->payment_method === 'cod'
-            ? 'pdf.order-placed'
-            : 'pdf.invoice';
+        // Kies juiste view op basis van betaalmethode
+        $view = $order->payment_method === 'cod' ? 'pdf.order-placed' : 'pdf.invoice';
 
+        // Maak pdf aan met DomPDF, stuur order data mee naar de view
         $pdf = Pdf::loadView($view, ['order' => $order]);
 
-        return $pdf->download('invoice-order-' . $order->id . '.pdf');
+        // Downloaden met een duidelijke bestandsnaam
+        return $pdf->download('Invoice-order-' . $order->id . '.pdf');
     }
 
 }

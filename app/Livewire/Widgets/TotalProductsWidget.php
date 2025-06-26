@@ -18,7 +18,7 @@ class TotalProductsWidget extends Component
         $items = collect();
         foreach ($orders as $order) {
             foreach ($order->items as $item) {
-                $items->push($item);
+                $items->push($item); // voeg toe aan verzameling
             }
         }
 

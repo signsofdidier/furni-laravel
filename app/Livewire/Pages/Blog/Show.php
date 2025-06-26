@@ -14,7 +14,7 @@ class Show extends Component
 
     public function mount($slug)
     {
-        // haal de blog op volgens de slug
+        // HAAL BLOG OP VOLGENS DE SLUG
         $this->blog = Blog::with(['categories', 'user'])->where('slug', $slug)->firstOrFail();
 
         // Zoek vorige en vorige blog op basis van created_at

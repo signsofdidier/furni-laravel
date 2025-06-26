@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 
 class TopThreeProducts extends Component
 {
-    public $topProducts = [];
+    public $topProducts = []; // De top 3 producten die deze user het meest heeft gekocht
 
     public function mount()
     {
@@ -19,14 +19,14 @@ class TopThreeProducts extends Component
         // Een lege collectie om alle items te verzamelen
         $items = collect();
 
-        // Alle items uit alle bestellingen verzamelen in één lijst
+        // Elk order item van elke bestelling toevoegen aan $items
         foreach ($orders as $order) {
             foreach ($order->items as $item) {
-                $items->push($item);
+                $items->push($item); // voeg toe aan de lijst
             }
         }
 
-        // Items groeperen per product_id en optellen hoeveel keer elk product is gekocht
+        // Groepeer alles per product_id en tel hoeveel keer elk product gekocht is
         $grouped = $items
             ->groupBy('product_id') // groepeer alle items per product
             ->map(function ($items) {
@@ -35,10 +35,11 @@ class TopThreeProducts extends Component
             ->sortDesc() // sorteer van meest naar minst verkocht
             ->take(3); // neem enkel de top 3
 
-        // Productnamen ophalen bij de product_id's en de top 3 in een associatieve array stoppen
+        // Haal voor de top 3 de productnamen op (voor de weergave)
+        // mapWithKeys: geeft snel een “associatieve array” terug om te gebruiken in de view
         $this->topProducts = $grouped->mapWithKeys(function ($qty, $productId) {
             $product = Product::find($productId);
-            $name = $product?->name ?? 'Onbekend product';
+            $name = $product?->name ?? 'Unknown Product';
             return [$name => $qty];
         });
     }

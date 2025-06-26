@@ -8,23 +8,23 @@ use Illuminate\Support\Collection;
 
 class Last30days extends Component
 {
-    public $total = 0;
+    public $total = 0; // totaal verkochte producten in de laatste 30 dagen
 
     public function mount()
     {
-        // Haal alle bestellingen op van de huidige gebruiker die in de laatste 30 dagen zijn geplaatst,
-        // inclusief de bijbehorende orderitems
+        // Haal alle orders van de huidige user op van de laatste 30 dagen, inclusief hun items
         $orders = Order::with('items')
             ->where('user_id', auth()->id())
             ->where('created_at', '>=', now()->subDays(30))
             ->get();
 
-        // Verzamel alle items uit deze bestellingen
+        // Verzamel alle order items uit deze bestellingen in één collection
         $items = collect();
 
+        // Loop alle orders af, en voeg elk item uit die orders toe aan de verzameling $items
         foreach ($orders as $order) {
             foreach ($order->items as $item) {
-                $items->push($item);
+                $items->push($item); // elk item toevoegen aan de collection
             }
         }
 

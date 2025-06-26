@@ -11,15 +11,20 @@ use Livewire\Component;
 #[Title('Product Detail - E-Commerce')]
 class ProductDetailPage extends Component
 {
-
+    // De slug uit de URL (om het juiste product op te halen)
     public $slug;
+
+    // Hoeveelheid die je wil toevoegen
     public $quantity = 1;
+
+    // Welke kleur geselecteerd?
     public $selectedColorId;
 
-    public Product $product;
+    public Product $product; // Het huidige product
 
     public function mount($slug)
     {
+        // Haal het product (en alle kleuren + stock) op bij laden pagina
         $this->product = Product::with(['colors', 'productColorStocks'])
             ->where('slug', $slug)
             ->firstOrFail();
@@ -32,21 +37,23 @@ class ProductDetailPage extends Component
             return;
         }
 
+        // anders verhoog quantity
         $this->quantity++;
     }
 
+    // Verlaag de quantity, maar nooit lager dan 1
     public function decreaseQuantity()
     {
         $this->quantity = max(1, $this->quantity - 1);
     }
 
-    // add product to cart method
+    // ADD PRODUCT TO CART
     public function addToCart($product_id){
-        $this->quantity = max(1, $this->quantity); // Minimaal 1
+        $this->quantity = max(1, $this->quantity); // Minimaal 1, mag nooit lager dan 1
 
-        // MOET KLEUR SELECTEREN
+        // MOET EERST KLEUR KIEZEN
         if (!$this->selectedColorId) {
-            $this->addError('selectedColorId', 'Please select a color.');
+            $this->addError('selectedColorId', 'Please select a color first.');
             return;
         }
 
@@ -59,12 +66,11 @@ class ProductDetailPage extends Component
         // QUANTITY KAN NIET GROTER WORDEN DAN MAX STOCK
         if ($inCart + $this->quantity > $maxStock) {
             $remaining = $maxStock - $inCart;
+            // Enkelvoud/meervoud voor het woordje 'item' (1 item vs. meerdere items)
             $itemText = $remaining === 1 ? 'item' : 'items';
             $this->addError('quantity', "Only $remaining $itemText left in stock for this color.");
             return;
         }
-
-
 
         // Voeg product met geselecteerde kleur toe aan cart
         $total_count = CartManagement::addItemToCartWithQuantity(
@@ -73,7 +79,7 @@ class ProductDetailPage extends Component
             $this->selectedColorId
         );
 
-        // Reset quantity na toevoegen
+        // Zet quantity terug op 1 na toevoegen
         $this->quantity = 1;
 
         // Update cart count in Navbar via event
@@ -91,15 +97,14 @@ class ProductDetailPage extends Component
     // JE MAG NIET BOVEN MAXIMALE STOCK AANVRAGEN MET INCREASE QUANTITY
     public function getMaxStockProperty()
     {
-        // als er geen kleur geselecteerd is ..
+        // als er nog geen kleur gekozen is, dan geen voorraad checken
         if (!$this->selectedColorId) {
             return null;
         }
 
-        return $this->product->stockForColorId($this->selectedColorId); // stock voor geselecteerde kleur
+        // Geef de stock terug voor deze kleur (helper van Product model)
+        return $this->product->stockForColorId($this->selectedColorId);
     }
-
-
 
     /* INCREASE EN DECREASE KNOP BLOKKEREN */
     // MAG VERHOGEN ?
@@ -127,12 +132,12 @@ class ProductDetailPage extends Component
             return false;
         }
 
-        // Quantity mag nooit onder 1 gaan
+        // QUANTITY MAG NOOIT ONDER 1 GAAN
         return $this->quantity > 1;
     }
 
     // RESET QUANTITY BIJ KLEUR WISSEL
-    // Wordt automatisch aangeroepen zodra de geselecteerde kleur wijzigt
+    // Als je van kleur wisselt, zet de quantity terug op 1 en reset errors
     public function updatedSelectedColorId($value)
     {
         // Reset de hoeveelheid naar 1 bij elke kleurwissel
@@ -144,13 +149,14 @@ class ProductDetailPage extends Component
     }
 
 
+    // Render de pagina, met product, 8 featured producten & info voor knoppen
     public function render()
     {
-        logger()->info('Livewire debug', [
+        /*logger()->info('Livewire debug', [
             'selectedColorId' => $this->selectedColorId,
             'quantity' => $this->quantity,
             'maxStock' => $this->maxStock,
-        ]);
+        ]);*/
 
         // haal alleen de actieve, featured producten op (max. 8)
         $featuredProducts = Product::query()
@@ -161,7 +167,6 @@ class ProductDetailPage extends Component
 
         return view('livewire.product-detail-page', [
             'product' => $this->product,
-            //'product' => Product::where('slug', $this->slug)->firstOrFail(),
             'featuredProducts' => $featuredProducts,
             'canIncrease' => $this->canIncrease,
             'canDecrease' => $this->canDecrease,

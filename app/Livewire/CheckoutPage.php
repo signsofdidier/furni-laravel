@@ -18,8 +18,8 @@ use Stripe\Stripe;
 class CheckoutPage extends Component
 {
     // Alle adressen van de user (voor keuze of nieuw adres invullen)
-    public $addresses;               // Alle adressen van de user
-    public $selected_address_id;     // Gekozen adres-id (of 'new' voor nieuw adres)
+    public $addresses; // Alle adressen van de user
+    public $selected_address_id; // Gekozen adres-id (of 'new' voor nieuw adres)
 
     // Nieuw adres velden
     public $first_name;

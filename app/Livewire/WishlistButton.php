@@ -66,9 +66,6 @@ class WishlistButton extends Component
 
     }
 
-    /**
-     * Rendert het Livewire-component en geeft de bijhorende Blade view terug.
-     */
     public function render()
     {
         return view('livewire.wishlist-button');

@@ -10,7 +10,7 @@ use Livewire\WithFileUploads;
 // ProfileForm.php
 class ProfileForm extends Component
 {
-    use WithFileUploads;
+    use WithFileUploads; // Livewire trait om file uploads te laten werken
 
     public $name;
     public $email;
@@ -41,13 +41,14 @@ class ProfileForm extends Component
                 Storage::disk('public')->delete($user->profile_photo_path);
             }
 
-            // Upload nieuwe foto
+            // Upload de nieuwe foto naar 'profile-photos/' op de public disk
             $path = $this->new_profile_photo->store('profile-photos', 'public');
             $user->profile_photo_path = $path;
         }
 
         $user->save();
 
+        // SWEETALERT voor profile alerts
         $this->dispatch('profile-alert');
     }
 

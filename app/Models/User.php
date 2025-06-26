@@ -66,12 +66,13 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         return $this->hasMany(Review::class);
     }
 
+    // user heeft meerdere addresses
     public function addresses()
     {
         return $this->hasMany(Address::class);
     }
 
-    // user heeft meerdere wishlists
+    // user heeft meerdere wishlist items
     public function wishlist(){
         return $this->hasMany(Wishlist::class);
     }
@@ -96,13 +97,11 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
     }
 
 
-    // Alleen user met deze email (admin) kan in de admin panel (backend) inloggen
+    // Alleen users met een rol kunnen toegang hebben tot de admin panel
     public function canAccessPanel(Panel $panel): bool
     {
         // toegang tot admin als user minstens 1 rol heeft
         return $this->roles()->exists();
     }
-
-
 
 }

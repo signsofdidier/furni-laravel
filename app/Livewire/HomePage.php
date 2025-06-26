@@ -16,29 +16,24 @@ use Livewire\Component;
 
 class HomePage extends Component
 {
-
     // Threshold voor gratis verzending uit de Settings
     public float $free_shipping_threshold  = 0;
 
-
-    public $blogs;
-
+    public $blogs; // Hier bewaar ik de blogs voor de homepage
 
     public function mount(){
         // Haal de free_shipping_threshold uit de database (één record in settings)
         $setting = Setting::first();
         $this->free_shipping_threshold = $setting->free_shipping_threshold ?? 0.0;
-
         $this->blogs = Blog::latest()->take(8)->get();
-
     }
 
-    // add product to cart method
+    // ADD PRODUCT TO CART
     public function addToCart($product_id){
-        $total_count = CartManagement::addItemToCart($product_id);
+        // Voeg 1 stuk toe aan de cart (helper)
+        $total_count = CartManagement::addItemToCart($product_id); //
 
-        //Hiermee kan je in de navbar class de 'update-cart-count' event triggeren met #[On('update-cart-count')]
-        /*$this->dispatch('update-cart-count', total_count: $total_count)->to(Navbar::class);*/
+        // Stuur event naar Navbar zodat de teller bijwerkt
         $this->dispatch('update-cart-count', total_count: $total_count)->to('partials.navbar');
 
         // Update cart in de drawer modal
@@ -46,12 +41,11 @@ class HomePage extends Component
 
         // LIVEWIRE SWEETALERT
         $this->dispatch('alert');
-
     }
 
     public function render()
     {
-        // als de brand actief is geven we hem weer (is_active staat in de brand model)
+        // als de brand/categories actief is geven we ze weer (is_active staat in de brand model)
         $brands = Brand::where('is_active', 1)->get();
         $categories = Category::where('is_active', 1)->get();
 

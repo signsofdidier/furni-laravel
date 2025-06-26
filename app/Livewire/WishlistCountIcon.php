@@ -25,7 +25,7 @@ class WishlistCountIcon extends Component
 
     // Wordt uitgevoerd als het wishlistUpdated-event wordt verzonden
     public function updateCount(){
-        // Herbereken de wishlist-count (bijv. na toevoegen/verwijderen)
+        // Herbereken de wishlist-count (bv na toevoegen/verwijderen)
         $this->count = Wishlist::where('user_id', auth()->user()->id)->count();
     }
 

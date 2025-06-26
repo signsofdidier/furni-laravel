@@ -9,12 +9,14 @@ use Livewire\Component;
 
 class ProductReviewForm extends Component
 {
-    public Product $product;
+    public Product $product; // Het product waarvoor de review is
 
+    // Formulier velden
     public int $rating = 0;
     public string $title = '';
     public string $body = '';
 
+    // Toon of verberg het formulier (voor modal/uitklappen)
     public bool $showForm = false;
 
     public function mount(Product $product)
@@ -22,6 +24,7 @@ class ProductReviewForm extends Component
         $this->product = $product;
     }
 
+    // Laat formulier enkel zien als user nog geen review schreef
     public function showReviewForm()
     {
         if (! $this->hasUserReviewed()) {
@@ -31,10 +34,12 @@ class ProductReviewForm extends Component
 
     public function save()
     {
+        // MOET INGELOGD ZIJN OM REVIEW TE KUNNEN SCHRIJVEN
         if (! Auth::check()) {
             return redirect()->route('login');
         }
 
+        // Heeft deze user al een review op dit product?
         if ($this->hasUserReviewed()) {
             session()->flash('error', 'You have already submitted a review for this product.');
             return;
@@ -46,6 +51,7 @@ class ProductReviewForm extends Component
             'body' => 'required|string|max:2000',
         ]);
 
+        // Nieuwe review aanmaken, maar eerst goedkeuring admin nodig (approved = false)
         Review::create([
             'user_id' => Auth::id(),
             'product_id' => $this->product->id,
@@ -55,13 +61,16 @@ class ProductReviewForm extends Component
             'approved' => false,
         ]);
 
+        // Na opslaan: reset de velden & formulier sluiten
         $this->reset(['rating', 'title', 'body', 'showForm']);
 
         //session()->flash('success', 'Review submitted and is pending approval.');
+
+        // Verstuur event zodat bv. het review-lijstje zich kan updaten
         $this->dispatch('reviewAdded');
     }
 
-    // HEEFT DE USER AL EEN REVIEW OP DIT PRODUCT?
+    // HEEFT DE USER AL EEN REVIEW OP DIT PRODUCT? BOOLEAN
     public function hasUserReviewed(): bool
     {
         return $this->product

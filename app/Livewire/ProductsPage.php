@@ -51,7 +51,7 @@ class ProductsPage extends Component
 
     // PRICE RANGE FILTER
     #[Url]
-    public $price_range = 0; // Zet dit op 0 zodat de filter niet actief blijft als je via bvb homepage categories filtert
+    public $price_range = 0; // Zet dit op 0 zodat de filter niet actief blijft als je via bv homepage categories filtert
 
     // SORT BY FILTER
     #[Url]
@@ -62,33 +62,33 @@ class ProductsPage extends Component
 
 
 
-    // add product to cart method
+    // ADD PRODUCT TO CART
     public function addToCart($product_id){
 
-        // KLEUR ADD TO CART
-
-        // HAAL GESELECTEERD KLEUR OP
+        // Kijk welke kleur er geselecteerd is voor dit product
         $selectedColorId = $this->selectedColorPerProduct[$product_id] ?? null;
-
 
         // Als er geen kleur geselecteerd is, voeg een foutmelding toe
         if (!$selectedColorId) {
-
             $this->addError("selectedColorPerProduct.$product_id", 'Please select a color first.');
             return;
         }
 
-        // CONTROLLEER NIET OVER MAX STOCK GAAN
+        // WE MOGEN NIET OVER DE MAX STOCK GAAN
 
         // Haal het product op met alle kleuren
         $product = Product::with('productColorStocks')->findOrFail($product_id);
-        $maxStock = $product->stockForColorId($selectedColorId); // Max stock voor geselecteerde kleur
-        $inCart = CartManagement::getQuantityInCart($product_id, $selectedColorId); // Hoeveel in winkelwagen
+        // Max stock voor geselecteerde kleur
+        $maxStock = $product->stockForColorId($selectedColorId);
+        // Hoeveel producten in de cart
+        $inCart = CartManagement::getQuantityInCart($product_id, $selectedColorId);
 
         // CHECK QUANTITY KAN NIET GROTER ZIJN DAN STOCK
-        if ($inCart + 1 > $maxStock) // 1 = standaard quantity
+        if ($inCart + 1 > $maxStock) // Als wat er in je cart zit + 1 product erbij groter is dan max stock..
         {
-            $remaining = $maxStock - $inCart; // Berekening hoeveel overblijft
+            // Berekening hoeveel overblijft
+            $remaining = $maxStock - $inCart;
+            // Voeg foutmelding toe met aantal overblijvend
             $this->addError("selectedColorPerProduct.$product_id", "Only $remaining item(s) left in stock for this color.");
             return;
         }
@@ -99,8 +99,7 @@ class ProductsPage extends Component
             $selectedColorId // Geef de geselecteerde kleur
         );
 
-        //Hiermee kan je in de navbar class de 'update-cart-count' event triggeren met #[On('update-cart-count')]
-        /*$this->dispatch('update-cart-count', total_count: $total_count)->to(Navbar::class);*/
+        // Update de cart-teller in de navbar (event dispatchen naar Navbar)
         $this->dispatch('update-cart-count', total_count: $total_count)->to('partials.navbar');
 
         // Update cart in de drawer modal
@@ -130,7 +129,7 @@ class ProductsPage extends Component
         $productQuery = Product::with(['colors', 'productColorStocks'])
             ->where('is_active', 1);
 
-        // Filter de producten op basis van de geselecteerde categorieën, als er categorieën zijn geselecteerd
+        // Categorie filteren als er iets gekozen is
         if(!empty($this->selected_categories)) {
             $productQuery->whereIn('category_id', $this->selected_categories);
         }
@@ -178,7 +177,7 @@ class ProductsPage extends Component
             $productQuery->whereBetween('price', [0, $this->price_range]);
         }
 
-        // Sorteer de LAATSTE toegevoegde producten
+        // Sorteer de LATEST toegevoegde producten
         if($this->sort == 'latest'){
             $productQuery->latest();
         }
@@ -193,7 +192,7 @@ class ProductsPage extends Component
             $productQuery->orderBy('price', 'desc');
         }
 
-        // TEL de producten op basis van de geselecteerde categorieën
+        // Bereken totaal aantal gefilterde producten (voor in de UI te tonen)
         $totalFilteredCount = (clone $productQuery)->count();
 
         return view('livewire.products-page', [

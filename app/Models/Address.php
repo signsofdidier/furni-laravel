@@ -23,12 +23,13 @@ class Address extends Model
         'zip_code'
     ];
 
+    // Een adres kan aan meerdere orders hangen
     public function orders()
     {
         return $this->hasMany(Order::class);
     }
 
-    // Een adres hoort bij een user (optioneel/gastbestelling kan user_id null zijn)
+    // Een adres hoort bij een user
     public function user()
     {
         return $this->belongsTo(User::class);

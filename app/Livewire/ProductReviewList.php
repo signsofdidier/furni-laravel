@@ -9,7 +9,7 @@ class ProductReviewList extends Component
 {
     public Product $product;
 
-    // Wanneer een review wordt toegevoegd, refresh de component
+    // Wanneer een review wordt toegevoegd, REFRESH de component
     protected $listeners = ['reviewAdded' => '$refresh'];
 
     public function render()

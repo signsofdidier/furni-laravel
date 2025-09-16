@@ -35,12 +35,9 @@ class RegisterPage extends Component
         // zend verification email
         $user->sendEmailVerificationNotification();
 
-        // login user
-        // uitzetten als ze eerst moeten verificeren voor inloggen
         auth()->login($user);
 
-        // intended redirect naar de pagina waar je vandaan komt
-        //return redirect()->intended(route('profile'));
+        // redirect naar verification notice
         return redirect()->route('verification.notice');
     }
 

@@ -14,6 +14,7 @@ class ProductReviewList extends Component
 
     public function render()
     {
+        // LIJST APPROVED REVIEWS
         return view('livewire.product-review-list', [
             'reviews' => $this->product->reviews()->where('approved', true)->latest()->with('user')->get(),
         ]);

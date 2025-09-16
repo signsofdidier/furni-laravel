@@ -44,31 +44,31 @@ class SuccessPage extends Component
         ]);
     }
 
-    // Deze functie wordt enkel gebruikt als de user via Stripe betaald heeft
+    // Deze functie wordt enkel gebruikt als de user via Stripe BETAALD heeft
     private function handleStripeSuccess()
     {
         // Haal pending order data uit de sessie (werd bewaard voor het doorsturen naar Stripe)
         $pending_order_data = session()->get('pending_order_data');
         if (!$pending_order_data) {
-            // Geen pending data? (bv. refresh of terugknop), geef gewoon laatste order terug
+            // GEEN pending data? (bv. refresh of terugknop), geef gewoon laatste order terug
             return Order::with('address', 'user')
                 ->where('user_id', auth()->user()->id)
                 ->latest()
                 ->first();
         }
 
-        // Zet Stripe key en haal info op over deze sessie
+        // Zet Stripe key en HAAL INFO OP over deze sessie
         Stripe::setApiKey(env('STRIPE_SECRET'));
         $session_info = Session::retrieve($this->session_id);
 
-        // Check of betaling NIET geslaagd is
+        // Check of betaling NIET GESLAAGD is
         if ($session_info->payment_status !== 'paid') {
             // Alles wegsmijten en user naar cancel-pagina sturen
             session()->forget('pending_order_data');
             return redirect('/cancel');
         }
 
-        // Betaling OK: nu order echt aanmaken in de database
+        // BETALING OK: nu order echt aanmaken in de database
         $order = $this->createOrderFromPendingData($pending_order_data, $session_info);
 
         // Pending order data mag nu uit de sessie

@@ -7,7 +7,7 @@
                         <div class="col-lg-4 col-md-6 col-12" data-aos="fade-up" data-aos-duration="700">
                             <div class="article-card bg-transparent p-0 shadow-none">
                                 <a class="article-card-img-wrapper" href="{{ route('blog.show', $blog->slug) }}">
-                                    <img src="{{ url('storage', $blog->image) }}" alt="{{ $blog->title }}"
+                                    <img src="{{ asset('storage/' . $blog->image) }}" alt="{{ $blog->title }}"
                                          class="article-card-img w-100 rounded">
 
                                     {{-- CATEGORY --}}

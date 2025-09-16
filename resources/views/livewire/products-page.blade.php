@@ -45,7 +45,7 @@
                                         <div class="product-card">
                                             <div class="product-card-img">
                                                 <a class="product-hover-zoom" href="{{ url('/products') }}/{{ $product->slug }}">
-                                                    <img class="primary-img" src="{{ isset($product->images[0]) ? url('storage/' . $product->images[0]) : asset('img/product-placeholder.jpg') }}"
+                                                    <img class="primary-img" src="{{ isset($product->images[0]) ? asset('storage/' . $product->images[0]) : asset('img/product-placeholder.jpg') }}"
                                                          alt="{{  $product->name }}">
                                                 </a>
 
@@ -352,7 +352,6 @@
                             <ul x-show="open" x-collapse class="filter-lists list-unstyled mb-0">
                                 <li class="filter-item">
                                     <label class="filter-label">
-                                        <input type="checkbox" wire:model.live="featured" value="1" />
                                         <input type="checkbox" wire:model.live="featured" value="1" />
                                         <span class="filter-checkbox rounded me-2"></span>
                                         <span class="filter-text">Featured Products</span>

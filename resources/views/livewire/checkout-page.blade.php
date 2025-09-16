@@ -163,7 +163,7 @@
                             @forelse($cart_items as $item)
                                 <div class="minicart-item d-flex">
                                     <div class="mini-img-wrapper">
-                                        <img class="mini-img" src="{{ url('storage', $item['image']) }}" alt="{{ $item['name'] }}">
+                                        <img class="mini-img" src="{{ asset('storage/' . $item['image']) }}" alt="{{ $item['name'] }}">
                                     </div>
                                     <div class="product-info">
                                         <h2 class="product-title">

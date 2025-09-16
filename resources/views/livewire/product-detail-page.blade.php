@@ -14,8 +14,8 @@
                                     }'>
                                 @foreach($product->images as $image)
                                     <div class="img-large-wrapper">
-                                        <a href="{{ url('storage', $image) }}" data-fancybox="gallery">
-                                            <img class="w-100 h-100" src="{{ url('storage', $image) }}" alt="{{ $product->name }}">
+                                        <a href="{{ asset('storage/' . $image) }}" data-fancybox="gallery">
+                                            <img class="w-100 h-100" src="{{ asset('storage/' . $image) }}" alt="{{ $product->name }}">
                                         </a>
                                     </div>
                                 @endforeach
@@ -38,7 +38,7 @@
                                 @foreach($product->images as $image)
                                     <div>
                                         <div class="img-thumb-wrapper">
-                                            <img src="{{ url('storage', $image) }}" alt="{{ $product->name }}">
+                                            <img src="{{ asset('storage/' . $image) }}" alt="{{ $product->name }}">
                                         </div>
                                     </div>
                                 @endforeach
@@ -275,7 +275,7 @@
                                 <div class="product-card">
                                     <div class="product-card-img text-center">
                                         <a class="product-hover-zoom" href="{{ url('/products') }}/{{ $featured->slug }}">
-                                            <img class="primary-img" src="{{ url('storage', $featured->images[0]) }}"
+                                            <img class="primary-img" src="{{ asset('storage/' . $featured->images[0]) }}"
                                                  alt="{{ $featured->name }}">
                                         </a>
 

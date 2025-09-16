@@ -5,7 +5,7 @@
                 <div class="col-lg-9 col-md-12 col-12">
                     <div class="article-rte">
                         <div class="article-img">
-                            <img src="{{ url('storage', $blog->image) }}" alt="{{ $blog->title }}">
+                            <img src="{{ asset('storage/' . $blog->image) }}" alt="{{ $blog->title }}">
                         </div>
                         <div class="article-meta">
                             <h2 class="article-title">{{  $blog->title }}</h2>
@@ -109,7 +109,7 @@
                                 @foreach($latestBlog as $blog)
                                     <div class="related-item related-item-article d-flex">
                                         <div class="related-img-wrapper">
-                                            <img class="related-img" src="{{ url('storage', $blog->image) }}" alt="{{ $blog->title }}">
+                                            <img class="related-img" src="{{ asset('storage/' . $blog->image) }}" alt="{{ $blog->title }}">
                                         </div>
                                         <div class="related-product-info">
                                             <h2 class="related-heading text_14">

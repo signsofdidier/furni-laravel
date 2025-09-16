@@ -31,7 +31,7 @@
                                     <tr class="cart-item">
                                         <td class="cart-item-media">
                                             <div class="mini-img-wrapper">
-                                                <img class="mini-img" src="{{ url('storage', $item['image']) }}"
+                                                <img class="mini-img" src="{{ asset('storage/' . $item['image']) }}"
                                                      alt="{{ $item['name'] }}">
                                             </div>
                                         </td>

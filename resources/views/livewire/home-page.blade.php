@@ -203,7 +203,7 @@
                             <div class="product-card">
                                 <div class="product-card-img">
                                     <a class="product-hover-zoom" href="{{ url('products') . '/' . $product->slug }}">
-                                        <img class="primary-img" src="{{ isset($product->images[0]) ? url('storage/' . $product->images[0]) : asset('img/product-placeholder.jpg') }}"
+                                        <img class="primary-img" src="{{ isset($product->images[0]) ? asset('storage/' . $product->images[0]) : asset('img/product-placeholder.jpg') }}"
                                              alt="{{  $product->name }}">
                                     </a>
 
@@ -304,7 +304,7 @@
                                 <div class="article-slick-item" data-aos="fade-up" data-aos-duration="700">
                                     <div class="article-card bg-transparent p-0 shadow-none">
                                         <a class="article-card-img-wrapper" href="{{ route('blog.show', $blog->slug) }}">
-                                            <img src="{{ url('storage', $blog->image) }}" alt="{{ $blog->title }}"
+                                            <img src="{{ asset('storage/' . $blog->image) }}" alt="{{ $blog->title }}"
                                                  class="article-card-img rounded">
 
                                                   <span class="article-tag article-tag-absolute rounded">{{ $blog->categories->pluck('name')->join(', ') }}</span>

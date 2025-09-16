@@ -22,7 +22,7 @@
             <div class="flex-1 min-h-0 overflow-y-auto px-1 py-4 space-y-2 hide-scrollbar">
                 @forelse($cart_items as $item)
                     <div class="flex items-start mb-2 space-x-4">
-                        <img src="{{ url('storage', $item['image']) }}" class="w-14 h-14 object-cover rounded" alt="{{ $item['name'] }}">
+                        <img src="{{ asset('storage/' . $item['image']) }}" class="w-14 h-14 object-cover rounded" alt="{{ $item['name'] }}">
 
                         <div class="flex-1 text-sm">
                             <a href="{{ url('/products') }}/{{ $item['slug'] }}" class="font-semibold text-sm !text-gray-900">{{ $item['name'] }}</a>

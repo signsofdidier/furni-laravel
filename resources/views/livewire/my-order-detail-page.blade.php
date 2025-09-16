@@ -108,7 +108,7 @@
                                     <tr>
                                         <td class="align-middle">
                                             <div class="d-flex align-items-center">
-                                                <img src="{{ url('storage', $item->product->images[0]) }}" alt="{{ $item->product->name }}" class="me-3" style="width:50px; height:50px; object-fit:cover;">
+                                                <img src="{{ asset('storage/' . $item->product->images[0]) }}" alt="{{ $item->product->name }}" class="me-3" style="width:50px; height:50px; object-fit:cover;">
                                                 <span>{{ $item->product->name }}</span>
                                             </div>
                                         </td>

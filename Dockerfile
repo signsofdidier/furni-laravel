@@ -1,12 +1,19 @@
-# --- Stap 1: frontend assets bouwen (Vite) ---
+# --- Stap 1: composer packages (app.css importeert Flux CSS uit vendor/) ---
+FROM composer:2 AS vendor
+WORKDIR /app
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-interaction --no-scripts --no-autoloader --prefer-dist --ignore-platform-reqs
+
+# --- Stap 2: frontend assets bouwen (Vite) ---
 FROM node:20-alpine AS assets
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
+COPY --from=vendor /app/vendor ./vendor
 RUN rm -f public/hot && npm run build
 
-# --- Stap 2: PHP + Apache runtime ---
+# --- Stap 3: PHP + Apache runtime ---
 FROM php:8.4-apache
 
 # PHP extensies voor Laravel, Filament (intl), dompdf (gd) en MySQL
@@ -24,11 +31,8 @@ RUN sed -ri 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-avail
 
 WORKDIR /var/www/html
 
-# Eerst enkel composer-bestanden voor betere build-cache
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-interaction --no-scripts --no-autoloader --prefer-dist
-
 COPY . .
+COPY --from=vendor /app/vendor ./vendor
 COPY --from=assets /app/public/build ./public/build
 
 RUN rm -f public/hot \

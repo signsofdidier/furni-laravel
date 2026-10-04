@@ -58,7 +58,7 @@ class SuccessPage extends Component
         }
 
         // Zet Stripe key en HAAL INFO OP over deze sessie
-        Stripe::setApiKey(env('STRIPE_SECRET'));
+        Stripe::setApiKey(config('services.stripe.secret'));
         $session_info = Session::retrieve($this->session_id);
 
         // Check of betaling NIET GESLAAGD is

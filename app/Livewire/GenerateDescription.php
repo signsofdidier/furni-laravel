@@ -17,7 +17,7 @@ class GenerateDescription extends Component
     public function generate()
     {
         // Stuur een POST request naar Groq API (met Llama 3 model)
-        $response = Http::withToken(env('GROQ_API_KEY'))
+        $response = Http::withToken(config('services.groq.key'))
             ->post('https://api.groq.com/openai/v1/chat/completions', [
                 'model' => 'llama3-8b-8192',  // AI model (kan wijzigen in .env)
                 'messages' => [

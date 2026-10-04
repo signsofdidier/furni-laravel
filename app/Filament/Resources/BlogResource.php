@@ -127,7 +127,7 @@ class BlogResource extends Resource
 
                                         // Verstuur een API-aanvraag naar Groq voor AI-contentgeneratie
                                         $response = Http::withoutVerifying()
-                                            ->withToken(env('GROQ_API_KEY')) // Gebruik API key uit .env
+                                            ->withToken(config('services.groq.key')) // Gebruik API key uit .env
                                             ->timeout(60) // Timeout na 60 seconden
                                             ->post('https://api.groq.com/openai/v1/chat/completions', [
                                                 'model' => 'llama3-8b-8192', // AI model dat gebruikt wordt

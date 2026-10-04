@@ -182,7 +182,7 @@ class CheckoutPage extends Component
         }
 
         // Stripe keys instellen en sessie aanmaken
-        Stripe::setApiKey(env('STRIPE_SECRET'));
+        Stripe::setApiKey(config('services.stripe.secret'));
         $sessionCheckout = Session::create([
             'payment_method_types' => ['card'], // Betaalmethode: Card
             'customer_email' => auth()->user()->email, // Gebruikers email

@@ -104,7 +104,7 @@ class ProductResource extends Resource
                                     try {
                                         // API call naar Groq voor AI beschrijving
                                         $response = Http::withoutVerifying()
-                                            ->withToken(env('GROQ_API_KEY'))
+                                            ->withToken(config('services.groq.key'))
                                             ->timeout(15)
                                             ->post('https://api.groq.com/openai/v1/chat/completions', [
                                                 'model' => 'llama3-8b-8192',
